@@ -46,9 +46,9 @@
 
 <nav class="navbar navbar-expand-lg">
     <div class="clearfix">
-        <!-- <a class="navbar-brand" href="javascript:void(0)">
-            <img src="assets/images/logo_small.svg" alt="logo"> <span> B-ID Hub </span>
-        </a> -->
+        <a class="navbar-brand" href="javascript:void(0)">
+            <img src="assets/images/Masam_Logo_white.svg" alt="logo">
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -57,12 +57,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="menus">
             <ul class="nav navbar-nav clsMenuList">
                 <li *ngFor="let menu of menus" [ngClass]="{'dropdown': menu.child_sub_menu}">
-                    <a class="clsIcon clsPage" href="javascript:void(0)"(click)="redirect(menu.route, menu.child_sub_menu)" [ngClass]="{'dropdown-toggle': menu.child_sub_menu}" role="button" id="dropdownMenuButton"
+                    <a class="clsIcon clsPage" href="javascript:void(0)"
+                        (click)="redirect(menu.route, menu.child_sub_menu)"
+                        [ngClass]="{'dropdown-toggle': menu.child_sub_menu}" role="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span> {{ menu.title }} </span>
                     </a>
                     <div *ngIf="menu.child_sub_menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="javascript:void(0)" (click)="redirect(child.route)" *ngFor="let child of menu.child_sub_menu"> {{ child.title }} </a>
+                        <a class="dropdown-item" href="javascript:void(0)" (click)="redirect(child.route)"
+                            *ngFor="let child of menu.child_sub_menu"> {{ child.title }} </a>
                     </div>
                 </li>
             </ul>

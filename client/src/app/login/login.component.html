@@ -61,8 +61,8 @@
                             </p>
                         </div>
                         <div class="pt-3 login-actions d-flex justify-content-between">
-                            <a class="btn primaryBtn" (keydown)="onKeydown($event)"
-                                (click)="onSubmit()">{{ 'Log in' | translate }}</a>
+                            <a class="btn primaryBtn" (keydown)="onKeydown($event)" (click)="onSubmit()">{{ 'Log in' |
+                                translate }}</a>
                             <!-- <a
                                 class="secondryBtn"
                                 [routerLink]="['/signup']"
@@ -98,8 +98,7 @@
         <div class="clearfix">
             <div class="clsLeftSide">
                 <div class="clsImgBlock">
-                    <!-- <img src="assets/images/logo.svg" alt="Logo">
-                    <img src="assets/images/login/logo_text.svg" alt="B-ID"> -->
+                    <img src="assets/images/Masam_Logo_white.svg" alt="Logo">
                 </div>
 
                 <div class="clsPowered">
@@ -110,13 +109,12 @@
 
             <div class="clsRightSide">
                 <div class="clsFormBlock clsBeforeLogin">
-                    <div class="clearfix text-center mb-50">
-                        <h2 class="lb-c mb-10">
-                            <span class="clsMob-show"> <img src="assets/images/logo_small.svg" alt="">
-                            </span>
-                            Restaurants
-                        </h2>
-                        <h2 class="db-c"> Admin Login </h2>
+                    <div class="clearfix text-center mb-30">
+                        <div class="">
+                            <img class="clsWidth-150" src="assets/images/Masam_Logo.svg" alt="Logo">
+                        </div>
+
+                        <h2 class="db-c text-left"> Login </h2>
                     </div>
 
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -164,7 +162,8 @@
                             </div>
                         </div>
 
-                        <a [routerLink]="['/forgot-password']" class="btn btn-link width_in pt-0 pb-c"> Forgot Pasword
+                        <a [routerLink]="['/forgot-password']" class="btn btn-link width_in pt-0 pb-c text-right">
+                            Forgot Pasword
                         </a>
 
                         <button type="button" class="btn btn-success clsWidth-100 btn-lg" (keydown)="onKeydown($event)"

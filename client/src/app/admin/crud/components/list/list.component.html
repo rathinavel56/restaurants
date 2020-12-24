@@ -35,8 +35,8 @@
                            <span *ngIf="element.parent_user_id !== 0">{{element.parent_user.first_name}}
                               {{element.parent_user.last_name}}</span>
                         </span>
-                        <span
-                           *ngIf="elementChild['label'] !== 'From User'">{{getValue(elementChild['name'], element)}}</span>
+                        <span *ngIf="elementChild['label'] !== 'From User'">{{getValue(elementChild['name'],
+                           element)}}</span>
                      </span>
                      <span *ngIf="elementChild.listActions" class="clsAction inline-show clsMinWidth-100">
                         <ul class="clearfix unstyled">
@@ -49,6 +49,46 @@
                         </ul>
                      </span>
                   </td>
+
+                  <!-- <td class="tableActionBtns">
+                     <div class="actionBtnQa claerfix">
+                        <div class="rightNewAddSet f-right">
+                           <div class="defultIconSetPerson">
+                              <button class="btn addBtnsNew searchIcon addNew2 clsFontIcon">
+                                 <span data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                    <i class="fa fa-pencil"></i>
+                                 </span>
+                              </button>
+
+                              <button class="btn addBtnsNew searchIcon addNew2 clsFontIcon">
+                                 <span data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                    <i class="fa fa-trash-o"></i>
+                                 </span>
+                              </button>
+
+                              <button class="btn addBtnsNew searchIcon addNew3 afterHover clsFontIcon">
+                                 <span data-toggle="tooltip" data-placement="bottom" title="View">
+                                    <i class="fa fa-eye"></i>
+                                 </span>
+                              </button>
+
+                              <button class="btn addBtnsNew beforeHover transparantDotBtn">
+                                 <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                       version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                       style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                       <g>
+                                          <circle cx="256" cy="256" r="64" />
+                                          <circle cx="256" cy="448" r="64" />
+                                          <circle cx="256" cy="64" r="64" />
+                                       </g>
+                                    </svg>
+                                 </span>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </td> -->
                </tr>
                <tr *ngIf="responseData && responseData.length === 0">
                   <td colspan="{{menu.listview.fields.length}}">No Records</td>

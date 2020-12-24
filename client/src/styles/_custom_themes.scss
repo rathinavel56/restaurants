@@ -95,14 +95,14 @@ $sides       : (top, bottom, left, right);
 // Colors
 
 $site-color         : #717c82;
-$brand-primary      : #004fac;
-$brand-primary-dark : #004fac;
-$start-blue-color   : #113870;
-$end-blue-color     : #16468b;
+$brand-primary      : #F4633A;
+$brand-primary-dark : #f53600;
+$light-blue         : #FF8F1C;
+$start-blue-color   : $brand-primary;
+$end-blue-color     : $light-blue;
 $brand-success      : linear-gradient(to left, $start-blue-color, $end-blue-color);
 $brand-success-dark : linear-gradient(to left, $start-blue-color, $end-blue-color);
-$light-blue         : #57a4ff;
-$dark-blue          : #10284b;
+$dark-blue          : $brand-primary;
 $white              : #fff;
 $body-bg            : #fcfcfc;
 $black              : #000;
@@ -661,15 +661,15 @@ body .sfont {
 }
 
 .btn-success {
-  background  : $brand-success;
-  border-color: $brand-success;
+  background  : $brand-success !important;
+  border-color: $brand-primary;
   color       : $white;
 
   &:hover,
   &:active,
   &:focus {
-    background  : $brand-success;
-    border-color: $brand-success;
+    background  : $brand-success !important;
+    border-color: $brand-primary;
     color       : $white;
   }
 
@@ -897,7 +897,7 @@ p {
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 textarea {
@@ -908,7 +908,7 @@ textarea {
 
 select {
   &.form-control {
-    color       : $white;
+    color: $white;
     @include radius(6px);
   }
 }
