@@ -1,0 +1,72 @@
+<div class="container" *ngIf="menu">
+   <div class="table-wrapper clearfix">
+      <div class="table-title">
+         <div class="row">
+            <div class="col-sm-8">
+               <h2>Manage <b>{{menu.title}}</b></h2>
+            </div>
+
+            <div class="col-sm-4 text-right" *ngIf="menu.add || menu.approve ">
+               <a href="javascript:void(0)" (click)="redirect('add')" *ngIf="menu.add" class="btn btn-info"><i
+                     class="fa fa-plus pr-1"></i> <span>Add</span></a>
+               <a href="javascript:void(0)" (click)="redirect('delete')" *ngIf="menu.delete" class="btn btn-danger"><i
+                     class="fa fa-trash"></i> <span>Delete</span></a>
+               <a href="javascript:void(0)" (click)="approveAll()" *ngIf="menu.approve" class="btn btn-success"><i
+                     class="fa fa-plus"></i> <span>Approve All</span></a>
+               <a href="javascript:void(0)" (click)="disapproveAll()" *ngIf="menu.disapprove" class="btn btn-danger"><i
+                     class="fa fa-trash"></i> <span>Disapprove All</span></a>
+            </div>
+         </div>
+      </div>
+      <div class="clearfix table-responsive">
+         <table class="table table-sm">
+            <thead class="">
+               <tr>
+                  <th class="text-center" *ngFor="let item of menu.listview.fields">{{item.label}}</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let element of responseData">
+                  <td class="text-center" *ngFor="let elementChild of menu.listview.fields">
+                     <span *ngIf="!elementChild.listActions">
+                        <span *ngIf="elementChild['label'] === 'From User'">
+                           <span *ngIf="element.parent_user_id === 0">{{element.other_user.first_name}}
+                              {{element.other_user.last_name}}</span>
+                           <span *ngIf="element.parent_user_id !== 0">{{element.parent_user.first_name}}
+                              {{element.parent_user.last_name}}</span>
+                        </span>
+                        <span
+                           *ngIf="elementChild['label'] !== 'From User'">{{getValue(elementChild['name'], element)}}</span>
+                     </span>
+                     <span *ngIf="elementChild.listActions" class="clsAction inline-show clsMinWidth-100">
+                        <ul class="clearfix unstyled">
+                           <li *ngFor="let button of elementChild.listActions">
+                              <a href="javascript:void(0)" (click)="action(element, button.label)"
+                                 class="{{button.class}}" data-toggle="modal">
+                                 <i class="{{button.icon}}"></i>
+                              </a>
+                           </li>
+                        </ul>
+                     </span>
+                  </td>
+               </tr>
+               <tr *ngIf="responseData && responseData.length === 0">
+                  <td colspan="{{menu.listview.fields.length}}">No Records</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <!-- <div class="clearfix">
+        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+        <ul class="pagination">
+           <li class="page-item disabled"><a href="javascript:void(0)">Previous</a></li>
+           <li class="page-item"><a href="javascript:void(0)" class="page-link">1</a></li>
+           <li class="page-item"><a href="javascript:void(0)" class="page-link">2</a></li>
+           <li class="page-item active"><a href="javascript:void(0)" class="page-link">3</a></li>
+           <li class="page-item"><a href="javascript:void(0)" class="page-link">4</a></li>
+           <li class="page-item"><a href="javascript:void(0)" class="page-link">5</a></li>
+           <li class="page-item"><a href="javascript:void(0)" class="page-link">Next</a></li>
+        </ul>
+     </div> -->
+   </div>
+</div>

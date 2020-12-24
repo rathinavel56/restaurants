@@ -1,0 +1,193 @@
+<div [@routerTransition]>
+    <div *ngIf="!isAddEdit && sessionService && sessionService.role_id !== 3">
+        <div class="container">
+            <div class="table-wrapper clearfix">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2>Manage <b>Restaurants</b></h2>
+                        </div>
+                        <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id === 4">
+                            <a href="javascript:void(0)" (click)="addEdit()" class="btn btn-info"><i
+                                    class="fa fa-plus pr-1"></i> <span>Add</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix table-responsive">
+                    <table class="table table-sm">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center">Sl No</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let restaurant of restaurants; let i = index">
+                                <td class="text-center">
+                                    {{i+1}}
+                                </td>
+                                <td class="text-center">
+                                    {{restaurant.title}}
+                                </td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0)" (click)="edit(restaurant.id)" class="btn btn-info"><i
+                                        class="fa fa-plus pr-1"></i> <span>Edit</span></a><a href="javascript:void(0)" (click)="delete(restaurant.id)" class="btn btn-danger"><i
+                                            class="fa fa-plus pr-1"></i> <span>Delete</span></a>
+                                </td>
+                            </tr>
+                            <tr *ngIf="restaurants && restaurants.length === 0">
+                                <td colspan="2">No Records</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <div class="clearfix">
+                 <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                 <ul class="pagination">
+                    <li class="page-item disabled"><a href="javascript:void(0)">Previous</a></li>
+                    <li class="page-item"><a href="javascript:void(0)" class="page-link">1</a></li>
+                    <li class="page-item"><a href="javascript:void(0)" class="page-link">2</a></li>
+                    <li class="page-item active"><a href="javascript:void(0)" class="page-link">3</a></li>
+                    <li class="page-item"><a href="javascript:void(0)" class="page-link">4</a></li>
+                    <li class="page-item"><a href="javascript:void(0)" class="page-link">5</a></li>
+                    <li class="page-item"><a href="javascript:void(0)" class="page-link">Next</a></li>
+                 </ul>
+              </div> -->
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isAddEdit">
+        <form>
+            <div class="form-group">
+                <label>Name *:</label>
+                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.title"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label>Email *:</label>
+                <input type="email" class="form-control" [(ngModel)]="restaurantDetails.email"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group" *ngIf="!editMode">
+                <label>UserName *:</label>
+                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.username"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group" *ngIf="!editMode">
+                <label>Password *:</label>
+                <input type="password" class="form-control" [(ngModel)]="restaurantDetails.password"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group" *ngIf="!editMode">
+                <label>Confirm Password *:</label>
+                <input type="password" class="form-control" [(ngModel)]="restaurantDetails.confirmpassword"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label>Address *:</label>
+                <input type="text" class="form-control"  [(ngModel)]="restaurantDetails.address"
+                [ngModelOptions]="{standalone: true}" ngx-google-places-autocomplete
+                    (onAddressChange)="handleAddressChange($event)" autocomplete="no-fill" />
+            </div>
+            <div class="form-group">
+                <label>Latitude *:</label>
+                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.latitude"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label>Longitude *:</label>
+                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.longitude"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label>Description *:</label>
+                <textarea class="form-control" [(ngModel)]="restaurantDetails.description"
+                    [ngModelOptions]="{standalone: true}"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Disclaimer:</label>
+                <textarea class="form-control" [(ngModel)]="restaurantDetails.disclaimer"
+                    [ngModelOptions]="{standalone: true}"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Max Person *:</label>
+                <input type="number" min="1" class="form-control" [(ngModel)]="restaurantDetails.maxperson"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label>Special Conditions: (<i class="fa fa-plus-circle cursor" (click)="specialAdd()"></i>)</label>
+                <span *ngFor="let specialCondition of restaurantDetails.specialConditions">
+                    <input type="text" class="form-control" [(ngModel)]="specialCondition.name"
+                        [ngModelOptions]="{standalone: true}" /><br>
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Menu Items *: (<i class="fa fa-plus-circle cursor" (click)="menuAdd()"></i>)</label><br>
+                <span *ngFor="let menu of restaurantDetails.menus">
+                    <label>Name:</label>
+                    <input type="text" class="form-control" [(ngModel)]="menu.name"
+                        [ngModelOptions]="{standalone: true}">
+                    <label>Price:</label>
+                    <input type="text" class="form-control" [(ngModel)]="menu.price"
+                        [ngModelOptions]="{standalone: true}">
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Facilities / Services *: (<i class="fa fa-plus-circle cursor"
+                        (click)="facilitiesAdd()"></i>)</label>
+                <span *ngFor="let facility of restaurantDetails.facilities">
+                    <input type="text" class="form-control" [(ngModel)]="facility.name"
+                        [ngModelOptions]="{standalone: true}" /><br>
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Atmospheres: (<i class="fa fa-plus-circle cursor" (click)="atmosphereAdd()"></i>)</label>
+                <span *ngFor="let atmosphere of restaurantDetails.atmospheres">
+                    <input type="text" class="form-control" [(ngModel)]="atmosphere.name"
+                        [ngModelOptions]="{standalone: true}" /><br>
+                </span>
+            </div>
+            <div class="form-group" *ngIf="staticDataList">
+                <label>Spoken Languages *:</label>
+                <div class="form-check" *ngFor="let language of staticDataList.languages">
+                    <input class="form-check-input" type="checkbox" [checked]="language.selected" [(ngModel)]="language.selected"
+                        id="{{language.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" />
+                    <label class="form-check-label" for="{{language.name.replace(' ', '')}}">
+                        {{language.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="staticDataList">
+                <label>Payment Options *:</label>
+                <div class="form-check" *ngFor="let payment of staticDataList.payments">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="payment.selected"
+                        id="{{payment.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" />
+                    <label class="form-check-label" for="{{payment.name.replace(' ', '')}}">
+                        {{payment.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>About *:</label>
+                <textarea class="form-control" [(ngModel)]="restaurantDetails.about"
+                    [ngModelOptions]="{standalone: true}"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Attachments *:</label>
+                <input type="file" multiple (change)="uploadImage($event)" class="form-control-file">
+                <div id="preview">
+                    <app-attachment *ngFor="let attachment of restaurantDetails.attachments" [attachment]="attachment" [type]="original"></app-attachment>
+                </div>
+            </div>
+            <div class="clearfix text-left">
+                <button class="btn btn-primary" (click)="saveRes()" type="button">
+                    submit
+                </button>
+                <button class="btn btn-default" (click)="addEdit()" type="button">
+                    cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

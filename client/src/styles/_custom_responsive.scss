@@ -1,0 +1,109 @@
+@media screen and (min-width: 1400px) {
+	// body {}
+}
+
+@media screen and (min-width: 1200px) {
+	// body {}
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+	// body {}
+}
+
+@media screen and (min-width: 992px) and (max-width: 1024px) {
+	// body {}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+	body {
+		.clsAdminPage {
+			.clsLeftSide {
+
+				&:before {
+					background-position: -150px -85px;
+				}
+
+				&:after {
+					background-position: 130px 0px;
+				}
+
+				.clsImgBlock {
+					img {
+						width: 40%;
+					}
+				}
+			}
+
+			.clsFormBlock {
+
+				form {
+					max-width: 300px;
+					min-width: 300px;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	// body {}
+}
+
+@media screen and (min-width: 768px) {
+	// body {}
+}
+
+@media screen and (max-width: 767px) {
+	body {
+		.clsMob-show {
+			display: block;
+		}
+
+		.clsAdminPage {
+			.clsLeftSide {
+				display: none;
+			}
+
+			.clsRightSide {
+				width      : 100%;
+				float      : none;
+				display    : block;
+				background : $brand-success;
+				padding-top: 30px;
+				height     : auto;
+			}
+
+			.clsFormBlock {
+				h2 {
+					color: $white;
+
+					&.lb-c {
+						color: #d2b34f;
+					}
+
+					.clsMob-show {
+						display       : $ib;
+						vertical-align: top;
+					}
+				}
+
+				.mb-50 {
+					margin-bottom: 30px;
+				}
+
+				form {
+					background   : $white;
+					max-width    : inherit;
+					min-width    : inherit;
+					padding      : 30px;
+					margin       : 20px;
+					border-radius: 10px;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 380px) {
+	// body {}
+}

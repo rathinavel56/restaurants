@@ -1,0 +1,21 @@
+<div class="clsDashboard">
+    <div class="clearfix">
+        <div class="clsLeftNav" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
+            <app-sidebar (collapsedEvent)="receiveCollapsed($event)"></app-sidebar>
+            <div class="toggle-button" (click)="toggleCollapsed()">
+                <i class="fa fa-fw fa-angle-double-{{ collapsed ? 'right' : 'left' }}"></i>
+                <span>{{ 'Collapse Sidebar' | translate }}</span>
+            </div>
+        </div>
+
+        <div class="clsRightBlock">
+            <!-- <app-default-header></app-default-header> -->
+
+            <app-top-header></app-top-header>
+
+            <section class="main-container" [ngClass]="{collapsed: collapedSideBar}">
+                <router-outlet></router-outlet>
+            </section>
+        </div>
+    </div>
+</div>

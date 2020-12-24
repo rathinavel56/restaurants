@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+  <g id="real-estate" transform="translate(-1 -0.999)">
+    <path id="Path_881" data-name="Path 881" d="M53.253,18.295,52.87,18" transform="translate(-34.301 -11.242)" fill="#ffffff"/>
+    <path id="Path_882" data-name="Path 882" d="M24,42h5.419v6.774H24Z" transform="translate(-15.21 -27.113)" fill="#ffffff"/>
+    <g id="Group_232" data-name="Group 232" transform="translate(1 0.999)">
+      <path id="Path_883" data-name="Path 883" d="M21.867,8.86,11.706,1.069a.339.339,0,0,0-.418,0L1.127,9.2a.339.339,0,1,0,.423.529L3.709,8V21.661A.339.339,0,0,0,4.048,22h14.9a.339.339,0,0,0,.339-.339V7.74L21.455,9.4a.339.339,0,0,0,.412-.538ZM9.129,21.322v-6.1h4.742v6.1Zm5.419,0V14.887a.339.339,0,0,0-.339-.339H8.79a.339.339,0,0,0-.339.339v6.435H4.387V7.462L11.5,1.768l6.858,5.257.251.193v14.1Z" transform="translate(-1 -0.999)" fill="#ffffff"/>
+      <path id="Path_884" data-name="Path 884" d="M13.355,58H12.339a.339.339,0,1,0,0,.677h1.016a.339.339,0,0,0,0-.677Z" transform="translate(-8.274 -38.693)" fill="#ffffff"/>
+      <path id="Path_885" data-name="Path 885" d="M18.677,58h-.339a.339.339,0,0,0,0,.677h.339a.339.339,0,1,0,0-.677Z" transform="translate(-12.242 -38.693)" fill="#ffffff"/>
+    </g>
+  </g>
+</svg>

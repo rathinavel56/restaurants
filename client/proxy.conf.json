@@ -1,0 +1,20 @@
+{
+    "/api/*": {
+        "target": "http://3.129.224.137",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/images/original/*": {
+        "target": "http://3.129.224.137",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/images/static/*": {
+        "target": "http://3.129.224.137",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}
