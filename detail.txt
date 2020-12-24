@@ -1,0 +1,7 @@
+ubuntu/Vijay@54321
+root/Vijay@54321
+3.129.224.137
+ssh -i Vijay54321.pem ubuntu@3.129.224.137
+https://www.9lessons.info/2015/12/amazon-ec2-setup-with-ubuntu-and-xampp.html
+sudo chown -R ubuntu server
+E:\xampp7\htdocs\IMA\ima.ppk
