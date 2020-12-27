@@ -19,6 +19,13 @@ const routes: Routes = [
             //         )
             // },
             {
+                path: 'change_password',
+                loadChildren: () =>
+                    import('./passwordchanged/passwordchanged.module').then(
+                        (m) => m.PasswordchangedModule
+                    )
+            },
+            {
                 path: 'restaurants',
                 loadChildren: () =>
                     import('./restaurants/restaurants.module').then(

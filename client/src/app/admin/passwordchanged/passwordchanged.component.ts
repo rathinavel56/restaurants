@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ToastService } from '../api/services/toast-service';
-import { UserService } from '../api/services/user.service';
+import { ToastService } from '../../api/services/toast-service';
+import { UserService } from '../../api/services/user.service';
 
 @Component({
     selector: 'app-passwordchanged',
@@ -22,6 +22,10 @@ export class PasswordchangedComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.createForm();
+    }
+
+    createForm() {
         this.changepasswordForm = this.formBuilder.group(
             {
                 password: ['', [Validators.required]],
@@ -69,8 +73,8 @@ export class PasswordchangedComponent implements OnInit {
                 if (data.error.code) {
                     this.toastService.error(data.error.message);
                 } else {
-                    this.changedSuccess = true;
                     this.toastService.success(data.error.message);
+                    this.createForm();
                 }
             });
     }

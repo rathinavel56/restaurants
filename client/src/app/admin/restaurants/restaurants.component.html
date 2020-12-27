@@ -8,9 +8,15 @@
                             <h2>Manage <b>Restaurants</b></h2>
                         </div>
                         <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id === 4">
+                            <input type="text" class="form-control" [(ngModel)]="search"
+                            [ngModelOptions]="{standalone: true}">
+                            <a href="javascript:void(0)" (click)="getRestaurants()" class="btn btn-info"><span>Search</span></a>
                             <a href="javascript:void(0)" (click)="addEdit()" class="btn btn-info"><i
                                     class="fa fa-plus pr-1"></i> <span>Add</span></a>
                         </div>
+                        <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id !== 4"><input type="text" class="form-control" [(ngModel)]="search"
+                            [ngModelOptions]="{standalone: true}">
+                            <a href="javascript:void(0)" (click)="getRestaurants()" class="btn btn-info"> <span>Search</span></a></div>
                     </div>
                 </div>
                 <div class="clearfix table-responsive">
@@ -18,6 +24,8 @@
                         <thead class="">
                             <tr>
                                 <th class="text-center">Sl No</th>
+                                <th class="text-center">User Name</th>
+                                <th class="text-center">Email</th>
                                 <th class="text-center">Name</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -26,6 +34,12 @@
                             <tr *ngFor="let restaurant of restaurants; let i = index">
                                 <td class="text-center">
                                     {{i+1}}
+                                </td>
+                                <td class="text-center">
+                                    {{restaurant.user.username}}
+                                </td>
+                                <td class="text-center">
+                                    {{restaurant.user.email}}
                                 </td>
                                 <td class="text-center">
                                     {{restaurant.title}}
@@ -41,7 +55,7 @@
                                         </li>
 
                                         <li>
-                                            <a href="javascript:void(0)" (click)="delete(restaurant.id)"
+                                            <a href="javascript:void(0)" (click)="delete(index, restaurant.id)"
                                                 class="btn btn-danger">
                                                 <i class="fa fa-plus pr-1"></i>
                                                 <span>Delete</span>
@@ -51,7 +65,7 @@
                                 </td>
                             </tr>
                             <tr *ngIf="restaurants && restaurants.length === 0">
-                                <td colspan="2">No Records</td>
+                                <td colspan="5">No Records</td>
                             </tr>
                         </tbody>
                     </table>
@@ -174,6 +188,28 @@
                 </div>
             </div>
             <div class="form-group" *ngIf="staticDataList">
+                <label>Themes *:</label>
+                <div class="form-check" *ngFor="let theme of staticDataList.themes">
+                    <input class="form-check-input" type="checkbox" [checked]="theme.selected"
+                        [(ngModel)]="theme.selected" id="{{theme.name.replace(' ', '')}}"
+                        [ngModelOptions]="{standalone: true}" />
+                    <label class="form-check-label" for="{{theme.name.replace(' ', '')}}">
+                        {{theme.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="staticDataList">
+                <label>Cuisines *:</label>
+                <div class="form-check" *ngFor="let cuisine of staticDataList.cuisines">
+                    <input class="form-check-input" type="checkbox" [checked]="cuisine.selected"
+                        [(ngModel)]="cuisine.selected" id="{{cuisine.name.replace(' ', '')}}"
+                        [ngModelOptions]="{standalone: true}" />
+                    <label class="form-check-label" for="{{cuisine.name.replace(' ', '')}}">
+                        {{cuisine.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="staticDataList">
                 <label>Payment Options *:</label>
                 <div class="form-check" *ngFor="let payment of staticDataList.payments">
                     <input class="form-check-input" type="checkbox" [(ngModel)]="payment.selected"
@@ -192,8 +228,35 @@
                 <label>Attachments *:</label>
                 <input type="file" multiple (change)="uploadImage($event)" class="form-control-file">
                 <div id="preview">
-                    <app-attachment *ngFor="let attachment of restaurantDetails.attachments" [attachment]="attachment"
-                        [type]="original"></app-attachment>
+                    <div class="resimage" *ngFor="let attachment of restaurantDetails.attachments; let i = index">
+                        <span *ngIf="attachment.src">
+                            <img src="{{attachment.src}}" class="img-fluid" />
+                            <button type="button" class="btn btn-danger" (click)="softDelete(index)">Delete</button>
+                        </span>
+                        <span *ngIf="attachment.id">
+                            <app-attachment *ngIf="attachment.id" [type]="'medium_thumb'" [attachment]="attachment">
+                            </app-attachment>
+                            <button type="button" class="btn btn-danger" (click)="hardDelete(index, attachment.id)" >Delete</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check" >
+                    <input class="form-check-input" type="checkbox" [checked]="(restaurantDetails.is_active === 1)"
+                        [(ngModel)]="restaurantDetails.is_active" id="is_active" [ngModelOptions]="{standalone: true}" />
+                    <label class="form-check-label" for="is_active">
+                        Active *
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="sessionService.role_id === 1">
+                <div class="form-check" >
+                    <input class="form-check-input" type="checkbox" [checked]="(restaurantDetails.is_admin_deactived === 1)"
+                        [(ngModel)]="restaurantDetails.is_admin_deactived" id="is_admin_deactived" [ngModelOptions]="{standalone: true}" />
+                    <label class="form-check-label" for="is_active">
+                        Deactive *
+                    </label>
                 </div>
             </div>
             <div class="clearfix text-left">

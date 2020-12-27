@@ -51,9 +51,9 @@ export abstract class UserBaseComponent {
                     element.attachments.forEach(attachment => {
                         attachment.index = i;
                         album = {
-                            src: 'http://localhost:4200/images/original/UserAvatar/762.3940550e4f1ac87d7d22e64107173515.jpg',
+                            src: 'http://3.129.224.137/images/original/UserAvatar/762.3940550e4f1ac87d7d22e64107173515.jpg',
                             caption: 'test',
-                            thumb: 'http://localhost:4200/images/original/UserAvatar/762.3940550e4f1ac87d7d22e64107173515.jpg'
+                            thumb: 'http://3.129.224.137/images/original/UserAvatar/762.3940550e4f1ac87d7d22e64107173515.jpg'
                         };
                         this.albums.push(album);
                         i++;

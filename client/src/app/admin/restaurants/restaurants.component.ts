@@ -6,6 +6,7 @@ import { UserService } from '../../api/services/user.service';
 import { CrudService } from '../../api/services/crud.service';
 import { AppConst } from '../../utils/app-const';
 import { QueryParam } from '../../api/models/query-param';
+
 @Component({
     selector: 'app-restaurant',
     templateUrl: './restaurants.component.html',
@@ -24,6 +25,7 @@ export class RestaurantComponent implements OnInit {
     restaurants: any = [];
     editMode: any = false;
     sessionService: any;
+    search: any;
 
     ngOnInit() {
         this.sessionService = JSON.parse(sessionStorage.getItem('user_context'));
@@ -40,8 +42,11 @@ export class RestaurantComponent implements OnInit {
         this.isAddEdit = !this.isAddEdit;
     }
 
-    getRestaurants() {        
-        this.userService.restaurants({})
+    getRestaurants() {
+        this.toastService.showLoading();    
+        this.userService.restaurants({
+            search: this.search ? this.search : undefined
+        })
         .subscribe((response) => {
             if (response.data) {
                 this.restaurants = response.data;
@@ -52,10 +57,12 @@ export class RestaurantComponent implements OnInit {
 
     edit(id) {
         this.editMode = true;
+        this.toastService.showLoading();
         this.userService.restaurantDetail(id)
         .subscribe((response) => {
             if (response.data) {                
                 this.restaurantDetails = {
+                    id: id,
                     title: response.data.title,
                     description: response.data.description,
                     address: response.data.address,
@@ -82,8 +89,13 @@ export class RestaurantComponent implements OnInit {
                     }],
                     languages: [],
                     payments: [],
+                    themes: [],
+                    cuisines: [],
                     about: '',
-                    attachments: []
+                    attachments: [],
+                    attachmentsDeleted: [],
+                    is_active: response.data.is_active,
+                    is_admin_deactived: (this.sessionService.role_id === 1) ? response.data.is_admin_deactived : undefined
                 };
                 if (response.data.facilities_services && response.data.facilities_services.length > 0) {
                     this.restaurantDetails.facilities = [];
@@ -128,6 +140,16 @@ export class RestaurantComponent implements OnInit {
                         payment.selected = (response.data.payment.filter((e) => payment.id === e.payment_id).length > 0); 
                     });
                 }
+                if (response.data.themes && response.data.themes.length > 0) {
+                    this.staticDataList.themes.forEach(theme => {
+                        theme.selected = (response.data.themes.filter((e) => theme.id === e.theme_id).length > 0); 
+                    });
+                }
+                if (response.data.cuisines && response.data.cuisines.length > 0) {
+                    this.staticDataList.cuisines.forEach(cuisine => {
+                        cuisine.selected = (response.data.cuisines.filter((e) => cuisine.id === e.cuisine_id).length > 0); 
+                    });
+                }
                 if (response.data.about) {
                     this.restaurantDetails.about = response.data.about.about;
                 }
@@ -138,18 +160,18 @@ export class RestaurantComponent implements OnInit {
         });
     }
 
-    delete(id) {
+    delete(index, id) {
+        this.toastService.showLoading();
         this.userService.restaurantDelete(id)
         .subscribe((response) => {
-            if (response.data) {
-                
-            }
+            this.restaurants.splice(index, 1);
             this.toastService.clearLoading();
         });
     }
 
     reset() {
         this.restaurantDetails = {
+            id: null,
             title: '',
             username: '',
             password: '',
@@ -179,8 +201,13 @@ export class RestaurantComponent implements OnInit {
             }],
             languages: [],
             payments: [],
+            themes: [],
+            cuisines: [],
             about: '',
-            attachments: []
+            attachments: [],
+            attachmentsDeleted: [],
+            is_active: true,
+            is_admin_deactived: (this.sessionService.role_id === 1) ? 0 : undefined
         };
     }
 
@@ -209,15 +236,12 @@ export class RestaurantComponent implements OnInit {
     uploadImage(event) {
         this.toastService.showLoading();
         const formData: any = new FormData();
+        let thiss = this;
         let preview = document.querySelector('#preview');
         Array.from(event.target.files).forEach((file: any, index) => {
             let reader = new FileReader();
             reader.onload = (e: any) => {
-                var image = new Image();
-                image.height = 100;
-                image.title = file.name;
-                image.src = e.target.result;
-                preview.appendChild(image);
+                thiss.restaurantDetails.attachments.push({src: e.target.result});
             };
             reader.readAsDataURL(file);
             formData.append('file[]', file, file.name);
@@ -232,6 +256,15 @@ export class RestaurantComponent implements OnInit {
             });
             this.toastService.clearLoading();
         });
+    }
+
+    softDelete(index) {
+        this.restaurantDetails.attachments.splice(index, 1);
+    }
+
+    hardDelete(index, attachmentId) {
+        this.restaurantDetails.attachments.splice(index, 1);
+        this.restaurantDetails.attachmentsDeleted.push(attachmentId);
     }
 
     getStaticData() {
@@ -269,13 +302,13 @@ export class RestaurantComponent implements OnInit {
         });
     }
     saveRes() {
-        if (this.restaurantDetails.username.trim() === '') {
+        if (!this.editMode && this.restaurantDetails.username.trim() === '') {
             this.toastService.error('Name is required');
-        } else if (this.restaurantDetails.password.trim() === '') {
+        } else if (!this.editMode && this.restaurantDetails.password.trim() === '') {
             this.toastService.error('Password is required');    
-        } else if (this.restaurantDetails.confirmpassword.trim() === '') {
+        } else if (!this.editMode && this.restaurantDetails.confirmpassword.trim() === '') {
             this.toastService.error('Confirm Password is required');
-        } else if (this.restaurantDetails.password !== this.restaurantDetails.confirmpassword) {
+        } else if (!this.editMode && this.restaurantDetails.password !== this.restaurantDetails.confirmpassword) {
             this.toastService.error('Password and Confirm Password is required');
         } else if (this.restaurantDetails.address.trim() === '') {
             this.toastService.error('Address is required');
@@ -291,6 +324,10 @@ export class RestaurantComponent implements OnInit {
             this.toastService.error('Menus is required');
         } else if (this.restaurantDetails.facilities.filter((e) => e.name.trim() === '').length > 0) {
             this.toastService.error('Facilities is required');
+        } else if (this.staticDataList.themes.filter((theme) => theme.selected === true).length === 0) {
+            this.toastService.error('Theme is required');
+        } else if (this.staticDataList.cuisines.filter((cuisine) => cuisine.selected === true).length === 0) {
+            this.toastService.error('Cuisine is required');
         } else if (this.staticDataList.languages.filter((language) => language.selected === true).length === 0) {
             this.toastService.error('Languages is required');
         } else if (this.staticDataList.payments.filter((payment) => payment.selected === true).length === 0) {
@@ -300,18 +337,42 @@ export class RestaurantComponent implements OnInit {
         } else if (this.restaurantDetails.attachments.length === 0) {
             this.toastService.error('Images is required');
         } else {
+            this.restaurantDetails.themes = this.staticDataList.themes.filter((theme) => theme.selected === true);
+            this.restaurantDetails.cuisines = this.staticDataList.cuisines.filter((cuisine) => cuisine.selected === true);
             this.restaurantDetails.languages = this.staticDataList.languages.filter((language) => language.selected === true);
             this.restaurantDetails.payments = this.staticDataList.payments.filter((payment) => payment.selected === true);
-            this.userService.restaurantSave(this.restaurantDetails)
-            .subscribe((response) => {
-                if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
-                    this.toastService.success(response.error.message);
-                    this.reset();
-                } else {
-                    this.toastService.error(response.error.message);
-                }
-                this.toastService.clearLoading();
-            });
+            this.restaurantDetails.attachments = this.restaurantDetails.attachments.filter((attachment) => (!attachment.src && !attachment.id));
+            this.restaurantDetails.specialConditions = this.restaurantDetails.specialConditions.filter((e) => e.name.trim() !== '');
+            this.restaurantDetails.atmospheres = this.restaurantDetails.atmospheres.filter((e) => e.name.trim() !== '');
+            this.restaurantDetails.facilities = this.restaurantDetails.facilities.filter((e) => e.name.trim() !== '');
+            this.toastService.showLoading();
+            if (this.editMode) {
+                this.userService.restaurantEdit(this.restaurantDetails)
+                .subscribe((response) => {
+                    if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
+                        this.toastService.success(response.error.message);
+                        this.reset();
+                        this.getRestaurants();
+                        this.isAddEdit = false;
+                    } else {
+                        this.toastService.error(response.error.message);
+                    }
+                    this.toastService.clearLoading();
+                 });
+            } else {
+                this.userService.restaurantSave(this.restaurantDetails)
+                .subscribe((response) => {
+                    if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
+                        this.toastService.success(response.error.message);
+                        this.reset();
+                        this.getRestaurants();
+                        this.isAddEdit = false;
+                    } else {
+                        this.toastService.error(response.error.message);
+                    }
+                    this.toastService.clearLoading();
+                });       
+            }     
         }
     }
 }

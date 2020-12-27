@@ -29,4 +29,5 @@ export interface QueryParam {
     ispaid?: number;
     type?: string;
     date_detail?: string;
+    search?: string;
 }

@@ -18,21 +18,35 @@ export class ViewComponent implements OnInit {
   public menu: any;
   public responseData: any;
   public settings: any;
+  public windowData: any = window;
+  public isFirstTime: any = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private crudService: CrudService,
     private toastService: ToastService,
     private sessionService: SessionService,
     private _location: Location,
-    public router: Router) { }
-
-    @Input('menu_detail')
-    set meunuItem(value: string) {
-        this.menu = value;
-        this.getRecords();
+    public router: Router) {
+      let thiss = this;
+      this.windowData.top.viewFunc = function (value) {
+        if (!thiss.isFirstTime) {
+          setTimeout(() => {
+            thiss.meunuItem(value);
+            thiss.isFirstTime = true;
+          }, 500);
+        } else {
+          thiss.meunuItem(value);
+        }
+      };
     }
 
     ngOnInit(): void {
+      
+    }
+    
+    meunuItem(value: any) {
+        this.menu = value;
+        this.getRecords();
     }
 
     getRecords() {

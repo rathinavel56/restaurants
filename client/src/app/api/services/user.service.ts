@@ -113,13 +113,13 @@ export class UserService {
     }
 
     restaurantDelete(id: number): Observable<any> {
-        const url: string = AppConst.SERVER_URL.RESTAURANTS + '/' + id;
-        return this.apiService.httpGet(url, null);
+        const url: string = AppConst.SERVER_URL.RESTAURANTS + '/delete/' + id;
+        return this.apiService.httpPut(url, null);
     }
 
     restaurantEdit(request: any): Observable<any> {
-        const url: string = AppConst.SERVER_URL.RESTAURANTS;
-        return this.apiService.httpPost(url, request);
+        const url: string = AppConst.SERVER_URL.RESTAURANTS + '/' + request.id;
+        return this.apiService.httpPut(url, request);
     }
 
     restaurantSave(request: any): Observable<any> {

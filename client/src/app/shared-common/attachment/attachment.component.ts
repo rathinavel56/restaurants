@@ -2,7 +2,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Md5 } from 'ts-md5/dist/md5';
 import { Attachment } from 'src/app/api/models/attachment';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 // import { environment } from "../../environments/environment";
 
 @Component({
@@ -33,7 +33,6 @@ export class AttachmentComponent {
 
     @Input('attachment')
     set attachment(value: Attachment) {
-        this.imageClass = 'original';
         this.isVideo = (value && value.thumb) ? true : false;
         if (!this.isVideo && value && value.id) {
             const id: string = value.id.toString();
@@ -42,7 +41,7 @@ export class AttachmentComponent {
                 value.class + id + filename + this.imageClass
             ).toString();
             this.url =
-            'http://localhost:4200/images/' + this.imageClass + '/' +
+            'http://3.129.224.137/images/' + this.imageClass + '/' +
                 value.class +
                 '/' +
                 id +
@@ -61,14 +60,14 @@ export class AttachmentComponent {
                 value.class + idVideo + fileVideoName + this.imageClass
             ).toString();
             this.url =
-                'http://localhost:4200/images/' + this.imageClass + '/' +
+                'http://3.129.224.137/images/' + this.imageClass + '/' +
                 value.thumb.class +
                 '/' +
                 id +
                 '.' +
                 hash +
                 '.' + filename;
-            this.videoUrl = 'http://localhost:4200/images/' + this.imageClass + '/' +
+            this.videoUrl = 'http://3.129.224.137/images/' + this.imageClass + '/' +
                             value.class +
                             '/' +
                             idVideo +

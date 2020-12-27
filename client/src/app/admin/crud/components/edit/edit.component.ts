@@ -20,28 +20,47 @@ export class EditComponent implements OnInit {
   public responseData: any;
   public settings: any;
   public menuEditFields: any;
+  public windowData: any = window;
+  public isFirstTime: any = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private crudService: CrudService,
     private toastService: ToastService,
     private sessionService: SessionService,
     private _location: Location,
-    public router: Router) { }
+    public router: Router) {
+      let thiss = this;
+      this.windowData.top.editFunc = function (value) {
+        if (!thiss.isFirstTime) {
+          setTimeout(() => {
+            thiss.meunuItem(value);
+            thiss.isFirstTime = true;
+          }, 500);
+        } else {
+            thiss.meunuItem(value);
+        }
+      };
+    }
 
-    @Input('menu_detail')
-    set meunuItem(value: string) {
+    ngOnInit(): void {
+      
+    }
+    
+    meunuItem(value: any) {
       if (value) {
         this.menu = value;
         if (this.menu.api !== '/admin/settings' && this.menu.api !== '/admin/payment_gateways') {
           this.menu.edit.fields.forEach((element, index) => {
             if (element.type === 'tags' || element.type === 'select') {
-              this.crudService.get(element.reference, null)
-              .subscribe((response) => {
-                element.options = response.data;
-                if (element.type === 'tags') {
-                  this.setTags(element);
-                }
-              });
+              if (element.reference) {
+                this.crudService.get(element.reference, null)
+                .subscribe((response) => {
+                  element.options = response.data;
+                  if (element.type === 'tags') {
+                    this.setTags(element);
+                  }
+                });
+              }
               element.value = [];
             } else {
               element.value = '';
@@ -51,9 +70,6 @@ export class EditComponent implements OnInit {
         }
         this.getRecords();
       }
-    }
-
-    ngOnInit(): void {
     }
 
     getRecords() {

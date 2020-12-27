@@ -17,6 +17,8 @@ export class CrudComponent {
   public add: boolean;
   public edit: boolean;
   public view: boolean;
+  public windowData: any = window;
+  public isFirstTime: any = false;
   constructor(private activatedRoute: ActivatedRoute,
     public startupService: StartupService,
     private sessionService: SessionService,
@@ -31,12 +33,12 @@ export class CrudComponent {
   setPage() {
     this.apiEndPoint = '/' + this.activatedRoute.snapshot.paramMap.get('api');
     this.id = +this.activatedRoute.snapshot.paramMap.get('id');
-    this.list = (!(window.location.href.indexOf('/add') > -1) && !(window.location.href.indexOf('/edit') > -1)
-    && !(window.location.href.indexOf('/view') > -1));
-    this.setMenu();
-    this.add = (window.location.href.indexOf('/add') > -1);
-    this.edit = (window.location.href.indexOf('/edit') > -1);
-    this.view = (window.location.href.indexOf('/view') > -1);
+    this.list = (!(this.windowData.location.href.indexOf('/add') > -1) && !(this.windowData.location.href.indexOf('/edit') > -1)
+    && !(this.windowData.location.href.indexOf('/view') > -1));
+    this.add = (this.windowData.location.href.indexOf('/add') > -1);
+    this.edit = (this.windowData.location.href.indexOf('/edit') > -1);
+    this.view = (this.windowData.location.href.indexOf('/view') > -1);
+    this.setMenu();    
   }
 
   setMenu() {
@@ -48,12 +50,26 @@ export class CrudComponent {
         if (!formatMenu.role_id || formatMenu.role_id.indexOf(session.role_id) > -1) {
          if (formatMenu.copyFields) {
             formatMenu.listview.fields = formatMenu.listview.fields.filter((x) => (x.list === true));
-            formatMenu.add.fields = formatMenu.listview.fields.filter((x) => (x.add === true));
+            formatMenu.add = {
+              fields: formatMenu.listview.fields.filter((x) => (x.add === true))
+            };
             formatMenu.edit = {
               fields: formatMenu.listview.fields.filter((x) => (x.edit === true))
             };
             formatMenu.view = {
               fields: formatMenu.listview.fields.filter((x) => (x.view === true))
+            };
+          } else if (!formatMenu.copyFields && !formatMenu.child_sub_menu && formatMenu.listview && formatMenu.listview.fields) {
+            let feilds = formatMenu.listview.fields;
+            formatMenu.listview.fields = feilds.filter((x) => (x.list === true));
+            formatMenu.add = {
+              fields: feilds.filter((x) => (x.add === true))
+            };
+            formatMenu.edit = {
+              fields: feilds.filter((x) => (x.edit === true))
+            };
+            formatMenu.view = {
+              fields: feilds.filter((x) => (x.view === true))
             };
           } else if (formatMenu.child_sub_menu) {
               formatMenu.child_sub_menu.forEach(childMenu => {
@@ -72,6 +88,15 @@ export class CrudComponent {
     menus.forEach(menuItem => {
       if (menuItem.route === apiService) {
         this.menu = menuItem;
+        if (!this.isFirstTime) {
+          setTimeout(() => {
+              this.setListMenuItem();
+              this.isFirstTime = true;
+          }, 1000);          
+        } else {
+          this.setListMenuItem();
+        }
+        
       }
       if (menuItem.child_sub_menu) {
         menuItem.child_sub_menu.forEach(childMenuItem => {
@@ -83,19 +108,27 @@ export class CrudComponent {
     });
   }
 
+  setListMenuItem() {
+    if (this.list) {
+      this.windowData.top.listFunc(this.menu);
+    }
+    if (this.add) {
+      this.windowData.top.addFunc(this.menu);
+    }
+    if (this.edit) {
+      this.windowData.top.editFunc(this.menu);
+    }
+    if (this.view) {
+      this.windowData.top.viewFunc(this.menu);
+    }
+  }
+
   addChildMenus(formatMenu: any, elementData: any) {
     if (elementData.listview || formatMenu.listview) {
       let listFields = formatMenu.listview.fields;
-      if (elementData.listview) {
-        if (elementData.api === '/admin/instant_contestants') {
-          listFields = [];
-          listFields.push(formatMenu.listview.fields[0]);
-          listFields = [...listFields, ...elementData.listview.fields];
-          elementData.listview.fields = listFields;
-        } else {
+      if (elementData.listview) {        
           listFields = [...formatMenu.listview.fields, ...elementData.listview.fields];
           elementData.listview.fields = listFields;
-        }
       } else {
         elementData.listview = {
           fields: formatMenu.listview.fields.filter((x) => (x.list === true))

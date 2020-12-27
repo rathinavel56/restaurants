@@ -16,14 +16,31 @@ export class ListComponent implements OnInit {
   public menu: any;
   public responseData: any;
   public settings: any;
+  public windowData: any = window;
+  public isFirstTime: any = false;
 
   constructor(private crudService: CrudService,
     private toastService: ToastService,
     public sessionService: SessionService,
-    public router: Router) { }
+    public router: Router) {
+      let thiss = this;
+      this.windowData.top.listFunc = function (value) {
+        if (!thiss.isFirstTime) {
+          setTimeout(() => {
+            thiss.meunuItem(value);
+            thiss.isFirstTime = true;
+          }, 500);
+        } else {
+          thiss.meunuItem(value);
+        }
+      };
+    }
 
-  @Input('menu_detail')
-  set meunuItem(value: any) {
+    ngOnInit(): void {
+      
+    }
+    
+  meunuItem(value: any) {
     if (value) {
       this.menu = value;
       this.menu.listview.fields = value.listview.fields.filter((x) => (x.list === true));
@@ -31,10 +48,6 @@ export class ListComponent implements OnInit {
         this.getRecords();
       }
     }
-  }
-
-  ngOnInit(): void {
-
   }
 
   getRecords() {
