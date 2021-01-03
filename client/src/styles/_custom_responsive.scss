@@ -46,7 +46,19 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	// body {}
+	body {
+		.collapse {
+			display: block;
+		}
+
+		.clsDashboard {
+			.clsLeftNav {
+				.clsMenuList {
+					height: calc(100vh - 100px);
+				}
+			}
+		}
+	}
 }
 
 @media screen and (min-width: 768px) {
@@ -98,6 +110,18 @@
 					padding      : 30px;
 					margin       : 20px;
 					border-radius: 10px;
+				}
+			}
+		}
+
+		.collapse {
+			display: block;
+		}
+
+		.clsDashboard {
+			.clsLeftNav {
+				.clsMenuList {
+					height: calc(100vh - 100px);
 				}
 			}
 		}

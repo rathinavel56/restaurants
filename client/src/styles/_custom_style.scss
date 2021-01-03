@@ -1693,7 +1693,7 @@ body {
   .actionBtnQa {
     position  : absolute;
     text-align: right;
-    top       : 2px;
+    top       : -6px;
     right     : 20px;
     z-index   : 99;
 
@@ -1815,6 +1815,7 @@ body {
 
     &:hover {
       width: 250px;
+      top  : 8px;
 
       .defultIconSetPerson {
         width: 250px !important;
@@ -1873,4 +1874,42 @@ body {
   100% {
     transform: translateX(0px);
   }
+}
+
+.input-group-append {
+  .btn {
+    padding: 10px 15px 10px;
+  }
+}
+
+.pad-top-5 {
+  padding-top: 5px;
+}
+
+.pad-bot-5 {
+  padding-bottom: 5px;
+}
+
+.pad-left-5 {
+  padding-left: 5px;
+}
+
+.pad-right-5 {
+  padding-right: 5px;
+}
+
+.mar-top-5 {
+  margin-top: 5px;
+}
+
+.mar-bot-5 {
+  margin-bottom: 5px;
+}
+
+.mar-left-5 {
+  margin-left: 5px;
+}
+
+.mar-right-5 {
+  margin-right: 5px;
 }

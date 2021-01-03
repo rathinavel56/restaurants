@@ -98,6 +98,7 @@ $site-color         : #717c82;
 $brand-primary      : #F4633A;
 $brand-primary-dark : #f53600;
 $light-blue         : #FF8F1C;
+$light-blue-gr      : #FF8F1C4d;
 $start-blue-color   : $brand-primary;
 $end-blue-color     : $light-blue;
 $brand-success      : linear-gradient(to left, $start-blue-color, $end-blue-color);
@@ -719,7 +720,7 @@ body .sfont {
 
 .btn-white {
   background  : $white;
-  border-color: $dropdown-border;
+  border-color: $brand-primary;
   color       : $color-2;
 
   &:hover,
@@ -1110,6 +1111,10 @@ label {
           background: $color-3;
         }
       }
+
+      td[colspan] {
+        text-align: center;
+      }
     }
   }
 
@@ -1273,7 +1278,7 @@ label {
 }
 
 [type="checkbox"]:checked+label:before {
-  background  : $light-blue;
+  background  : $light-blue-gr;
   border-color: $light-blue;
 }
 

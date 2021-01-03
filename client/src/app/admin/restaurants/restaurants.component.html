@@ -1,270 +1,449 @@
-<div [@routerTransition]>
-    <div *ngIf="!isAddEdit && sessionService && sessionService.role_id !== 3">
-        <div class="container">
-            <div class="table-wrapper clearfix">
-                <div class="table-title">
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <h2>Manage <b>Restaurants</b></h2>
-                        </div>
-                        <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id === 4">
-                            <input type="text" class="form-control" [(ngModel)]="search"
-                            [ngModelOptions]="{standalone: true}">
-                            <a href="javascript:void(0)" (click)="getRestaurants()" class="btn btn-info"><span>Search</span></a>
-                            <a href="javascript:void(0)" (click)="addEdit()" class="btn btn-info"><i
-                                    class="fa fa-plus pr-1"></i> <span>Add</span></a>
-                        </div>
-                        <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id !== 4"><input type="text" class="form-control" [(ngModel)]="search"
-                            [ngModelOptions]="{standalone: true}">
-                            <a href="javascript:void(0)" (click)="getRestaurants()" class="btn btn-info"> <span>Search</span></a></div>
+<div [@routerTransition] class="container-fluid">
+    <div class="pt-30" *ngIf="!isAddEdit && sessionService && sessionService.role_id !== 3">
+        <div class="table-wrapper clearfix no-mar">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>Manage <b>Restaurants</b></h2>
                     </div>
-                </div>
-                <div class="clearfix table-responsive">
-                    <table class="table table-sm">
-                        <thead class="">
-                            <tr>
-                                <th class="text-center">Sl No</th>
-                                <th class="text-center">User Name</th>
-                                <th class="text-center">Email</th>
-                                <th class="text-center">Name</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let restaurant of restaurants; let i = index">
-                                <td class="text-center">
-                                    {{i+1}}
-                                </td>
-                                <td class="text-center">
-                                    {{restaurant.user.username}}
-                                </td>
-                                <td class="text-center">
-                                    {{restaurant.user.email}}
-                                </td>
-                                <td class="text-center">
-                                    {{restaurant.title}}
-                                </td>
-                                <td class="text-center clsAction">
-                                    <ul class="clearfix unstyled">
-                                        <li>
-                                            <a href="javascript:void(0)" (click)="edit(restaurant.id)"
-                                                class="btn btn-info">
-                                                <i class="fa fa-plus pr-1"></i>
-                                                <span>Edit</span>
-                                            </a>
-                                        </li>
 
-                                        <li>
-                                            <a href="javascript:void(0)" (click)="delete(index, restaurant.id)"
-                                                class="btn btn-danger">
-                                                <i class="fa fa-plus pr-1"></i>
-                                                <span>Delete</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr *ngIf="restaurants && restaurants.length === 0">
-                                <td colspan="5">No Records</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id === 4">
+                        <div class="inline-show v-top">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" [(ngModel)]="search"
+                                    [ngModelOptions]="{standalone: true}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary btn-info" type="button"
+                                        (click)="getRestaurants()" data-toggle="tooltip" data-placement="bottom"
+                                        title="Search">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="inline-show v-top pl-10 pad-top-5">
+                            <button type="button" (click)="addEdit()" class="btn btn-outline-secondary btn-info"
+                                data-toggle="tooltip" data-placement="bottom" title="Add">
+                                <i class="fa fa-plus pr-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 text-right" *ngIf="sessionService && sessionService.role_id !== 4">
+                        <!-- <input type="text" class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+                        <a href="javascript:void(0)" (click)="getRestaurants()" class="btn btn-info"> 
+                            <span>Search</span>
+                        </a> -->
+
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" [(ngModel)]="search"
+                                [ngModelOptions]="{standalone: true}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary btn-info" type="button"
+                                    (click)="getRestaurants()" data-toggle="tooltip" data-placement="bottom"
+                                    title="Search">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <!-- <div class="clearfix">
-                 <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                 <ul class="pagination">
-                    <li class="page-item disabled"><a href="javascript:void(0)">Previous</a></li>
-                    <li class="page-item"><a href="javascript:void(0)" class="page-link">1</a></li>
-                    <li class="page-item"><a href="javascript:void(0)" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="javascript:void(0)" class="page-link">3</a></li>
-                    <li class="page-item"><a href="javascript:void(0)" class="page-link">4</a></li>
-                    <li class="page-item"><a href="javascript:void(0)" class="page-link">5</a></li>
-                    <li class="page-item"><a href="javascript:void(0)" class="page-link">Next</a></li>
-                 </ul>
-              </div> -->
             </div>
+            <div class="clearfix table-responsive">
+                <table class="table table-sm">
+                    <thead class="">
+                        <tr>
+                            <th class="text-center">Sl No</th>
+                            <th class="text-center">User Name</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let restaurant of restaurants; let i = index">
+                            <td class="text-center">
+                                {{i+1}}
+                            </td>
+                            <td class="text-center">
+                                {{restaurant.user.username}}
+                            </td>
+                            <td class="text-center">
+                                {{restaurant.user.email}}
+                            </td>
+                            <td class="text-center">
+                                {{restaurant.title}}
+                            </td>
+
+                            <!-- <td class="text-center clsAction">
+                                <ul class="clearfix unstyled">
+                                    <li>
+                                        <a href="javascript:void(0)" (click)="edit(restaurant.id)"
+                                            class="btn btn-info">
+                                            <i class="fa fa-plus pr-1"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="javascript:void(0)" (click)="delete(index, restaurant.id)"
+                                            class="btn btn-danger">
+                                            <i class="fa fa-plus pr-1"></i>
+                                            <span>Delete</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td> -->
+
+                            <td class="tableActionBtns">
+                                <div class="actionBtnQa claerfix">
+                                    <div class="rightNewAddSet f-right">
+                                        <div class="defultIconSetPerson">
+                                            <button class="btn addBtnsNew searchIcon addNew2 clsFontIcon"
+                                                (click)="edit(restaurant.id)" data-toggle="tooltip"
+                                                data-placement="bottom" title="Edit">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+
+                                            <button class="btn addBtnsNew searchIcon addNew2 clsFontIcon"
+                                                (click)="delete(restaurant.id)" data-toggle="tooltip"
+                                                data-placement="bottom" title="Delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+
+                                            <button class="btn addBtnsNew beforeHover transparantDotBtn">
+                                                <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                        id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                        style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                                        <g>
+                                                            <circle cx="256" cy="256" r="64" />
+                                                            <circle cx="256" cy="448" r="64" />
+                                                            <circle cx="256" cy="64" r="64" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="restaurants && restaurants.length === 0">
+                            <td colspan="5">No Records</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <div class="clearfix">
+                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                <ul class="pagination">
+                <li class="page-item disabled"><a href="javascript:void(0)">Previous</a></li>
+                <li class="page-item"><a href="javascript:void(0)" class="page-link">1</a></li>
+                <li class="page-item"><a href="javascript:void(0)" class="page-link">2</a></li>
+                <li class="page-item active"><a href="javascript:void(0)" class="page-link">3</a></li>
+                <li class="page-item"><a href="javascript:void(0)" class="page-link">4</a></li>
+                <li class="page-item"><a href="javascript:void(0)" class="page-link">5</a></li>
+                <li class="page-item"><a href="javascript:void(0)" class="page-link">Next</a></li>
+                </ul>
+            </div> -->
         </div>
     </div>
-    <div *ngIf="isAddEdit">
+
+    <div *ngIf="isAddEdit" class="pt-30">
         <form>
-            <div class="form-group">
-                <label>Name *:</label>
-                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.title"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group">
-                <label>Email *:</label>
-                <input type="email" class="form-control" [(ngModel)]="restaurantDetails.email"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group" *ngIf="!editMode">
-                <label>UserName *:</label>
-                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.username"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group" *ngIf="!editMode">
-                <label>Password *:</label>
-                <input type="password" class="form-control" [(ngModel)]="restaurantDetails.password"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group" *ngIf="!editMode">
-                <label>Confirm Password *:</label>
-                <input type="password" class="form-control" [(ngModel)]="restaurantDetails.confirmpassword"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group">
-                <label>Address *:</label>
-                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.address"
-                    [ngModelOptions]="{standalone: true}" ngx-google-places-autocomplete
-                    (onAddressChange)="handleAddressChange($event)" autocomplete="no-fill" />
-            </div>
-            <div class="form-group">
-                <label>Latitude *:</label>
-                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.latitude"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group">
-                <label>Longitude *:</label>
-                <input type="text" class="form-control" [(ngModel)]="restaurantDetails.longitude"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group">
-                <label>Description *:</label>
-                <textarea class="form-control" [(ngModel)]="restaurantDetails.description"
-                    [ngModelOptions]="{standalone: true}"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Disclaimer:</label>
-                <textarea class="form-control" [(ngModel)]="restaurantDetails.disclaimer"
-                    [ngModelOptions]="{standalone: true}"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Max Person *:</label>
-                <input type="number" min="1" class="form-control" [(ngModel)]="restaurantDetails.maxperson"
-                    [ngModelOptions]="{standalone: true}">
-            </div>
-            <div class="form-group">
-                <label>Special Conditions: (<i class="fa fa-plus-circle cursor" (click)="specialAdd()"></i>)</label>
-                <span *ngFor="let specialCondition of restaurantDetails.specialConditions">
-                    <input type="text" class="form-control" [(ngModel)]="specialCondition.name"
-                        [ngModelOptions]="{standalone: true}" /><br>
-                </span>
-            </div>
-            <div class="form-group">
-                <label>Menu Items *: (<i class="fa fa-plus-circle cursor" (click)="menuAdd()"></i>)</label><br>
-                <span *ngFor="let menu of restaurantDetails.menus">
-                    <label>Name:</label>
-                    <input type="text" class="form-control" [(ngModel)]="menu.name"
-                        [ngModelOptions]="{standalone: true}">
-                    <label>Price:</label>
-                    <input type="text" class="form-control" [(ngModel)]="menu.price"
-                        [ngModelOptions]="{standalone: true}">
-                </span>
-            </div>
-            <div class="form-group">
-                <label>Facilities / Services *: (<i class="fa fa-plus-circle cursor"
-                        (click)="facilitiesAdd()"></i>)</label>
-                <span *ngFor="let facility of restaurantDetails.facilities">
-                    <input type="text" class="form-control" [(ngModel)]="facility.name"
-                        [ngModelOptions]="{standalone: true}" /><br>
-                </span>
-            </div>
-            <div class="form-group">
-                <label>Atmospheres: (<i class="fa fa-plus-circle cursor" (click)="atmosphereAdd()"></i>)</label>
-                <span *ngFor="let atmosphere of restaurantDetails.atmospheres">
-                    <input type="text" class="form-control" [(ngModel)]="atmosphere.name"
-                        [ngModelOptions]="{standalone: true}" /><br>
-                </span>
-            </div>
-            <div class="form-group" *ngIf="staticDataList">
-                <label>Spoken Languages *:</label>
-                <div class="form-check" *ngFor="let language of staticDataList.languages">
-                    <input class="form-check-input" type="checkbox" [checked]="language.selected"
-                        [(ngModel)]="language.selected" id="{{language.name.replace(' ', '')}}"
-                        [ngModelOptions]="{standalone: true}" />
-                    <label class="form-check-label" for="{{language.name.replace(' ', '')}}">
-                        {{language.name}}
-                    </label>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Name *:</label>
+                        <input type="text" class="form-control" [(ngModel)]="restaurantDetails.title"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" *ngIf="staticDataList">
-                <label>Themes *:</label>
-                <div class="form-check" *ngFor="let theme of staticDataList.themes">
-                    <input class="form-check-input" type="checkbox" [checked]="theme.selected"
-                        [(ngModel)]="theme.selected" id="{{theme.name.replace(' ', '')}}"
-                        [ngModelOptions]="{standalone: true}" />
-                    <label class="form-check-label" for="{{theme.name.replace(' ', '')}}">
-                        {{theme.name}}
-                    </label>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email *:</label>
+                        <input type="email" class="form-control" [(ngModel)]="restaurantDetails.email"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" *ngIf="staticDataList">
-                <label>Cuisines *:</label>
-                <div class="form-check" *ngFor="let cuisine of staticDataList.cuisines">
-                    <input class="form-check-input" type="checkbox" [checked]="cuisine.selected"
-                        [(ngModel)]="cuisine.selected" id="{{cuisine.name.replace(' ', '')}}"
-                        [ngModelOptions]="{standalone: true}" />
-                    <label class="form-check-label" for="{{cuisine.name.replace(' ', '')}}">
-                        {{cuisine.name}}
-                    </label>
+
+                <div class="col-sm-6" *ngIf="!editMode">
+                    <div class="form-group">
+                        <label>UserName *:</label>
+                        <input type="text" class="form-control" [(ngModel)]="restaurantDetails.username"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" *ngIf="staticDataList">
-                <label>Payment Options *:</label>
-                <div class="form-check" *ngFor="let payment of staticDataList.payments">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="payment.selected"
-                        id="{{payment.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" />
-                    <label class="form-check-label" for="{{payment.name.replace(' ', '')}}">
-                        {{payment.name}}
-                    </label>
+
+                <div class="col-sm-6" *ngIf="!editMode">
+                    <div class="form-group">
+                        <label>Password *:</label>
+                        <input type="password" class="form-control" [(ngModel)]="restaurantDetails.password"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>About *:</label>
-                <textarea class="form-control" [(ngModel)]="restaurantDetails.about"
-                    [ngModelOptions]="{standalone: true}"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Attachments *:</label>
-                <input type="file" multiple (change)="uploadImage($event)" class="form-control-file">
-                <div id="preview">
-                    <div class="resimage" *ngFor="let attachment of restaurantDetails.attachments; let i = index">
-                        <span *ngIf="attachment.src">
-                            <img src="{{attachment.src}}" class="img-fluid" />
-                            <button type="button" class="btn btn-danger" (click)="softDelete(index)">Delete</button>
-                        </span>
-                        <span *ngIf="attachment.id">
-                            <app-attachment *ngIf="attachment.id" [type]="'medium_thumb'" [attachment]="attachment">
-                            </app-attachment>
-                            <button type="button" class="btn btn-danger" (click)="hardDelete(index, attachment.id)" >Delete</button>
+
+                <div class="col-sm-6" *ngIf="!editMode">
+                    <div class="form-group">
+                        <label>Confirm Password *:</label>
+                        <input type="password" class="form-control" [(ngModel)]="restaurantDetails.confirmpassword"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Address *:</label>
+                        <input type="text" class="form-control" [(ngModel)]="restaurantDetails.address"
+                            [ngModelOptions]="{standalone: true}" ngx-google-places-autocomplete
+                            (onAddressChange)="handleAddressChange($event)" autocomplete="no-fill" />
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Latitude *:</label>
+                        <input type="text" class="form-control" [(ngModel)]="restaurantDetails.latitude"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Longitude *:</label>
+                        <input type="text" class="form-control" [(ngModel)]="restaurantDetails.longitude"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Max Person *:</label>
+                        <input type="number" min="1" class="form-control" [(ngModel)]="restaurantDetails.maxperson"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Description *:</label>
+                        <textarea class="form-control" [(ngModel)]="restaurantDetails.description"
+                            [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Disclaimer:</label>
+                        <textarea class="form-control" [(ngModel)]="restaurantDetails.disclaimer"
+                            [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Special Conditions: (<i class="fa fa-plus-circle cursor"
+                                (click)="specialAdd()"></i>)</label>
+                        <span *ngFor="let specialCondition of restaurantDetails.specialConditions">
+                            <input type="text" class="form-control" [(ngModel)]="specialCondition.name"
+                                [ngModelOptions]="{standalone: true}" /><br>
                         </span>
                     </div>
                 </div>
+
             </div>
-            <div class="form-group">
-                <div class="form-check" >
-                    <input class="form-check-input" type="checkbox" [checked]="(restaurantDetails.is_active === 1)"
-                        [(ngModel)]="restaurantDetails.is_active" id="is_active" [ngModelOptions]="{standalone: true}" />
-                    <label class="form-check-label" for="is_active">
-                        Active *
-                    </label>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Menu Items *: (<i class="fa fa-plus-circle cursor" (click)="menuAdd()"></i>)</label><br>
+                        <div class="row" *ngFor="let menu of restaurantDetails.menus">
+                            <div class="col-sm-6">
+                                <label>Name:</label>
+                                <input type="text" class="form-control" [(ngModel)]="menu.name"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>Price:</label>
+                                <input type="text" class="form-control" [(ngModel)]="menu.price"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Facilities / Services *: (<i class="fa fa-plus-circle cursor"
+                                (click)="facilitiesAdd()"></i>)</label>
+                        <div class="row">
+                            <div class="col-sm-6 mb-15" *ngFor="let facility of restaurantDetails.facilities">
+                                <input type="text" class="form-control" [(ngModel)]="facility.name"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Atmospheres: (<i class="fa fa-plus-circle cursor" (click)="atmosphereAdd()"></i>)</label>
+                        <div class="row">
+                            <div class="col-sm-6 mb-15" *ngFor="let atmosphere of restaurantDetails.atmospheres">
+                                <input type="text" class="form-control" [(ngModel)]="atmosphere.name"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="staticDataList">
+                    <div class="form-group">
+                        <label>Spoken Languages *:</label>
+                        <div class="form-check" *ngFor="let language of staticDataList.languages">
+                            <input class="form-check-input" type="checkbox" [checked]="language.selected"
+                                [(ngModel)]="language.selected" id="{{language.name.replace(' ', '')}}"
+                                [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="{{language.name.replace(' ', '')}}">
+                                {{language.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="staticDataList">
+                    <div class="form-group">
+                        <label>Themes *:</label>
+                        <div class="form-check" *ngFor="let theme of staticDataList.themes">
+                            <input class="form-check-input" type="checkbox" [checked]="theme.selected"
+                                [(ngModel)]="theme.selected" id="{{theme.name.replace(' ', '')}}"
+                                [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="{{theme.name.replace(' ', '')}}">
+                                {{theme.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="staticDataList">
+                    <div class="form-group">
+                        <label>Cuisines *:</label>
+                        <div class="form-check" *ngFor="let cuisine of staticDataList.cuisines">
+                            <input class="form-check-input" type="checkbox" [checked]="cuisine.selected"
+                                [(ngModel)]="cuisine.selected" id="{{cuisine.name.replace(' ', '')}}"
+                                [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="{{cuisine.name.replace(' ', '')}}">
+                                {{cuisine.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="staticDataList">
+                    <div class="form-group">
+                        <label>Payment Options *:</label>
+                        <div class="form-check" *ngFor="let payment of staticDataList.payments">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="payment.selected"
+                                id="{{payment.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="{{payment.name.replace(' ', '')}}">
+                                {{payment.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>About *:</label>
+                        <textarea class="form-control" [(ngModel)]="restaurantDetails.about"
+                            [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Attachments *:</label>
+
+                        <div class="clsFile-btn">
+                            <span class="clsUploadIcon">
+                                <i class="fa fa-upload"></i>
+                            </span>
+                            <input type="file" multiple (change)="uploadImage($event)" class="form-control">
+                        </div>
+
+                        <div id="preview" class="clearfix pt-10">
+                            <div class="resimage"
+                                *ngFor="let attachment of restaurantDetails.attachments; let i = index">
+                                <div class="row" *ngIf="attachment.src">
+                                    <div class="col-sm-6">
+                                        <img src="{{attachment.src}}" class="img-fluid" />
+                                    </div>
+
+                                    <div class="col-sm-6 text-right">
+                                        <button type="button" class="btn btn-danger"
+                                            (click)="softDelete(index)">Delete</button>
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="attachment.id">
+                                    <div class="col-sm-6">
+                                        <app-attachment *ngIf="attachment.id" [type]="'medium_thumb'"
+                                            [attachment]="attachment">
+                                        </app-attachment>
+                                    </div>
+
+                                    <div class="col-sm-6 text-right">
+                                        <button type="button" class="btn btn-danger"
+                                            (click)="hardDelete(index, attachment.id)">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                [checked]="(restaurantDetails.is_active === 1)"
+                                [(ngModel)]="restaurantDetails.is_active" id="is_active"
+                                [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="is_active">
+                                Active *
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="sessionService.role_id === 1">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                [checked]="(restaurantDetails.is_admin_deactived === 1)"
+                                [(ngModel)]="restaurantDetails.is_admin_deactived" id="is_admin_deactived"
+                                [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="is_active">
+                                Deactive *
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-group" *ngIf="sessionService.role_id === 1">
-                <div class="form-check" >
-                    <input class="form-check-input" type="checkbox" [checked]="(restaurantDetails.is_admin_deactived === 1)"
-                        [(ngModel)]="restaurantDetails.is_admin_deactived" id="is_admin_deactived" [ngModelOptions]="{standalone: true}" />
-                    <label class="form-check-label" for="is_active">
-                        Deactive *
-                    </label>
-                </div>
-            </div>
-            <div class="clearfix text-left">
+
+            <div class="clearfix text-right pb-20">
+                <button class="btn btn-white" (click)="addEdit()" type="button">
+                    cancel
+                </button>
+
                 <button class="btn btn-primary" (click)="saveRes()" type="button">
                     submit
-                </button>
-                <button class="btn btn-default" (click)="addEdit()" type="button">
-                    cancel
                 </button>
             </div>
         </form>
