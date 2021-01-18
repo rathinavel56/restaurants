@@ -29,10 +29,8 @@
                             "src/assets/javascripts/jquery.min.js",
                             "node_modules/chart.js/dist/Chart.js",
                             "node_modules/bootstrap-slider/dist/bootstrap-slider.min.js",
-                            "src/assets/javascripts/slim.min.js",
                             "src/assets/javascripts/popper.min.js",
                             "src/assets/javascripts/bootstrap.min.js",
-                            "src/assets/javascripts/bootstrap.bundle.min.js",
                             "src/assets/javascripts/custom-aos-animate.js",
                             "src/assets/javascripts/custom-js.js"
                         ]

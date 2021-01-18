@@ -461,9 +461,9 @@ body {
 
 // style overwrite
 .img-fluid {
-    height    : 100%;
-    width     : 100%;
-    object-fit: cover;
+    // height    : 100%;
+    // width     : 100%;
+    object-fit: contain;
 }
 
 .container {
@@ -504,11 +504,13 @@ body {
         top: -26px;
     }
 }
+
 select {
     .form-control {
         background: none !important;
     }
 }
+
 .btn-danger {
     color: #fff !important;
 }

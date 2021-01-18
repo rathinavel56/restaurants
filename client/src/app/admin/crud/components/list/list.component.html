@@ -1,4 +1,4 @@
-<div class="container" *ngIf="menu">
+<div class="container-fluid" *ngIf="menu">
    <div class="table-wrapper clearfix">
       <div class="table-title">
          <div class="row">
@@ -92,6 +92,7 @@
                      </div>
                   </td> -->
                </tr>
+
                <tr *ngIf="responseData && responseData.length === 0">
                   <td colspan="{{menu.listview.fields.length + 1}}">No Records</td>
                </tr>

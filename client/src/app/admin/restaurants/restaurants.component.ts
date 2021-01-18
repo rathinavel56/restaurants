@@ -14,11 +14,11 @@ import { QueryParam } from '../../api/models/query-param';
     animations: [routerTransition()]
 })
 export class RestaurantComponent implements OnInit {
-    
+
     constructor(private toastService: ToastService,
         private userService: UserService,
-        private crudService: CrudService) {}
-    staticDataList: any; 
+        private crudService: CrudService) { }
+    staticDataList: any;
     timeSlots: any = [];
     restaurantDetails: any;
     isAddEdit: any = false;
@@ -43,130 +43,130 @@ export class RestaurantComponent implements OnInit {
     }
 
     getRestaurants() {
-        this.toastService.showLoading();    
+        this.toastService.showLoading();
         this.userService.restaurants({
             search: this.search ? this.search : undefined
         })
-        .subscribe((response) => {
-            if (response.data) {
-                this.restaurants = response.data;
-            }
-            this.toastService.clearLoading();
-        });
+            .subscribe((response) => {
+                if (response.data) {
+                    this.restaurants = response.data;
+                }
+                this.toastService.clearLoading();
+            });
     }
 
     edit(id) {
         this.editMode = true;
         this.toastService.showLoading();
         this.userService.restaurantDetail(id)
-        .subscribe((response) => {
-            if (response.data) {                
-                this.restaurantDetails = {
-                    id: id,
-                    title: response.data.title,
-                    description: response.data.description,
-                    address: response.data.address,
-                    email: response.data.user.email,
-                    city: response.data.city.name,
-                    state: response.data.state,
-                    country: response.data.country.name,
-                    disclaimer: response.data.disclaimer,
-                    latitude: response.data.latitude,
-                    longitude: response.data.longitude,
-                    maxperson: response.data.max_person,
-                    specialConditions: [{
-                        name: ''
-                    }],
-                    facilities: [{
-                        name: ''
-                    }],
-                    menus: [{
-                        name: '',
-                        price: ''
-                    }],
-                    atmospheres: [{
-                        name: ''
-                    }],
-                    languages: [],
-                    payments: [],
-                    themes: [],
-                    cuisines: [],
-                    about: '',
-                    attachments: [],
-                    attachmentsDeleted: [],
-                    is_active: response.data.is_active,
-                    is_admin_deactived: (this.sessionService.role_id === 1) ? response.data.is_admin_deactived : undefined
-                };
-                if (response.data.facilities_services && response.data.facilities_services.length > 0) {
-                    this.restaurantDetails.facilities = [];
-                    response.data.facilities_services.forEach(facility => {
-                        this.restaurantDetails.facilities.push({
-                            name: facility.name
+            .subscribe((response) => {
+                if (response.data) {
+                    this.restaurantDetails = {
+                        id: id,
+                        title: response.data.title,
+                        description: response.data.description,
+                        address: response.data.address,
+                        email: response.data.user.email,
+                        city: response.data.city.name,
+                        state: response.data.state,
+                        country: response.data.country.name,
+                        disclaimer: response.data.disclaimer,
+                        latitude: response.data.latitude,
+                        longitude: response.data.longitude,
+                        maxperson: response.data.max_person,
+                        specialConditions: [{
+                            name: ''
+                        }],
+                        facilities: [{
+                            name: ''
+                        }],
+                        menus: [{
+                            name: '',
+                            price: ''
+                        }],
+                        atmospheres: [{
+                            name: ''
+                        }],
+                        languages: [],
+                        payments: [],
+                        themes: [],
+                        cuisines: [],
+                        about: '',
+                        attachments: [],
+                        attachmentsDeleted: [],
+                        is_active: response.data.is_active,
+                        is_admin_deactived: (this.sessionService.role_id === 1) ? response.data.is_admin_deactived : undefined
+                    };
+                    if (response.data.facilities_services && response.data.facilities_services.length > 0) {
+                        this.restaurantDetails.facilities = [];
+                        response.data.facilities_services.forEach(facility => {
+                            this.restaurantDetails.facilities.push({
+                                name: facility.name
+                            });
                         });
-                    });
-                }
-                if (response.data.menus && response.data.menus.length > 0) {
-                    this.restaurantDetails.menus = [];
-                    response.data.menus.forEach(menu => {
-                        this.restaurantDetails.menus.push({
-                            name: menu.name,
-                            price: menu.price
+                    }
+                    if (response.data.menus && response.data.menus.length > 0) {
+                        this.restaurantDetails.menus = [];
+                        response.data.menus.forEach(menu => {
+                            this.restaurantDetails.menus.push({
+                                name: menu.name,
+                                price: menu.price
+                            });
                         });
-                    });
-                }
-                if (response.data.special_conditions && response.data.special_conditions.length > 0) {
-                    this.restaurantDetails.specialConditions = [];
-                    response.data.special_conditions.forEach(specialCondition => {
-                        this.restaurantDetails.specialConditions.push({
-                            name: specialCondition.condition
+                    }
+                    if (response.data.special_conditions && response.data.special_conditions.length > 0) {
+                        this.restaurantDetails.specialConditions = [];
+                        response.data.special_conditions.forEach(specialCondition => {
+                            this.restaurantDetails.specialConditions.push({
+                                name: specialCondition.condition
+                            });
                         });
-                    });
-                }
-                if (response.data.atmospheres && response.data.atmospheres.length > 0) {
-                    this.restaurantDetails.atmospheres = [];
-                    response.data.atmospheres.forEach(atmosphere => {
-                        this.restaurantDetails.atmospheres.push({
-                            name: atmosphere.name
+                    }
+                    if (response.data.atmospheres && response.data.atmospheres.length > 0) {
+                        this.restaurantDetails.atmospheres = [];
+                        response.data.atmospheres.forEach(atmosphere => {
+                            this.restaurantDetails.atmospheres.push({
+                                name: atmosphere.name
+                            });
                         });
-                    });
+                    }
+                    if (response.data.languages && response.data.languages.length > 0) {
+                        this.staticDataList.languages.forEach(language => {
+                            language.selected = (response.data.languages.filter((e) => language.id === e.language_id).length > 0);
+                        });
+                    }
+                    if (response.data.payment && response.data.payment.length > 0) {
+                        this.staticDataList.payments.forEach(payment => {
+                            payment.selected = (response.data.payment.filter((e) => payment.id === e.payment_id).length > 0);
+                        });
+                    }
+                    if (response.data.themes && response.data.themes.length > 0) {
+                        this.staticDataList.themes.forEach(theme => {
+                            theme.selected = (response.data.themes.filter((e) => theme.id === e.theme_id).length > 0);
+                        });
+                    }
+                    if (response.data.cuisines && response.data.cuisines.length > 0) {
+                        this.staticDataList.cuisines.forEach(cuisine => {
+                            cuisine.selected = (response.data.cuisines.filter((e) => cuisine.id === e.cuisine_id).length > 0);
+                        });
+                    }
+                    if (response.data.about) {
+                        this.restaurantDetails.about = response.data.about.about;
+                    }
+                    this.restaurantDetails.attachments = response.data.attachments;
+                    this.isAddEdit = !this.isAddEdit;
                 }
-                if (response.data.languages && response.data.languages.length > 0) {
-                    this.staticDataList.languages.forEach(language => {
-                        language.selected = (response.data.languages.filter((e) => language.id === e.language_id).length > 0); 
-                    });
-                }
-                if (response.data.payment && response.data.payment.length > 0) {
-                    this.staticDataList.payments.forEach(payment => {
-                        payment.selected = (response.data.payment.filter((e) => payment.id === e.payment_id).length > 0); 
-                    });
-                }
-                if (response.data.themes && response.data.themes.length > 0) {
-                    this.staticDataList.themes.forEach(theme => {
-                        theme.selected = (response.data.themes.filter((e) => theme.id === e.theme_id).length > 0); 
-                    });
-                }
-                if (response.data.cuisines && response.data.cuisines.length > 0) {
-                    this.staticDataList.cuisines.forEach(cuisine => {
-                        cuisine.selected = (response.data.cuisines.filter((e) => cuisine.id === e.cuisine_id).length > 0); 
-                    });
-                }
-                if (response.data.about) {
-                    this.restaurantDetails.about = response.data.about.about;
-                }
-                this.restaurantDetails.attachments = response.data.attachments;
-                this.isAddEdit = !this.isAddEdit;
-            }
-            this.toastService.clearLoading();
-        });
+                this.toastService.clearLoading();
+            });
     }
 
     delete(index, id) {
         this.toastService.showLoading();
         this.userService.restaurantDelete(id)
-        .subscribe((response) => {
-            this.restaurants.splice(index, 1);
-            this.toastService.clearLoading();
-        });
+            .subscribe((response) => {
+                this.restaurants.splice(index, 1);
+                this.toastService.clearLoading();
+            });
     }
 
     reset() {
@@ -223,7 +223,7 @@ export class RestaurantComponent implements OnInit {
                 }
                 if (element.types.indexOf('country') > -1) {
                     this.restaurantDetails.country = element.long_name;
-                }                  
+                }
             });
         } else {
             this.restaurantDetails.address = '';
@@ -241,21 +241,21 @@ export class RestaurantComponent implements OnInit {
         Array.from(event.target.files).forEach((file: any, index) => {
             let reader = new FileReader();
             reader.onload = (e: any) => {
-                thiss.restaurantDetails.attachments.push({src: e.target.result});
+                thiss.restaurantDetails.attachments.push({ src: e.target.result });
             };
             reader.readAsDataURL(file);
             formData.append('file[]', file, file.name);
-        });     
+        });
         const queryParam: QueryParam = {
             class: 'Restaurant'
         };
         this.crudService.postFile('/attachments_mutiple', formData, queryParam)
-        .subscribe((response) => {
-            response.attachments.forEach((e) => {
-                this.restaurantDetails.attachments.push(e);
+            .subscribe((response) => {
+                response.attachments.forEach((e) => {
+                    this.restaurantDetails.attachments.push(e);
+                });
+                this.toastService.clearLoading();
             });
-            this.toastService.clearLoading();
-        });
     }
 
     softDelete(index) {
@@ -305,7 +305,7 @@ export class RestaurantComponent implements OnInit {
         if (!this.editMode && this.restaurantDetails.username.trim() === '') {
             this.toastService.error('Name is required');
         } else if (!this.editMode && this.restaurantDetails.password.trim() === '') {
-            this.toastService.error('Password is required');    
+            this.toastService.error('Password is required');
         } else if (!this.editMode && this.restaurantDetails.confirmpassword.trim() === '') {
             this.toastService.error('Confirm Password is required');
         } else if (!this.editMode && this.restaurantDetails.password !== this.restaurantDetails.confirmpassword) {
@@ -348,31 +348,31 @@ export class RestaurantComponent implements OnInit {
             this.toastService.showLoading();
             if (this.editMode) {
                 this.userService.restaurantEdit(this.restaurantDetails)
-                .subscribe((response) => {
-                    if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
-                        this.toastService.success(response.error.message);
-                        this.reset();
-                        this.getRestaurants();
-                        this.isAddEdit = false;
-                    } else {
-                        this.toastService.error(response.error.message);
-                    }
-                    this.toastService.clearLoading();
-                 });
+                    .subscribe((response) => {
+                        if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
+                            this.toastService.success(response.error.message);
+                            this.reset();
+                            this.getRestaurants();
+                            this.isAddEdit = false;
+                        } else {
+                            this.toastService.error(response.error.message);
+                        }
+                        this.toastService.clearLoading();
+                    });
             } else {
                 this.userService.restaurantSave(this.restaurantDetails)
-                .subscribe((response) => {
-                    if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
-                        this.toastService.success(response.error.message);
-                        this.reset();
-                        this.getRestaurants();
-                        this.isAddEdit = false;
-                    } else {
-                        this.toastService.error(response.error.message);
-                    }
-                    this.toastService.clearLoading();
-                });       
-            }     
+                    .subscribe((response) => {
+                        if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
+                            this.toastService.success(response.error.message);
+                            this.reset();
+                            this.getRestaurants();
+                            this.isAddEdit = false;
+                        } else {
+                            this.toastService.error(response.error.message);
+                        }
+                        this.toastService.clearLoading();
+                    });
+            }
         }
     }
 }

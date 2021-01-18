@@ -1,18 +1,18 @@
 <div [@routerTransition]>
    <div class="container-fluid mt-30">
       <div class="row">
-         <div class="col-sm-1">
+         <div class="col-sm-2 col-md-1">
             Days
          </div>
 
-         <div class="col-sm-1">
+         <div class="col-sm-3 col-md-1">
             <div class="inline-show v-mid">
                <label for="holiday" class="mb-0"> Holiday
                </label>
             </div>
          </div>
 
-         <div class="col-sm-10">
+         <div class="col-sm-7 col-md-10 text-center">
             <div class="inline-show v-mid">
                <label for="timeslot" class="mb-0"> TimeSlot
                </label>
@@ -29,13 +29,16 @@
                   {{schedule.day}}
                </td>
                <td>
-                  <input type="checkbox" (click)="updateSchedule(schedule)" id="{{schedule.day}}" [checked]="(schedule.type === 1)">
+                  <input type="checkbox" (click)="updateSchedule(schedule)" id="{{schedule.day}}"
+                     [checked]="(schedule.type === 1)">
                   <label for="{{schedule.day}}" class="mb-0"></label>
                </td>
                <td>
                   <div class="clsTimeSlot" *ngIf="schedule.type === 0">
                      <span *ngFor="let timeSlot of schedule.timeSlots">
-                        <input style="width:50px" type="number" min="0" [(ngModel)]="timeSlot.slot" [ngModelOptions]="{standalone: true}" (change)="updatetimeSlot(timeSlot, $event)" /><br>{{timeSlot.time}}
+                        <input style="width:50px" type="number" min="0" [(ngModel)]="timeSlot.slot"
+                           [ngModelOptions]="{standalone: true}"
+                           (change)="updatetimeSlot(timeSlot, $event)" /><br>{{timeSlot.time}}
                      </span>
                   </div>
                   <div class="clsTimeSlot" *ngIf="schedule.type === 1">

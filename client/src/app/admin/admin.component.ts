@@ -1,5 +1,6 @@
 
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+declare const $: any;
 
 @Component({
     selector: 'app-admin',
@@ -14,7 +15,15 @@ export class AdminComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        $(document).ready(function () {
+            setTimeout(function () {
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                });
+            }, 500);
+        });
+    }
 
     toggleCollapsed() {
         this.collapsed = !this.collapsed;

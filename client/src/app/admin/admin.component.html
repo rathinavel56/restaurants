@@ -8,12 +8,12 @@
             </div>
         </div>
 
-        <div class="clsRightBlock">
+        <div class="clsRightBlock" [ngClass]="{sidebarPushRight: isActive, clsCollapsedLeft: collapsed}">
             <!-- <app-default-header></app-default-header> -->
 
             <app-top-header></app-top-header>
 
-            <section class="main-container" [ngClass]="{collapsed: collapedSideBar}">
+            <section class="clearfix">
                 <router-outlet></router-outlet>
             </section>
         </div>
