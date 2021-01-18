@@ -22,11 +22,13 @@
          <table class="table table-sm">
             <thead class="">
                <tr>
+                  <th class="text-center">ID</th>
                   <th class="text-center" *ngFor="let item of menu.listview.fields">{{item.label}}</th>
                </tr>
             </thead>
             <tbody>
-               <tr *ngFor="let element of responseData">
+               <tr *ngFor="let element of responseData; let indexCrud = index">
+                  <td>{{indexCrud + 1}}</td>
                   <td class="text-center" *ngFor="let elementChild of menu.listview.fields">
                      <span *ngIf="!elementChild.listActions">
                         <span *ngIf="elementChild['label'] === 'From User'">
@@ -91,7 +93,7 @@
                   </td> -->
                </tr>
                <tr *ngIf="responseData && responseData.length === 0">
-                  <td colspan="{{menu.listview.fields.length}}">No Records</td>
+                  <td colspan="{{menu.listview.fields.length + 1}}">No Records</td>
                </tr>
             </tbody>
          </table>
