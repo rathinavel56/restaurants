@@ -22,20 +22,20 @@ class CustomTimeSlot extends AppModel
         'id',
 		'created_at',
 		'updated_at',
-		'center_id',
+		'restaurant_id',
 		'date_detail',
-		'type',
-		'from_timeslot',
-		'to_timeslot'
+		'type'
     );
     public $rules = array(
         'id' => 'sometimes|required',
-		'center_id' => 'sometimes|required',
+		'restaurant_id' => 'sometimes|required',
 		'created_at' => 'sometimes|required',
 		'updated_at' => 'sometimes|required',
 		'date_detail' => 'sometimes|required',
-		'type' => 'sometimes|required',
-		'from_timeslot' => 'sometimes|required',
-		'to_timeslot' => 'sometimes|required'
+		'type' => 'sometimes|required'
     );
+	public function slots()
+    {
+		return $this->hasMany('Models\Slot', 'time_slot_id', 'id')->where('type', 1);
+    }
 }

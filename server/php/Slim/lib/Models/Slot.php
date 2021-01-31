@@ -6,14 +6,14 @@ namespace Models;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class TimeSlot extends AppModel
+class Slot extends AppModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'time_slots';
+    protected $table = 'slots';
     public $hidden = array(
         'created_at',
         'updated_at'
@@ -22,20 +22,18 @@ class TimeSlot extends AppModel
         'id',
 		'created_at',
 		'updated_at',
-		'restaurant_id',
-		'day',
-		'type'
+		'time_slot_id',
+		'type',
+		'from_timeslot',
+		'slot_count'
     );
     public $rules = array(
         'id' => 'sometimes|required',
-		'restaurant_id' => 'sometimes|required',
 		'created_at' => 'sometimes|required',
 		'updated_at' => 'sometimes|required',
-		'day' => 'sometimes|required',
-		'type' => 'sometimes|required'
+		'time_slot_id' => 'sometimes|required',
+		'type' => 'sometimes|required',
+		'from_timeslot' => 'sometimes|required',
+		'slot_count' => 'sometimes|required'
     );
-	public function slots()
-    {
-		return $this->hasMany('Models\Slot', 'time_slot_id', 'id')->where('type', 0);
-    }
 }

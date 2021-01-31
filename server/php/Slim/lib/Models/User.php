@@ -70,9 +70,6 @@ class User extends AppModel
     public $hidden = array(
 		'created_at',
 		'updated_at',
-		'role_id',
-		'email',
-		'mobile',
 		'password',
 		'user_login_count',
 		'available_wallet_amount',
@@ -87,9 +84,9 @@ class User extends AppModel
 		'vote_pay_key',
 		'vote_to_purchase',
 		'subscription_pay_key',
-		'fund_pay_key',
+		'subscription_end_date',
 		'donated',
-		'subscription_id',
+		'last_name',
 		'paypal_email',
 		'total_votes',
 		'display_name',
@@ -97,7 +94,8 @@ class User extends AppModel
 		'instant_vote_to_purchase',
 		'is_paypal_connect',
 		'is_stripe_connect',
-		'subscription_end_date'
+		'is_archive',
+		'role'
     );
     public $rules = array(
        'username' => [
@@ -131,13 +129,13 @@ class User extends AppModel
     /**
      * To check if username already exist in user table, if so generate new username with append number
      *
-     * @param string $username User name which want to check if already exsist
+     * @param string $username User name which want to check if already exists
      *
      * @return mixed
      */
     public function checkUserName($username)
     {
-        $userExist = User::where('username', $username)->first();
+        $userExist = User::where('email', $username)->first();
         if (count($userExist) > 0) {
             $org_username = $username;
             $i = 1;
@@ -160,55 +158,15 @@ class User extends AppModel
     {
         return $this->hasOne('Models\Attachment', 'foreign_id', 'id')->select('id', 'filename', 'class', 'foreign_id')->where('class', 'UserAvatar');
     }
-    public function cover_photo()
-    {
-        return $this->hasOne('Models\Attachment', 'foreign_id', 'id')->where('class', 'CoverPhoto');
-    }
     public function role()
     {
         return $this->belongsTo('Models\Role', 'role_id', 'id');
     }
-	public function company()
-    {
-        return $this->belongsTo('Models\User', 'company_id', 'id');
-    }
-	public function company_user()
-    {
-        return $this->belongsTo('Models\User', 'company_id', 'id')->select('id');
-    }
-	public function address()
-    {
-        return $this->hasOne('Models\UserAddress', 'user_id', 'id')->where('is_default', true)->where('is_active', true);
-    }
-    public function foreign()
+	public function foreign()
     {
         return $this->morphTo(null, 'class', 'foreign_id');
     }
-	public function user_category()
-    {
-        return $this->hasOne('Models\UserCategory', 'user_id', 'id')->where('is_active', true)->with('category');
-    }
-	public function user_categories()
-    {
-        return $this->hasMany('Models\UserCategory', 'user_id', 'id')->where('is_active', true)->with('category');
-    }
-	public function category()
-    {
-		return $this->hasOne('Models\UserCategory', 'user_id', 'id')->with('category')->where('is_active', true)->where('category_id', $_GET['category_id']);	
-    }
-	public function contest()
-    {
-		if (isset($_GET['contest_id']) && $_GET['contest_id'] != '') {
-			return $this->hasOne('Models\UserContest', 'user_id', 'id')->where('contest_id', $_GET['contest_id']);
-		} else {
-			return $this->hasOne('Models\UserContest', 'user_id', 'id');
-		}
-    }
-	public function vote_category()
-    {
-		return $this->hasOne('Models\UserCategory', 'user_id', 'id')->select('user_id','votes')->where('category_id', $_GET['category_id']);	
-    }
-    public function scopeFilter($query, $params = array())
+	public function scopeFilter($query, $params = array())
     {
         global $authUser;
         parent::scopeFilter($query, $params);
@@ -224,24 +182,6 @@ class User extends AppModel
 		if (!empty($params['search'])) {
 			$search = $params['search'];
 			$query->where('username', 'like', "%$search%");
-        }
-		if (!empty($params['category_id'])) {
-            $category_id = explode(',', $params['category_id']);
-            $user_id = array();
-            $user_categories = UserCategory::select('user_id')->whereIn('category_id', $category_id)->get()->toArray();
-            foreach ($user_categories as $user_category) {
-                $user_id[] = $user_category['user_id'];
-            }
-            $query->whereIn('id', $user_id);
-        }
-		if (!empty($params['contest_id'])) {
-            $constests = explode(',', $params['contest_id']);
-            $user_id = array();
-			$user_constests = UserContest::whereIn('contest_id', $constests)->get()->toArray();
-			foreach ($user_constests as $user_constest) {
-                $user_id[] = $user_constest['user_id'];
-            }
-            $query->whereIn('id', $user_id);
         }
         if (!empty($authUser) && !empty($authUser['role_id'])) {
             if ($authUser['role_id'] != \Constants\ConstUserTypes::Admin) {

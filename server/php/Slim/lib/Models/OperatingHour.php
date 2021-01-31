@@ -1,20 +1,17 @@
 <?php
-/**
- * Advertisement
- */
 namespace Models;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class TimeSlot extends AppModel
+class OperatingHour extends AppModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'time_slots';
-    public $hidden = array(
+    protected $table = 'operating_hours';
+	public $hidden = array(
         'created_at',
         'updated_at'
     );
@@ -22,20 +19,20 @@ class TimeSlot extends AppModel
         'id',
 		'created_at',
 		'updated_at',
+		'type',
 		'restaurant_id',
-		'day',
-		'type'
+		'day_id',
+		'from',
+		'to'
     );
     public $rules = array(
         'id' => 'sometimes|required',
-		'restaurant_id' => 'sometimes|required',
 		'created_at' => 'sometimes|required',
 		'updated_at' => 'sometimes|required',
-		'day' => 'sometimes|required',
-		'type' => 'sometimes|required'
+		'name' => 'sometimes|required'
     );
-	public function slots()
-    {
-		return $this->hasMany('Models\Slot', 'time_slot_id', 'id')->where('type', 0);
-    }
+	public function day()
+	{
+		return $this->belongsTo('Models\Day', 'day_id', 'id');
+	}
 }

@@ -792,7 +792,7 @@ function findCountryIdFromIso2($iso2)
  *
 */
 function saveImage($class_name, $file, $foreign_id, $is_multi = false, $user_id = null, $ispaid = 0, $args = array()) {
-    if ($class_name == 'UserAvatar' && (!empty($file)) && (file_exists(APP_PATH . '/media/tmp/' . $file))) {
+    if (($class_name == 'UserAvatar' || $class_name == 'Brand' || $class_name == 'City' || $class_name == 'Cuisine' || $class_name == 'Theme') && (!empty($file)) && (file_exists(APP_PATH . '/media/tmp/' . $file))) {
         //Removing and re-inserting new image
         $userImg = Models\Attachment::where('foreign_id', $foreign_id)->where('class', $class_name)->first();
         if (!empty($userImg) && !($is_multi)) {
@@ -810,8 +810,7 @@ function saveImage($class_name, $file, $foreign_id, $is_multi = false, $user_id 
                 }
             }
         }
-	}
-	
+	}	
 	$attachment = new Models\Attachment;
 	if (!file_exists(APP_PATH . '/media/' . $class_name . '/' . $foreign_id)) {
 		mkdir(APP_PATH . '/media/' . $class_name . '/' . $foreign_id, 0777, true);
@@ -1921,5 +1920,78 @@ function offlineToCart($userId) {
 			$cart->save();
 		}
 		Models\OfflineCart::where('ipaddress', getClientRequestIP())->delete();
+	}
+}
+function send_twilio_text_sms($id, $token, $from, $to, $body)
+{
+	$url = "https://api.twilio.com/2010-04-01/Accounts/".$id."/SMS/Messages";
+	$data = array (
+		'From' => $from,
+		'To' => $to,
+		'Body' => $body,
+	);
+	$post = http_build_query($data);
+	$x = curl_init($url );
+	curl_setopt($x, CURLOPT_POST, true);
+	curl_setopt($x, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($x, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($x, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	curl_setopt($x, CURLOPT_USERPWD, "$id:$token");
+	curl_setopt($x, CURLOPT_POSTFIELDS, $post);
+	$y = curl_exec($x);
+	curl_close($x);
+	return $y;
+}
+function checkEmail($email) {
+   $find1 = strpos($email, '@');
+   $find2 = strpos($email, '.');
+   return ($find1 !== false && $find2 !== false && $find2 > $find1);
+}
+function restaurantCountUpdate() {
+	Capsule::select('update cities set count=0');
+	$cities = Capsule::select('SELECT c.id, COALESCE(count(r.city_id), 0) AS count
+	FROM cities c
+	inner JOIN restaurants r ON c.id = r.city_id
+	GROUP BY c.id');
+	if(!empty($cities)) {
+		$cities = json_decode(json_encode($cities), true);
+		foreach($cities as $city) {
+			Capsule::select('update cities set count='.$city['count'].' where id='.$city['id']);
+		}
+	}
+	Capsule::select('update countries set count=0');
+	$countries = Capsule::select('SELECT c.id,c.name, COALESCE(count(r.country_id), 0) AS count
+	FROM countries c
+	inner JOIN restaurants r ON c.id = r.country_id
+	GROUP BY c.id');
+	if(!empty($countries)) {
+		$countries = json_decode(json_encode($countries), true);
+		foreach($countries as $country) {
+			Capsule::select('update countries set count='.$country['count'].' where id='.$country['id']);
+		}
+	}
+
+	Capsule::select('update themes set count=0');
+	$themes = Capsule::select('SELECT c.id, COALESCE(count(r.theme_id), 0) AS count
+	FROM themes c
+	inner JOIN restaurant_themes r ON c.id = r.theme_id
+	GROUP BY c.id');
+	if(!empty($themes)) {
+		$themes = json_decode(json_encode($themes), true);
+		foreach($themes as $theme) {
+			Capsule::select('update themes set count='.$theme['count'].' where id='.$theme['id']);
+		}
+	}
+
+	Capsule::select('update cuisines set count=0');
+	$cuisines = Capsule::select('SELECT c.id, COALESCE(count(r.cuisine_id), 0) AS count
+	FROM cuisines c
+	inner JOIN restaurant_cuisines r ON c.id = r.cuisine_id
+	GROUP BY c.id');
+	if(!empty($cuisines)) {
+		$cuisines = json_decode(json_encode($cuisines), true);
+		foreach($cuisines as $cuisine) {
+			Capsule::select('update cuisines set count='.$cuisine['count'].' where id='.$cuisine['id']);
+		}
 	}
 }

@@ -50,4 +50,9 @@ class Country extends AppModel
     public $qSearchFields = array(
         'name'
     );
+	public function cites()
+    {
+        return $this->hasMany('Models\City', 'country_id', 'id');
+    }
+	
 }

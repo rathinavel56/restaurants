@@ -1,41 +1,36 @@
 <?php
 /**
- * Advertisement
+ * Cart
  */
 namespace Models;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class TimeSlot extends AppModel
+class FacilitiesService extends AppModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'time_slots';
-    public $hidden = array(
+    protected $table = 'facilities_services';
+	public $hidden = array(
         'created_at',
-        'updated_at'
+        'updated_at',
+		'is_active'
     );
     protected $fillable = array(
         'id',
 		'created_at',
 		'updated_at',
 		'restaurant_id',
-		'day',
-		'type'
+		'name'
     );
     public $rules = array(
         'id' => 'sometimes|required',
-		'restaurant_id' => 'sometimes|required',
 		'created_at' => 'sometimes|required',
 		'updated_at' => 'sometimes|required',
-		'day' => 'sometimes|required',
-		'type' => 'sometimes|required'
+		'restaurant_id' => 'sometimes|required',
+		'name' => 'sometimes|required'
     );
-	public function slots()
-    {
-		return $this->hasMany('Models\Slot', 'time_slot_id', 'id')->where('type', 0);
-    }
 }

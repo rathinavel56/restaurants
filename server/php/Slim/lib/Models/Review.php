@@ -1,41 +1,38 @@
 <?php
-/**
- * Advertisement
- */
 namespace Models;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class TimeSlot extends AppModel
+class Review extends AppModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'time_slots';
-    public $hidden = array(
+    protected $table = 'reviews';
+	public $hidden = array(
         'created_at',
-        'updated_at'
+        'updated_at',
+		'is_active'
     );
     protected $fillable = array(
         'id',
 		'created_at',
 		'updated_at',
+		'user_id',
 		'restaurant_id',
-		'day',
-		'type'
+		'comments',
+		'rating'
     );
     public $rules = array(
         'id' => 'sometimes|required',
-		'restaurant_id' => 'sometimes|required',
 		'created_at' => 'sometimes|required',
 		'updated_at' => 'sometimes|required',
-		'day' => 'sometimes|required',
-		'type' => 'sometimes|required'
+		'user_id' => 'sometimes|required'
     );
-	public function slots()
-    {
-		return $this->hasMany('Models\Slot', 'time_slot_id', 'id')->where('type', 0);
-    }
+	public function user()
+	{
+		return $this->belongsTo('Models\User', 'user_id', 'id')->select('id', 'first_name')->with('attachment');
+	}
 }

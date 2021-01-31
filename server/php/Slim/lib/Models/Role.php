@@ -1,6 +1,6 @@
 <?php
 /**
- * Role
+ * Attachment
  *
  * PHP version 5
  *
@@ -19,8 +19,7 @@ class Role extends AppModel
      */
     protected $table = 'roles';
 	public $hidden = array(
-						'created_at',
-						'updated_at',
-						'is_active'
-					);
+        'created_at',
+        'updated_at'		
+    );
 }
