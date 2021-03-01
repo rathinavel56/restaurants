@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,18 +9,94 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;669;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;669;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Rozha+One&display=swap" rel="stylesheet" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoehlpyGzPAfvGk5M4KaHly6jWOjOlD5Q&libraries=places&language=en"></script>
+
+    <style>
+        .loadingAnimatBefore {
+            width: 100%;
+            height: 100vh;
+            background: #fff;
+        }
+        
+        .loadingGifAnimation {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .loadingInner {
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            border-radius: 50%;
+            background-color: transparent;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0 auto;
+        }
+        
+        .spinCircle img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .spinCircle {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            margin: 5px auto;
+            z-index: 1;
+            animation: spinRoate 0.8s linear infinite;
+        }
+        
+        .logoCenterLoading {
+            width: 26px;
+            display: block;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0 auto;
+            z-index: 99;
+        }
+        
+        @keyframes spinRoate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
     <app-root>
-        <div class="spinner">
+        <!-- <div class="spinner">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
             <div class="bounce3"></div>
+        </div> -->
+
+        <div class="loadingAnimatBefore">
+            <div class="loadingGifAnimation clearfix">
+                <div class="loadingInner clearfix">
+                    <div class="spinCircle">
+                        <img src="assets/images/loading-circle.png" alt="loading">
+                    </div>
+                    <img class="logoCenterLoading" src="assets/images/msasm_small_logo.png" alt="logo">
+                </div>
+            </div>
         </div>
     </app-root>
 </body>

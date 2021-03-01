@@ -1,1915 +1,1659 @@
 .clsNav {
-  .navbar-default {
-    background-color: $dark-blue;
-    min-height      : $header-size;
-    @include pad(15px, null, 15px, null);
-    border: 0;
-
-    .navbar-nav {
-      >li {
-        >a {
-          @include pad(0px, 0px, 0px, 0px);
-          @include mar(23px, 30px, 23px, 0px);
-          @include header($base-size, $white, 600, 1.56, normal);
-          text-align       : left;
-          -webkit-transform: perspective(1px) translateZ(0);
-          transform        : perspective(1px) translateZ(0);
-          box-shadow       : 0 0 1px transparent;
-          position         : relative;
-
-          &:before {
-            content: "";
-            @include absolute(bottom -4px right 100% left 0px);
-            z-index                           : -1;
-            background                        : $light-blue;
-            height                            : 1px;
-            -webkit-transition-property       : right;
-            transition-property               : right;
-            -webkit-transition-duration       : 0.3s;
-            transition-duration               : 0.3s;
-            -webkit-transition-timing-function: ease-out;
-            transition-timing-function        : ease-out;
-          }
-
-          &:hover,
-          &:focus,
-          &:active {
-            color: $light-blue;
-
-            &:before {
-              right: 0;
+    .navbar-default {
+        background-color: $dark-blue;
+        min-height: $header-size;
+        @include pad(15px, null, 15px, null);
+        border: 0;
+        .navbar-nav {
+            >li {
+                >a {
+                    @include pad(0px, 0px, 0px, 0px);
+                    @include mar(23px, 30px, 23px, 0px);
+                    @include header($base-size, $white, 600, 1.56, normal);
+                    text-align: left;
+                    -webkit-transform: perspective(1px) translateZ(0);
+                    transform: perspective(1px) translateZ(0);
+                    box-shadow: 0 0 1px transparent;
+                    position: relative;
+                    &:before {
+                        content: "";
+                        @include absolute(bottom -4px right 100% left 0px);
+                        z-index: -1;
+                        background: $light-blue;
+                        height: 1px;
+                        -webkit-transition-property: right;
+                        transition-property: right;
+                        -webkit-transition-duration: 0.3s;
+                        transition-duration: 0.3s;
+                        -webkit-transition-timing-function: ease-out;
+                        transition-timing-function: ease-out;
+                    }
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        color: $light-blue;
+                        &:before {
+                            right: 0;
+                        }
+                    }
+                }
+                &:last-child {
+                    >a {
+                        @include mar(null, 0px, null, null);
+                    }
+                }
+                &.active {
+                    a {
+                        background: transparent;
+                        color: $light-blue;
+                        &:before {
+                            right: 0;
+                        }
+                    }
+                }
+                &.dropdown {
+                    a {
+                        @include mar(0px, 0px, 0px, 0px);
+                        img {
+                            @include size(72px);
+                            @include radius(100%);
+                        }
+                        &:before {
+                            display: none;
+                        }
+                        &:hover,
+                        &:active,
+                        &:focus {
+                            color: $white;
+                        }
+                    }
+                    &.show {
+                        .fa-chevron-down {
+                            &:before {
+                                content: "\f077";
+                            }
+                        }
+                    }
+                }
+                .dropdown-menu {
+                    padding: 10px;
+                    background: $white;
+                    @include radius(8px);
+                    min-width: 220px;
+                    top: 120%;
+                    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+                    li {
+                        // border-bottom: 1px solid $dropdown-border;
+                        &:last-child {
+                            border-bottom: 0px;
+                        }
+                        a {
+                            @include pad(14px, 16px, 14px, 16px);
+                            transition: all 0.5s;
+                            @include font-source($base-size, $light-blue, normal, 1.14, normal);
+                            @include radius(4px);
+                            &:hover,
+                            &:active,
+                            &:focus {
+                                background: $light-blue;
+                                color: $white;
+                            }
+                        }
+                    }
+                    &:after,
+                    &:before {
+                        bottom: 100%;
+                        right: 20%;
+                        border: solid transparent;
+                        content: " ";
+                        height: 0;
+                        width: 0;
+                        position: absolute;
+                        pointer-events: none;
+                    }
+                    &:after {
+                        border-color: rgba(136, 183, 213, 0);
+                        border-bottom-color: $white;
+                        border-width: 6px;
+                        margin-left: 1px;
+                    }
+                    &:before {
+                        border-color: rgba(194, 225, 245, 0);
+                        border-bottom-color: rgba(0, 0, 0, 0.1);
+                        border-width: 7px;
+                    }
+                }
             }
-          }
+            .show {
+                a {
+                    background: transparent;
+                    color: $light-blue;
+                }
+            }
         }
-
-        &:last-child {
-          >a {
-            @include mar(null, 0px, null, null);
-          }
-        }
-
-        &.active {
-          a {
-            background: transparent;
-            color     : $light-blue;
-
-            &:before {
-              right: 0;
-            }
-          }
-        }
-
-        &.dropdown {
-          a {
-            @include mar(0px, 0px, 0px, 0px);
-
-            img {
-              @include size(72px);
-              @include radius(100%);
-            }
-
-            &:before {
-              display: none;
-            }
-
+        .navbar-toggle {
+            border-color: transparent;
+            @include mar(17px, null, 17px, null);
             &:hover,
-            &:active,
-            &:focus {
-              color: $white;
+            &:focus,
+            &:active {
+                background: transparent;
+                border-color: transparent;
+                @include mar(19px, null, 19px, null);
             }
-          }
-
-          &.show {
-            .fa-chevron-down {
-              &:before {
-                content: "\f077";
-              }
-            }
-          }
         }
-
-        .dropdown-menu {
-          padding   : 10px;
-          background: $white;
-          @include radius(8px);
-          min-width : 220px;
-          top       : 120%;
-          box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
-
-          li {
-            // border-bottom: 1px solid $dropdown-border;
-
-            &:last-child {
-              border-bottom: 0px;
+        &.clsBeforeLogin {
+            .navbar-header {
+                float: none;
+                text-align: center;
+                .navbar-brand {
+                    float: none;
+                    @include pad(0px, 0px, 0px, 0px);
+                    &:after {
+                        display: none;
+                    }
+                }
             }
-
-            a {
-              @include pad(14px, 16px, 14px, 16px);
-              transition: all 0.5s;
-              @include font-source($base-size, $light-blue, normal, 1.14, normal);
-              @include radius(4px);
-
-              &:hover,
-              &:active,
-              &:focus {
-                background: $light-blue;
-                color     : $white;
-              }
+            .navbar-collapse.collapse {
+                display: none !important;
             }
-          }
-
-          &:after,
-          &:before {
-            bottom        : 100%;
-            right         : 20%;
-            border        : solid transparent;
-            content       : " ";
-            height        : 0;
-            width         : 0;
-            position      : absolute;
-            pointer-events: none;
-          }
-
-          &:after {
-            border-color       : rgba(136, 183, 213, 0);
-            border-bottom-color: $white;
-            border-width       : 6px;
-            margin-left        : 1px;
-          }
-
-          &:before {
-            border-color       : rgba(194, 225, 245, 0);
-            border-bottom-color: rgba(0, 0, 0, 0.1);
-            border-width       : 7px;
-          }
         }
-      }
-
-      .show {
-        a {
-          background: transparent;
-          color     : $light-blue;
-        }
-      }
     }
-
-    .navbar-toggle {
-      border-color: transparent;
-      @include mar(17px, null, 17px, null);
-
-      &:hover,
-      &:focus,
-      &:active {
-        background  : transparent;
-        border-color: transparent;
-        @include mar(19px, null, 19px, null);
-      }
-    }
-
-    &.clsBeforeLogin {
-      .navbar-header {
-        float     : none;
-        text-align: center;
-
+    .navbar-header {
         .navbar-brand {
-          float: none;
-          @include pad(0px, 0px, 0px, 0px);
-
-          &:after {
-            display: none;
-          }
+            @include header($lg-size - 4, $white, 600, 1.5, normal);
+            @include pad(5px, 75px, 0px, 0px);
+            position: relative;
+            img {
+                display: $ib;
+                vertical-align: middle;
+                height: 40px;
+            }
+            span {
+                display: $ib;
+                vertical-align: middle;
+            }
+            &:after {
+                content: '';
+                @include absolute(top 4px right 40px);
+                @include size(1px, 62px);
+                background: $white;
+            }
         }
-      }
-
-      .navbar-collapse.collapse {
-        display: none !important;
-      }
     }
-  }
-
-  .navbar-header {
-    .navbar-brand {
-      @include header($lg-size - 4, $white, 600, 1.5, normal);
-      @include pad(5px, 75px, 0px, 0px);
-      position: relative;
-
-      img {
-        display       : $ib;
-        vertical-align: middle;
-        height        : 40px;
-      }
-
-      span {
-        display       : $ib;
-        vertical-align: middle;
-      }
-
-      &:after {
-        content: '';
-        @include absolute(top 4px right 40px);
-        @include size(1px, 62px);
-        background: $white;
-      }
-    }
-  }
 }
 
 .footer {
-  a {
-    @include font-source($base-size, $white, 400, 1.56, normal);
-
-    &:hover,
-    &:active,
-    &:focus {
-      color: $white;
-    }
-  }
-
-  ul {
-    li {
-      display       : $ib;
-      vertical-align: top;
-      padding-right : 20px;
-      position      : relative;
-
-      &:before {
-        content: '';
-        display: $b;
-        @include absolute(top 6px bottom 0 right 6px);
-        @include size(1px, 15px);
-        background: $white;
-      }
-
-      &:last-child {
-        &:before {
-          display: none;
+    a {
+        @include font-source($base-size, $white, 400, 1.56, normal);
+        &:hover,
+        &:active,
+        &:focus {
+            color: $white;
         }
-      }
     }
-  }
+    ul {
+        li {
+            display: $ib;
+            vertical-align: top;
+            padding-right: 20px;
+            position: relative;
+            &:before {
+                content: '';
+                display: $b;
+                @include absolute(top 6px bottom 0 right 6px);
+                @include size(1px, 15px);
+                background: $white;
+            }
+            &:last-child {
+                &:before {
+                    display: none;
+                }
+            }
+        }
+    }
 }
 
 .clsMainPage {
-  @include pad($header-size, null, null, null);
-
-  .clsLoginPage {
-    @include pad(92px, null, 110px, null);
-
-    .clsLeft {
-      padding-top: 86px;
-
-      h2 {
-        padding-bottom: 20px;
-      }
-
-      h4 {
-        padding-bottom: 40px;
-      }
-
-      ul {
-        li {
-          @include radius(10px);
-          box-shadow      : 0 6px 16px 0 $shadow-value;
-          background-color: $white;
-          margin-bottom   : 10px;
-          @include pad(20px, 20px, 20px, 20px);
-        }
-      }
-    }
-
-    .clsRight {
-      @include pad(80px, 0px, 100px, 0px);
-      @include radius(54px);
-      box-shadow: 0 6px 16px 0 $shadow-value;
-      border    : solid 6px $light-blue;
-      background: $white;
-      text-align: center;
-
-      h2 {
-        margin-bottom: 42px;
-      }
-
-      h4 {
-        margin-top: 37px;
-
-        a {
-          color: $light-blue;
-        }
-      }
-
-      p {
-        margin-top: 38px;
-      }
-    }
-  }
-
-  .clsSelectAccountPage {
-    @include pad(95px, null, 110px, null);
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      margin-bottom: 92px;
-    }
-
-    .clsInner {
-      @include pad(50px, 50px, 50px, 50px);
-      @include radius(54px);
-      box-shadow      : 0 6px 16px 0 $shadow-value;
-      background-color: $white;
-      text-align      : center;
-
-      h2 {
-        margin-bottom: 0px;
-      }
-
-      .clsContent {
-        min-height: 200px;
-      }
-    }
-  }
-
-  .clsActivityPage {
-    @include pad(40px, null, null, null);
-
-    .clsActivityList {
-      @include mar(null, null, 60px, null);
-
-      .clsCountBlock {
-        @include pad(16px, 25px, 16px, 25px);
-        @include radius(8px);
-        box-shadow      : 0 3px 6px 0 $shadow-value;
-        background-color: #ffffff;
-        margin-bottom   : 15px;
-
+    @include pad($header-size, null, null, null);
+    .clsLoginPage {
+        @include pad(92px, null, 110px, null);
         .clsLeft {
-          @include font-source($base-size + 5, $dark-blue, normal, 1.48, normal);
-        }
-
-        .clsRight {
-          @include header($base-size + 5, $light-blue, 600, 1.48, normal);
-        }
-      }
-
-      ul {
-        li {
-          @include pad(20px, 25px, 20px, 25px);
-          border-bottom: 1px solid $dropdown-border;
-
-          .media-left {
-            padding-right: 20px;
-
-            img {
-              @include size(58px);
-              @include radius(100%);
+            padding-top: 86px;
+            h2 {
+                padding-bottom: 20px;
             }
-          }
-
-          .media-right {
-            min-width: 200px;
-          }
+            h4 {
+                padding-bottom: 40px;
+            }
+            ul {
+                li {
+                    @include radius(10px);
+                    box-shadow: 0 6px 16px 0 $shadow-value;
+                    background-color: $white;
+                    margin-bottom: 10px;
+                    @include pad(20px, 20px, 20px, 20px);
+                }
+            }
         }
-      }
+        .clsRight {
+            @include pad(80px, 0px, 100px, 0px);
+            @include radius(54px);
+            box-shadow: 0 6px 16px 0 $shadow-value;
+            border: solid 6px $light-blue;
+            background: $white;
+            text-align: center;
+            h2 {
+                margin-bottom: 42px;
+            }
+            h4 {
+                margin-top: 37px;
+                a {
+                    color: $light-blue;
+                }
+            }
+            p {
+                margin-top: 38px;
+            }
+        }
     }
-
-    select {
-      -webkit-appearance: none;
-      -moz-appearance   : none;
-      appearance        : none;
-
-      &.form-control {
-        background  : $light-blue;
-        border-color: $light-blue;
-        color       : $white;
-        height      : 48px;
-        @include radius(6px);
-      }
+    .clsSelectAccountPage {
+        @include pad(95px, null, 110px, null);
+        h1 {
+            margin-bottom: 10px;
+        }
+        h2 {
+            margin-bottom: 92px;
+        }
+        .clsInner {
+            @include pad(50px, 50px, 50px, 50px);
+            @include radius(54px);
+            box-shadow: 0 6px 16px 0 $shadow-value;
+            background-color: $white;
+            text-align: center;
+            h2 {
+                margin-bottom: 0px;
+            }
+            .clsContent {
+                min-height: 200px;
+            }
+        }
     }
-  }
-
-  .clsPages {
-    .clsRectBox {
-      @include size(668px, 338px);
-      @include mar(0px, auto, 50px, auto);
-      @include radius(8px);
-      background: $color-1;
+    .clsActivityPage {
+        @include pad(40px, null, null, null);
+        .clsActivityList {
+            @include mar(null, null, 60px, null);
+            .clsCountBlock {
+                @include pad(16px, 25px, 16px, 25px);
+                @include radius(8px);
+                box-shadow: 0 3px 6px 0 $shadow-value;
+                background-color: #ffffff;
+                margin-bottom: 15px;
+                .clsLeft {
+                    @include font-source($base-size + 5, $dark-blue, normal, 1.48, normal);
+                }
+                .clsRight {
+                    @include header($base-size + 5, $light-blue, 600, 1.48, normal);
+                }
+            }
+            ul {
+                li {
+                    @include pad(20px, 25px, 20px, 25px);
+                    border-bottom: 1px solid $dropdown-border;
+                    .media-left {
+                        padding-right: 20px;
+                        img {
+                            @include size(58px);
+                            @include radius(100%);
+                        }
+                    }
+                    .media-right {
+                        min-width: 200px;
+                    }
+                }
+            }
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            &.form-control {
+                background: $light-blue;
+                border-color: $light-blue;
+                color: $white;
+                height: 48px;
+                @include radius(6px);
+            }
+        }
     }
-  }
+    .clsPages {
+        .clsRectBox {
+            @include size(668px, 338px);
+            @include mar(0px, auto, 50px, auto);
+            @include radius(8px);
+            background: $color-1;
+        }
+    }
 }
 
 .modal-dialog-centered {
-  display       : -ms-flexbox;
-  display       : flex;
-  -ms-flex-align: center;
-  align-items   : center;
-  min-height    : calc(100% - (.5rem * 2));
-  margin        : 0 auto;
-
-  .modal-dialog-inner {
-    width: 100%;
-  }
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    min-height: calc(100% - (.5rem * 2));
+    margin: 0 auto;
+    .modal-dialog-inner {
+        width: 100%;
+    }
 }
 
 .clsAct_detail {
-  .modal-dialog-inner {
-    width : 510px;
-    margin: auto;
-  }
-
-  .modal-content {
-    @include radius(28px);
-  }
-
-  .modal-header {
-    border-bottom : 0px;
-    padding-bottom: 0;
-
-    .close {
-      @include mar(0px, 10px, null, null);
-      border: 1px solid $dark-blue;
-      @include radius(100%);
-      @include size(30px);
-      color  : $light-blue;
-      opacity: 1;
+    .modal-dialog-inner {
+        width: 510px;
+        margin: auto;
     }
-  }
-
-  .media-left {
-    min-width : 50px;
-    text-align: center;
-
-    img {
-      margin: 0 auto;
+    .modal-content {
+        @include radius(28px);
     }
-  }
-
-  .modal-body {
-    @include pad(0px, 66px, 50px, 66px);
-    // max-height: 500px;
-    // overflow-y: auto;
-  }
-
-  ul {
-    li {
-      @include pad(25px, 20px, 25px, 20px);
-      border-bottom: 1px solid $dropdown-border;
-
-      .media-right {
-        img {
-          @include size(127px);
-          @include radius(100%);
+    .modal-header {
+        border-bottom: 0px;
+        padding-bottom: 0;
+        .close {
+            @include mar(0px, 10px, null, null);
+            border: 1px solid $dark-blue;
+            @include radius(100%);
+            @include size(30px);
+            color: $light-blue;
+            opacity: 1;
         }
-      }
-
-      &:first-child {
-        padding-bottom: 20px;
-      }
-
-      &:last-child {
-        border-bottom : 0px;
-        padding-bottom: 0px;
-      }
     }
-  }
+    .media-left {
+        min-width: 50px;
+        text-align: center;
+        img {
+            margin: 0 auto;
+        }
+    }
+    .modal-body {
+        @include pad(0px, 66px, 50px, 66px);
+        // max-height: 500px;
+        // overflow-y: auto;
+    }
+    ul {
+        li {
+            @include pad(25px, 20px, 25px, 20px);
+            border-bottom: 1px solid $dropdown-border;
+            .media-right {
+                img {
+                    @include size(127px);
+                    @include radius(100%);
+                }
+            }
+            &:first-child {
+                padding-bottom: 20px;
+            }
+            &:last-child {
+                border-bottom: 0px;
+                padding-bottom: 0px;
+            }
+        }
+    }
 }
 
 .clsFormTab {
-  .nav-tabs {
-    border    : 0px;
-    text-align: center;
-
-    li {
-      float         : none;
-      display       : $ib;
-      vertical-align: top;
-      @include mar(null, 80px, 50px, 80px);
-
-      a {
-        background  : $white;
-        color       : $color-1;
-        border-color: $dropdown-border;
-        @include size(72px);
-        @include radius(100%);
-        text-align  : center;
-        line-height : 50px;
-        margin-right: 0;
-        font-size   : $md-size;
-      }
-
-      &.active,
-      &.clsComplete {
-        a {
-          background  : $light-blue;
-          border-color: $dropdown-border;
-          color       : $white;
+    .nav-tabs {
+        border: 0px;
+        text-align: center;
+        li {
+            float: none;
+            display: $ib;
+            vertical-align: top;
+            @include mar(null, 80px, 50px, 80px);
+            a {
+                background: $white;
+                color: $color-1;
+                border-color: $dropdown-border;
+                @include size(72px);
+                @include radius(100%);
+                text-align: center;
+                line-height: 50px;
+                margin-right: 0;
+                font-size: $md-size;
+            }
+            &.active,
+            &.clsComplete {
+                a {
+                    background: $light-blue;
+                    border-color: $dropdown-border;
+                    color: $white;
+                }
+            }
+            &:after {
+                content: '';
+                display: $b;
+                @include size(70px, 1px);
+                background: $site-color;
+                @include absolute(top 36px right -83px);
+            }
+            &:last-child {
+                &:after {
+                    @include absolute(right auto left -83px);
+                }
+            }
         }
-      }
-
-      &:after {
-        content: '';
-        display: $b;
-        @include size(70px, 1px);
-        background: $site-color;
-        @include absolute(top 36px right -83px);
-      }
-
-      &:last-child {
-        &:after {
-          @include absolute(right auto left -83px);
-        }
-      }
     }
-  }
 }
 
 .clsFile-btn {
-  position      : relative;
-  overflow      : hidden;
-  font-family   : "Poppins", sans-serif;
-  font-size     : 16px;
-  color         : #10284b;
-  font-weight   : normal;
-  line-height   : 1.5;
-  letter-spacing: .32px;
-  height        : 49px;
-  @include radius(9px);
-  box-shadow    : none;
-  resize        : none;
-  padding-top   : 13px;
-  padding-right : 16px;
-  padding-bottom: 13px;
-  padding-left  : 16px;
-  border        : 1px solid #10284b;
-
-  input {
-    position : absolute;
-    font-size: 50px;
-    opacity  : 0;
-    right    : 0;
-    top      : 0;
-  }
-
-  .clsUploadIcon {
-    @include absolute(top 10px right 15px);
-  }
+    position: relative;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    color: #10284b;
+    font-weight: normal;
+    line-height: 1.5;
+    letter-spacing: .32px;
+    height: 49px;
+    @include radius(9px);
+    box-shadow: none;
+    resize: none;
+    padding-top: 13px;
+    padding-right: 16px;
+    padding-bottom: 13px;
+    padding-left: 16px;
+    border: 1px solid #10284b;
+    input {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0;
+        right: 0;
+        top: 0;
+    }
+    .clsUploadIcon {
+        @include absolute(top 10px right 15px);
+    }
 }
 
 .clsPageList {
-  .table {
-
-    thead,
-    tbody {
-      tr {
-
-        th,
-        td {
-          &:nth-child(1) {
-            min-width: 400px;
-            max-width: 400px;
-          }
-
-          &:nth-child(2) {
-            min-width: 300px;
-            max-width: 300px;
-          }
-
-          &:nth-child(3),
-          &:nth-child(4) {
-            min-width : 200px;
-            max-width : 200px;
-            text-align: center;
-          }
-
-          .media-left {
-            img {
-              @include size(58px);
-              @include radius(100%);
+    .table {
+        thead,
+        tbody {
+            tr {
+                th,
+                td {
+                    &:nth-child(1) {
+                        min-width: 400px;
+                        max-width: 400px;
+                    }
+                    &:nth-child(2) {
+                        min-width: 300px;
+                        max-width: 300px;
+                    }
+                    &:nth-child(3),
+                    &:nth-child(4) {
+                        min-width: 200px;
+                        max-width: 200px;
+                        text-align: center;
+                    }
+                    .media-left {
+                        img {
+                            @include size(58px);
+                            @include radius(100%);
+                        }
+                    }
+                    a {
+                        font-family: 'Poppins', sans-serif;
+                        color: $site-color;
+                        font-weight: normal;
+                    }
+                }
             }
-          }
-
-          a {
-            font-family: 'Poppins', sans-serif;
-            color      : $site-color;
-            font-weight: normal;
-          }
         }
-      }
     }
-  }
 }
 
 .clsMinWidth-400 {
-  min-width: 400px;
+    min-width: 400px;
 }
 
 .clsPage_detail {
-  .media-left {
-    position: relative;
-
-    img {
-      @include size(133px);
-      @include radius(100%);
-    }
-
-    span {
-      display: $ib;
-      @include size(18px);
-      @include radius(100%);
-      @include absolute(top 90px right 30px);
-      background: $green;
-    }
-  }
-
-  .clsDataOpt {
-    ul {
-      border-top : 1px solid $dropdown-border;
-      padding-top: 10px;
-
-      li {
-        @include pad(30px, null, 30px, null);
-        border-bottom: 1px solid $dropdown-border;
-
-        .media-body {
-          >h4 {
-            color: #66494a50;
-          }
-
-          >p {
-            color: #66494a50;
-          }
+    .media-left {
+        position: relative;
+        img {
+            @include size(133px);
+            @include radius(100%);
         }
-
-        .clsChecked {
-          .media-body {
-
-            h4,
-            p {
-              color: $dark-blue;
+        span {
+            display: $ib;
+            @include size(18px);
+            @include radius(100%);
+            @include absolute(top 90px right 30px);
+            background: $green;
+        }
+    }
+    .clsDataOpt {
+        ul {
+            border-top: 1px solid $dropdown-border;
+            padding-top: 10px;
+            li {
+                @include pad(30px, null, 30px, null);
+                border-bottom: 1px solid $dropdown-border;
+                .media-body {
+                    >h4 {
+                        color: #66494a50;
+                    }
+                    >p {
+                        color: #66494a50;
+                    }
+                }
+                .clsChecked {
+                    .media-body {
+                        h4,
+                        p {
+                            color: $dark-blue;
+                        }
+                    }
+                }
             }
-          }
         }
-
-      }
+        select {
+            &.form-control {
+                height: 29px;
+                @include pad(3px, 16px, 3px, 16px);
+            }
+        }
+        .clsSelect-icon {
+            &:before {
+                top: 5px;
+            }
+        }
     }
-
-    select {
-      &.form-control {
-        height: 29px;
-        @include pad(3px, 16px, 3px, 16px);
-      }
-    }
-
-    .clsSelect-icon {
-      &:before {
-        top: 5px;
-      }
-    }
-  }
 }
 
 .custom-tab {
-  >ul {
-    >li {
-      >a {
-        @include mar(null, 70px, null, null);
-        @include pad(0px, 0px, 15px, 0px);
-        @include header_one($sm-size, $dark-blue, 600, 1.48, normal);
-        border       : 0px;
-        border-bottom: 9px solid transparent;
-
-        &:hover,
-        &:focus,
-        &:active {
-          background   : transparent;
-          color        : $light-blue;
-          border       : 0px;
-          border-bottom: 9px solid $light-blue;
+    >ul {
+        >li {
+            >a {
+                @include mar(null, 70px, null, null);
+                @include pad(0px, 0px, 15px, 0px);
+                @include header_one($sm-size, $dark-blue, 600, 1.48, normal);
+                border: 0px;
+                border-bottom: 9px solid transparent;
+                &:hover,
+                &:focus,
+                &:active {
+                    background: transparent;
+                    color: $light-blue;
+                    border: 0px;
+                    border-bottom: 9px solid $light-blue;
+                }
+            }
+            &.active {
+                a {
+                    color: $light-blue;
+                    border: 0px;
+                    border-bottom: 9px solid $light-blue;
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        background: transparent;
+                        color: $light-blue;
+                        border: 0px;
+                        border-bottom: 9px solid $light-blue;
+                    }
+                }
+            }
+            &:last-child {
+                a {
+                    margin-right: 0px;
+                }
+            }
         }
-      }
-
-      &.active {
-        a {
-          color        : $light-blue;
-          border       : 0px;
-          border-bottom: 9px solid $light-blue;
-
-          &:hover,
-          &:focus,
-          &:active {
-            background   : transparent;
-            color        : $light-blue;
-            border       : 0px;
-            border-bottom: 9px solid $light-blue;
-          }
-        }
-      }
-
-      &:last-child {
-        a {
-          margin-right: 0px;
-        }
-      }
     }
-  }
 }
 
 .clsAdminPage {
-  margin-bottom: 0px;
-
-  .clsLeftSide {
-    background     : $brand-success;
-    width          : 50%;
-    height         : 100vh;
-    float          : left;
-    position       : relative;
-    text-align     : center;
-    display        : flex;
-    align-items    : center;
-    justify-content: center;
-
-    &:before {
-      content: '';
-      @include absolute(top 0px left 0px);
-      @include size(277px, 530px);
-      display          : $b;
-      background       : url(../assets/images/login/pattern_right.svg) -50px -105px;
-      background-repeat: no-repeat;
+    margin-bottom: 0px;
+    .clsLeftSide {
+        background: $brand-success;
+        width: 50%;
+        height: 100vh;
+        float: left;
+        position: relative;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:before {
+            content: '';
+            @include absolute(top 0px left 0px);
+            @include size(277px, 530px);
+            display: $b;
+            background: url(../assets/images/login/pattern_right.svg) -50px -105px;
+            background-repeat: no-repeat;
+        }
+        &:after {
+            content: '';
+            @include absolute(bottom 0px right 0px);
+            @include size(230px, 341px);
+            display: $b;
+            background: url(../assets/images/login/pattern_left.svg);
+            background-repeat: no-repeat;
+        }
+        .clsImgBlock {
+            // @include pad(200px, null, 200px, null);
+            img {
+                margin: 0 auto 40px;
+                display: $b;
+                @include size(300px);
+            }
+        }
+        .clsPowered {
+            @include absolute(bottom 60px left 0px right 0px);
+        }
     }
-
-    &:after {
-      content: '';
-      @include absolute(bottom 0px right 0px);
-      @include size(230px, 341px);
-      display          : $b;
-      background       : url(../assets/images/login/pattern_left.svg);
-      background-repeat: no-repeat;
+    .clsRightSide {
+        background: $white;
+        width: 50%;
+        height: 100vh;
+        float: right;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            &.clsWidth-150 {
+                width: 150px;
+            }
+        }
     }
-
-    .clsImgBlock {
-      // @include pad(200px, null, 200px, null);
-
-      img {
-        margin : 0 auto 40px;
-        display: $b;
-        @include size(300px);
-      }
+    .clsFormBlock {
+        form {
+            min-width: 380px;
+            max-width: 380px;
+            margin: 0 auto;
+        }
     }
-
-    .clsPowered {
-      @include absolute(bottom 60px left 0px right 0px);
-    }
-  }
-
-  .clsRightSide {
-    background     : $white;
-    width          : 50%;
-    height         : 100vh;
-    float          : right;
-    display        : flex;
-    align-items    : center;
-    justify-content: center;
-
-    img {
-      &.clsWidth-150 {
-        width: 150px;
-      }
-    }
-  }
-
-  .clsFormBlock {
-
-    form {
-      min-width: 380px;
-      max-width: 380px;
-      margin   : 0 auto;
-    }
-  }
 }
 
 .clsDashboard {
-  margin-bottom: 0px;
-
-  .clsLeftNav {
-    background: $brand-success;
-    width     : 230px;
-    height    : 100%;
-    float     : left;
-    position  : fixed;
-
-    .navbar {
-      position: static;
-      display : $b;
-      padding : 0;
-    }
-
-    .navbar-nav {
-      float: none;
-
-      li {
-        float: none;
-        width: 100%;
-
-        a {
-          display: block;
-          @include font-source($base-size, $white, 400, 1.48, normal);
-          @include pad(15px, null, 15px, 50px);
-          position  : relative;
-          background: transparent;
-
-          &.clsIcon {
-            &:before {
-              content: '';
-              display: $b;
-              @include size(30px);
-              @include absolute(left 15px top 12px);
-              background-repeat: no-repeat;
-            }
-          }
-
-          &.clsOver {
-            &:before {
-              background: url(../assets/images/login/home.svg) no-repeat;
-            }
-          }
-
-          &.clsUser {
-            &:before {
-              background: url(../assets/images/login/user.svg) no-repeat;
-            }
-          }
-
-          &.clsPage {
-            &:before {
-              top       : 15px;
-              background: url(../assets/images/login/code.svg) no-repeat;
-            }
-          }
-
-          &.clsPersonal {
-            &:before {
-              left      : 20px;
-              background: url(../assets/images/login/smartphone.svg) no-repeat;
-            }
-          }
-
-          &.clsBusiness {
-            &:before {
-              top       : 15px;
-              background: url(../assets/images/login/business.svg) no-repeat;
-            }
-          }
-
-          &.clsPending {
-            &:before {
-              left      : 18px;
-              top       : 15px;
-              background: url(../assets/images/login/checklist.svg) no-repeat;
-            }
-          }
-
-          &.clsAdmin {
-            &:before {
-              top       : 15px;
-              background: url(../assets/images/login/setting.svg) no-repeat;
-            }
-          }
-
-          &.clsDiscover {
-            &:before {
-              top       : 16px;
-              left      : 18px;
-              background: url(../assets/images/login/world.svg) no-repeat;
-            }
-          }
-
-          &.clsFeed {
-            &:before {
-              top       : 17px;
-              background: url(../assets/images/login/mail.svg) no-repeat;
-            }
-          }
-
-          &.clsMessage {
-            &:before {
-              top       : 17px;
-              background: url(../assets/images/login/chat.svg) no-repeat;
-            }
-          }
-
-          &.clsLock {
-            &:before {
-              background: url(../assets/images/login/lock.svg) no-repeat;
-              top       : 15px;
-            }
-          }
-
-          &.clsLogout {
-            &:before {
-              background: url(../assets/images/login/logout.svg) no-repeat;
-              top       : 17px;
-            }
-          }
-
-          &:hover,
-          &:focus,
-          &:active {
-            background: transparent;
-            color     : $black;
-
-            // img {
-
-            //   &.clsNormal {
-            //     display: none;
-            //   }
-
-            //   &.clsHover {
-            //     display: $ib;
-            //   }
-            // }
-
-            &.clsOver {
-              &:before {
-                background: url(../assets/images/login/home_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsUser {
-              &:before {
-                background: url(../assets/images/login/user_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsPage {
-              &:before {
-                background: url(../assets/images/login/code_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsPersonal {
-              &:before {
-                background: url(../assets/images/login/smartphone_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsBusiness {
-              &:before {
-                background: url(../assets/images/login/business_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsPending {
-              &:before {
-                background: url(../assets/images/login/checklist_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsAdmin {
-              &:before {
-                background: url(../assets/images/login/setting_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsDiscover {
-              &:before {
-                background: url(../assets/images/login/world_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsFeed {
-              &:before {
-                background: url(../assets/images/login/mail_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsMessage {
-              &:before {
-                background: url(../assets/images/login/chat_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsLock {
-              &:before {
-                background: url(../assets/images/login/lock_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsLogout {
-              &:before {
-                background: url(../assets/images/login/logout_hover.svg) no-repeat;
-              }
-            }
-          }
-
-          // img {
-          //   padding-right: 10px;
-
-          //   &.clsHover {
-          //     display: none;
-          //   }
-          // }
+    margin-bottom: 0px;
+    .clsLeftNav {
+        background: $brand-success;
+        width: 230px;
+        height: 100%;
+        float: left;
+        position: fixed;
+        .navbar {
+            position: static;
+            display: $b;
+            padding: 0;
         }
-
-        &.active {
-          >a {
-            @include header($base-size, $light-blue, 600, 1.48, normal);
-
-            // img {
-
-            //   &.clsNormal {
-            //     display: none;
-            //   }
-
-            //   &.clsHover {
-            //     display: $ib;
-            //   }
-            // }
-
-            &.clsOver {
-              &:before {
-                background: url(../assets/images/login/home_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsUser {
-              &:before {
-                background: url(../assets/images/login/user_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsPage {
-              &:before {
-                background: url(../assets/images/login/code_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsPersonal {
-              &:before {
-                background: url(../assets/images/login/smartphone_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsBusiness {
-              &:before {
-                background: url(../assets/images/login/business_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsPending {
-              &:before {
-                background: url(../assets/images/login/checklist_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsAdmin {
-              &:before {
-                background: url(../assets/images/login/setting_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsDiscover {
-              &:before {
-                background: url(../assets/images/login/world_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsFeed {
-              &:before {
-                background: url(../assets/images/login/mail_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsMessage {
-              &:before {
-                background: url(../assets/images/login/chat_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsLock {
-              &:before {
-                background: url(../assets/images/login/lock_hover.svg) no-repeat;
-              }
-            }
-
-            &.clsLogout {
-              &:before {
-                background: url(../assets/images/login/logout_hover.svg) no-repeat;
-              }
-            }
-          }
-        }
-
-        &.show {
-
-          .dropdown-menu {
-            background: transparent;
-            position  : static;
-            width     : 100%;
-            float     : none;
-            border    : 0px;
-            @include pad(0px, 0px, 0px, 45px);
-
-            a {
-              padding-left  : 20px;
-              background    : transparent;
-              padding       : 10px;
-              text-transform: capitalize;
-
-              &:before {
-                content: '';
-                @include absolute(left -10px top 16px);
-                @include size(10px);
-                @include radius(100%);
-                background: transparent;
-                border    : 1px solid $white;
-              }
-
-              &:hover,
-              &:focus,
-              &:active {
-                background: transparent;
-                color     : $black !important;
-
-                &:before {
-                  background  : $black;
-                  border-color: $black;
+        .navbar-nav {
+            float: none;
+            li {
+                float: none;
+                width: 100%;
+                a {
+                    display: block;
+                    @include font-source($base-size, $white, 400, 1.48, normal);
+                    @include pad(15px, null, 15px, 50px);
+                    position: relative;
+                    background: transparent;
+                    &.clsIcon {
+                        &:before {
+                            content: '';
+                            display: $b;
+                            @include size(30px);
+                            @include absolute(left 15px top 12px);
+                            background-repeat: no-repeat;
+                        }
+                    }
+                    &.clsOver {
+                        &:before {
+                            background: url(../assets/images/login/home.svg) no-repeat;
+                        }
+                    }
+                    &.clsUser {
+                        &:before {
+                            background: url(../assets/images/login/user.svg) no-repeat;
+                        }
+                    }
+                    &.clsPage {
+                        &:before {
+                            top: 15px;
+                            background: url(../assets/images/login/code.svg) no-repeat;
+                        }
+                    }
+                    &.clsPersonal {
+                        &:before {
+                            left: 20px;
+                            background: url(../assets/images/login/smartphone.svg) no-repeat;
+                        }
+                    }
+                    &.clsBusiness {
+                        &:before {
+                            top: 15px;
+                            background: url(../assets/images/login/business.svg) no-repeat;
+                        }
+                    }
+                    &.clsPending {
+                        &:before {
+                            left: 18px;
+                            top: 15px;
+                            background: url(../assets/images/login/checklist.svg) no-repeat;
+                        }
+                    }
+                    &.clsAdmin {
+                        &:before {
+                            top: 15px;
+                            background: url(../assets/images/login/setting.svg) no-repeat;
+                        }
+                    }
+                    &.clsDiscover {
+                        &:before {
+                            top: 16px;
+                            left: 18px;
+                            background: url(../assets/images/login/world.svg) no-repeat;
+                        }
+                    }
+                    &.clsFeed {
+                        &:before {
+                            top: 17px;
+                            background: url(../assets/images/login/mail.svg) no-repeat;
+                        }
+                    }
+                    &.clsMessage {
+                        &:before {
+                            top: 17px;
+                            background: url(../assets/images/login/chat.svg) no-repeat;
+                        }
+                    }
+                    &.clsLock {
+                        &:before {
+                            background: url(../assets/images/login/lock.svg) no-repeat;
+                            top: 15px;
+                        }
+                    }
+                    &.clsLogout {
+                        &:before {
+                            background: url(../assets/images/login/logout.svg) no-repeat;
+                            top: 17px;
+                        }
+                    }
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        background: transparent;
+                        color: $black;
+                        // img {
+                        //   &.clsNormal {
+                        //     display: none;
+                        //   }
+                        //   &.clsHover {
+                        //     display: $ib;
+                        //   }
+                        // }
+                        &.clsOver {
+                            &:before {
+                                background: url(../assets/images/login/home_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsUser {
+                            &:before {
+                                background: url(../assets/images/login/user_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsPage {
+                            &:before {
+                                background: url(../assets/images/login/code_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsPersonal {
+                            &:before {
+                                background: url(../assets/images/login/smartphone_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsBusiness {
+                            &:before {
+                                background: url(../assets/images/login/business_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsPending {
+                            &:before {
+                                background: url(../assets/images/login/checklist_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsAdmin {
+                            &:before {
+                                background: url(../assets/images/login/setting_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsDiscover {
+                            &:before {
+                                background: url(../assets/images/login/world_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsFeed {
+                            &:before {
+                                background: url(../assets/images/login/mail_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsMessage {
+                            &:before {
+                                background: url(../assets/images/login/chat_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsLock {
+                            &:before {
+                                background: url(../assets/images/login/lock_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsLogout {
+                            &:before {
+                                background: url(../assets/images/login/logout_hover.svg) no-repeat;
+                            }
+                        }
+                    }
+                    // img {
+                    //   padding-right: 10px;
+                    //   &.clsHover {
+                    //     display: none;
+                    //   }
+                    // }
                 }
-              }
+                &.active {
+                    >a {
+                        @include header($base-size, $light-blue, 600, 1.48, normal);
+                        // img {
+                        //   &.clsNormal {
+                        //     display: none;
+                        //   }
+                        //   &.clsHover {
+                        //     display: $ib;
+                        //   }
+                        // }
+                        &.clsOver {
+                            &:before {
+                                background: url(../assets/images/login/home_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsUser {
+                            &:before {
+                                background: url(../assets/images/login/user_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsPage {
+                            &:before {
+                                background: url(../assets/images/login/code_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsPersonal {
+                            &:before {
+                                background: url(../assets/images/login/smartphone_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsBusiness {
+                            &:before {
+                                background: url(../assets/images/login/business_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsPending {
+                            &:before {
+                                background: url(../assets/images/login/checklist_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsAdmin {
+                            &:before {
+                                background: url(../assets/images/login/setting_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsDiscover {
+                            &:before {
+                                background: url(../assets/images/login/world_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsFeed {
+                            &:before {
+                                background: url(../assets/images/login/mail_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsMessage {
+                            &:before {
+                                background: url(../assets/images/login/chat_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsLock {
+                            &:before {
+                                background: url(../assets/images/login/lock_hover.svg) no-repeat;
+                            }
+                        }
+                        &.clsLogout {
+                            &:before {
+                                background: url(../assets/images/login/logout_hover.svg) no-repeat;
+                            }
+                        }
+                    }
+                }
+                &.show {
+                    .dropdown-menu {
+                        background: transparent;
+                        position: static;
+                        width: 100%;
+                        float: none;
+                        border: 0px;
+                        @include pad(0px, 0px, 0px, 45px);
+                        a {
+                            padding-left: 20px;
+                            background: transparent;
+                            padding: 10px;
+                            text-transform: capitalize;
+                            &:before {
+                                content: '';
+                                @include absolute(left -10px top 16px);
+                                @include size(10px);
+                                @include radius(100%);
+                                background: transparent;
+                                border: 1px solid $white;
+                            }
+                            &:hover,
+                            &:focus,
+                            &:active {
+                                background: transparent;
+                                color: $black !important;
+                                &:before {
+                                    background: $black;
+                                    border-color: $black;
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-
-    .navbar-header {
-      float: none;
-    }
-
-    .navbar-brand {
-      float  : none;
-      display: $b;
-      @include size(100%, 70px);
-      @include header($sm-size, $white, 600, 1.48, normal);
-      margin-bottom: 10px;
-      @include pad(10px, 15px, 10px, 15px);
-
-      >img {
-        display: $b;
-        margin : -20px auto 0px;
-        width  : 100px;
-      }
-    }
-
-    .navbar-collapse {
-      padding: 0;
-    }
-
-    .clsMenuList {
-      overflow  : hidden;
-      overflow-y: auto;
-      height    : calc(100vh - 250px);
-    }
-
-    .clsChangePwd {
-      @include absolute(bottom 10px);
-
-      li {
-
-        &:first-child {
-          a {
+        .navbar-header {
+            float: none;
+        }
+        .navbar-brand {
+            float: none;
+            display: $b;
+            @include size(100%, 70px);
+            @include header($sm-size, $white, 600, 1.48, normal);
             margin-bottom: 10px;
-
-            &:after {
-              content: '';
-              display: $b;
-              height : 1px;
-              @include absolute(left 30px right 10px bottom -4px);
-              background: $dropdown-border;
+            @include pad(10px, 15px, 10px, 15px);
+            >img {
+                display: $b;
+                margin: -20px auto 0px;
+                width: 100px;
             }
-          }
         }
-      }
+        .navbar-collapse {
+            padding: 0;
+        }
+        .clsMenuList {
+            overflow: hidden;
+            overflow-y: auto;
+            height: calc(100vh - 250px);
+        }
+        .clsChangePwd {
+            @include absolute(bottom 10px);
+            li {
+                &:first-child {
+                    a {
+                        margin-bottom: 10px;
+                        &:after {
+                            content: '';
+                            display: $b;
+                            height: 1px;
+                            @include absolute(left 30px right 10px bottom -4px);
+                            background: $dropdown-border;
+                        }
+                    }
+                }
+            }
+        }
+        &.collapsed {
+            .navbar-nav {
+                li {
+                    min-height: 53px;
+                    a {
+                        span {
+                            display: none;
+                        }
+                        &.dropdown-toggle {
+                            &:after {
+                                display: none;
+                            }
+                        }
+                        &.clsLock:before {
+                            left: 23px;
+                        }
+                        &.clsLogout:before {
+                            left: 20px;
+                        }
+                    }
+                }
+            }
+            .navbar-brand {
+                img {
+                    width: 90px;
+                    margin: -20px 0 0 -30px;
+                }
+                span {
+                    display: none;
+                }
+            }
+            .clsChangePwd {
+                li:first-child a:after {
+                    display: none;
+                }
+            }
+        }
     }
-
-    &.collapsed {
-      .navbar-nav {
-        li {
-          min-height: 53px;
-
-          a {
-
-            span {
-              display: none;
-            }
-
-            &.dropdown-toggle {
-              &:after {
-                display: none;
-              }
-            }
-
-            &.clsLock:before {
-              left: 23px;
-            }
-
-            &.clsLogout:before {
-              left: 20px;
-            }
-          }
+    .clsRightBlock {
+        width: calc(100% - 230px);
+        @include pad(15px, 15px, null, 15px);
+        float: right;
+        height: 100%;
+        &.clsCollapsedLeft {
+            width: calc(100% - 60px);
         }
-      }
-
-      .navbar-brand {
-        img {
-          width : 90px;
-          margin: -20px 0 0 -30px;
-        }
-
-        span {
-          display: none;
-        }
-      }
-
-      .clsChangePwd {
-        li:first-child a:after {
-          display: none;
-        }
-      }
     }
-  }
-
-  .clsRightBlock {
-    width: calc(100% - 230px);
-    @include pad(30px, 35px, null, 35px);
-    float : right;
-    height: 100%;
-
-    &.clsCollapsedLeft {
-      width: calc(100% - 60px);
-    }
-  }
 }
 
 .clsSearchIcon {
-  position: relative;
-
-  .form-control {
-    height: 38px;
-    @include pad(5px, 30px, 5px, 10px);
-    border-color: $dropdown-border;
-
-  }
-
-  .fa-search {
-    @include absolute(top 10px right 15px);
-    cursor : pointer;
-    z-index: 9;
-    color  : $light-blue;
-  }
+    position: relative;
+    .form-control {
+        height: 38px;
+        @include pad(5px, 30px, 5px, 10px);
+        border-color: $dropdown-border;
+    }
+    .fa-search {
+        @include absolute(top 10px right 15px);
+        cursor: pointer;
+        z-index: 9;
+        color: $light-blue;
+    }
 }
 
 .clsProgress_tab {
-  ul {
-    border: 0px;
-
-
-    a {
-      &.nav-link {
-        @include pad(0px, 20px, 0px, 20px);
-        @include mar(0px, 0px, 0px, 5px);
-        @include radius(4px);
-        @include header_one($base-size, $brand-primary, 500, normal, normal);
-        background: transparent;
-        border    : 0px;
-
-        &:hover,
-        &:focus,
-        &:active {
-          background: $brand-primary;
-          color     : $white;
-          border    : 0px;
+    ul {
+        border: 0px;
+        a {
+            &.nav-link {
+                @include pad(0px, 20px, 0px, 20px);
+                @include mar(0px, 0px, 0px, 5px);
+                @include radius(4px);
+                @include header_one($base-size, $brand-primary, 500, normal, normal);
+                background: transparent;
+                border: 0px;
+                &:hover,
+                &:focus,
+                &:active {
+                    background: $brand-primary;
+                    color: $white;
+                    border: 0px;
+                }
+                &.active {
+                    border: 0px;
+                    background: $brand-primary;
+                    color: $white;
+                    font-weight: 400;
+                    font-family: 'Poppins';
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        background: $brand-primary;
+                        color: $white;
+                        border: 0px;
+                    }
+                }
+            }
         }
-
-        &.active {
-          border     : 0px;
-          background : $brand-primary;
-          color      : $white;
-          font-weight: 400;
-          font-family: 'Poppins';
-
-          &:hover,
-          &:focus,
-          &:active {
-            background: $brand-primary;
-            color     : $white;
-            border    : 0px;
-          }
-        }
-      }
     }
-  }
 }
 
 .clsDataValue {
-  .clsInner {
-    @include pad(25px, 35px, 25px, 35px);
-    background: $light-blue;
-    @include radius(29px);
-    min-height: 230px;
-    box-shadow: 0 3px 8px 0 rgba(16, 40, 75, 0.16);
-  }
-
-  .clsBor-right {
-    position: relative;
-
-    &:after {
-      content: '';
-      display: $b;
-      @include absolute(top 0px right 0px);
-      @include size(1px, 100%);
-      background: $white;
-      opacity   : 0.3;
+    .clsInner {
+        @include pad(25px, 35px, 25px, 35px);
+        background: $light-blue;
+        @include radius(29px);
+        min-height: 230px;
+        box-shadow: 0 3px 8px 0 rgba(16, 40, 75, 0.16);
     }
-  }
+    .clsBor-right {
+        position: relative;
+        &:after {
+            content: '';
+            display: $b;
+            @include absolute(top 0px right 0px);
+            @include size(1px, 100%);
+            background: $white;
+            opacity: 0.3;
+        }
+    }
 }
 
 .clsDashTable {
-  .clsCircleImg {
-    @include size(58px);
-    @include radius(100%);
-  }
-
-  .table {
-    thead {
-      font-size: $base-size;
-
-      tr {
-        th {
-          padding: 20px 25px 20px;
-        }
-      }
+    .clsCircleImg {
+        @include size(58px);
+        @include radius(100%);
     }
-
-    tbody {
-      tr {
-        td {
-          padding: 15px 25px 7px;
+    .table {
+        thead {
+            font-size: $base-size;
+            tr {
+                th {
+                    padding: 20px 25px 20px;
+                }
+            }
         }
-      }
+        tbody {
+            tr {
+                td {
+                    padding: 15px 25px 7px;
+                }
+            }
+        }
+        thead,
+        tbody {
+            tr {
+                th,
+                td {
+                    min-width: 120px;
+                    &:first-child {
+                        min-width: 50px;
+                    }
+                    &:nth-child(2) {
+                        min-width: 160px;
+                    }
+                    &:nth-child(3) {
+                        min-width: 260px;
+                    }
+                    &:nth-child(4) {
+                        min-width: 200px;
+                    }
+                    &:nth-child(6),
+                    &:nth-child(8),
+                    &:nth-child(9) {
+                        text-align: center;
+                    }
+                    &.clsMinWidth-50 {
+                        min-width: 50px;
+                    }
+                    &.clsMinWidth-100 {
+                        min-width: 100px;
+                    }
+                    &.clsMinWidth-150 {
+                        min-width: 150px;
+                    }
+                    &.clsMinWidth-200 {
+                        min-width: 200px;
+                    }
+                    &.clsMinWidth-250 {
+                        min-width: 250px;
+                    }
+                    &.clsMinWidth-300 {
+                        min-width: 300px;
+                    }
+                }
+                &:hover {
+                    td {
+                        background: $color-3;
+                    }
+                }
+            }
+        }
     }
-
-    thead,
-    tbody {
-      tr {
-
-        th,
-        td {
-          min-width: 120px;
-
-          &:first-child {
-            min-width: 50px;
-          }
-
-          &:nth-child(2) {
-            min-width: 160px;
-          }
-
-          &:nth-child(3) {
-            min-width: 260px;
-          }
-
-          &:nth-child(4) {
-            min-width: 200px;
-          }
-
-          &:nth-child(6),
-          &:nth-child(8),
-          &:nth-child(9) {
-            text-align: center;
-          }
-
-          &.clsMinWidth-50 {
-            min-width: 50px;
-          }
-
-          &.clsMinWidth-100 {
-            min-width: 100px;
-          }
-
-          &.clsMinWidth-150 {
-            min-width: 150px;
-          }
-
-          &.clsMinWidth-200 {
-            min-width: 200px;
-          }
-
-          &.clsMinWidth-250 {
-            min-width: 250px;
-          }
-
-          &.clsMinWidth-300 {
-            min-width: 300px;
-          }
-        }
-
-        &:hover {
-          td {
-            background: $color-3;
-          }
-        }
-      }
-    }
-  }
 }
 
 .clsRadioBlock {
-
-  [type=radio]:checked+label,
-  [type=radio]:not(:checked)+label {
-    padding-left : 35px;
-    margin-bottom: 0px;
-    color        : $dark-blue;
-  }
+    [type=radio]:checked+label,
+    [type=radio]:not(:checked)+label {
+        padding-left: 35px;
+        margin-bottom: 0px;
+        color: $dark-blue;
+    }
 }
 
 .clsDownload {
-  margin-top: -25px;
-
-  img {
-    display: $b;
-    margin : 0 auto;
-  }
-
-  span {
-    display    : $b;
-    padding-top: 10px;
-  }
+    margin-top: -25px;
+    img {
+        display: $b;
+        margin: 0 auto;
+    }
+    span {
+        display: $b;
+        padding-top: 10px;
+    }
 }
 
 .clsReceipt-table {
-  .table {
-    tr {
-
-      th,
-      td {
-        &:nth-child(2) {
-          min-width: 250px;
+    .table {
+        tr {
+            th,
+            td {
+                &:nth-child(2) {
+                    min-width: 250px;
+                }
+                .clsCircleImg {
+                    @include size(58px);
+                    @include radius(100%);
+                }
+            }
+            &:first-child {
+                padding-top: 16px;
+            }
         }
-
-        .clsCircleImg {
-          @include size(58px);
-          @include radius(100%);
-        }
-      }
-
-      &:first-child {
-        padding-top: 16px;
-      }
     }
-  }
-
-  .clsMinWidth-350 {
-    min-width: 350px;
-  }
-
-  .clsDeleteIcon {
-    @include absolute(top -7px right -10px);
-    cursor: pointer;
-  }
+    .clsMinWidth-350 {
+        min-width: 350px;
+    }
+    .clsDeleteIcon {
+        @include absolute(top -7px right -10px);
+        cursor: pointer;
+    }
 }
 
 .clsProfileTab {
-  .media-left {
-    img {
-      @include size(140px);
-      @include radius(100%);
+    .media-left {
+        img {
+            @include size(140px);
+            @include radius(100%);
+        }
     }
-  }
 }
 
 .clsPassport {
-  img {
-    @include size(513px, 301px !important);
-    margin: 0 auto;
-  }
+    img {
+        @include size(513px, 301px !important);
+        margin: 0 auto;
+    }
 }
 
 .clsPersonalTable {
-  .table {
-
-    thead,
-    tbody {
-      tr {
-
-        th,
-        td {
-          min-width: 170px;
-
-          &:nth-child(2),
-          &:nth-child(3) {
-            min-width: 270px;
-          }
+    .table {
+        thead,
+        tbody {
+            tr {
+                th,
+                td {
+                    min-width: 170px;
+                    &:nth-child(2),
+                    &:nth-child(3) {
+                        min-width: 270px;
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
 
 .clsDataTab {
-  ul {
-    // width: 235px;
-
-    li {
-      @include pad(33px, 20px, 33px, 50px);
-      @include header($base-size, $dark-blue, 600, 1.56, normal);
-      position     : relative;
-      border-bottom: 1px solid $dropdown-border;
-
-      span {
-        @include absolute(left 10px top 30px);
-      }
-
-      &:last-child {
-        border-bottom: 0px;
-      }
+    ul {
+        // width: 235px;
+        li {
+            @include pad(33px, 20px, 33px, 50px);
+            @include header($base-size, $dark-blue, 600, 1.56, normal);
+            position: relative;
+            border-bottom: 1px solid $dropdown-border;
+            span {
+                @include absolute(left 10px top 30px);
+            }
+            &:last-child {
+                border-bottom: 0px;
+            }
+        }
     }
-  }
 }
 
 .clsLabelTop {
-  @include absolute(top -30px left 30px);
+    @include absolute(top -30px left 30px);
 }
 
 .clsMinWidth-50 {
-  min-width: 50px;
+    min-width: 50px;
 }
 
 .clsMinWidth-100 {
-  min-width: 100px;
+    min-width: 100px;
 }
 
 .clsMinWidth-150 {
-  min-width: 150px;
+    min-width: 150px;
 }
 
 .clsMinWidth-200 {
-  min-width: 200px;
+    min-width: 200px;
 }
 
 .clsMinWidth-250 {
-  min-width: 250px;
+    min-width: 250px;
 }
 
 .clsMinWidth-300 {
-  min-width: 300px;
+    min-width: 300px;
 }
 
 .clsSdk_id {
-
-  span {
-    display: $ib;
-    @include mar(8px, null, null, null);
-    @include pad(12px, 26px, 12px, 34px);
-    background: $color-1;
-    color     : $dark-blue;
-  }
+    span {
+        display: $ib;
+        @include mar(8px, null, null, null);
+        @include pad(12px, 26px, 12px, 34px);
+        background: $color-1;
+        color: $dark-blue;
+    }
 }
 
 .clsAction {
-  ul {
-    li {
-      display       : $ib;
-      vertical-align: top;
-      margin-right  : 15px;
-
-      a {
-        display: $b;
-      }
-
-      &:last-child {
-        margin-right: 0px;
-      }
+    min-width: 170px;
+    ul {
+        li {
+            display: $ib;
+            vertical-align: top;
+            margin-right: 15px;
+            a {
+                display: $b;
+            }
+            &:last-child {
+                margin-right: 0px;
+            }
+        }
     }
-  }
 }
 
 .clsWidth-58 {
-  @include size(58px);
+    @include size(58px);
 }
 
 .clsRound-100 {
-  @include radius(100%);
+    @include radius(100%);
 }
 
 .clsCollab {
-  .modal-body {
-    @include pad(30px, 30px, 30px, 30px);
-  }
-
-  form {
-    @include pad(30px, null, null, 40px);
-  }
-
-  .clsMaxHeight {
-    max-height   : 300px;
-    overflow-y   : auto;
-    padding-right: 50px;
-  }
-
-  ul {
-    li {
-      border-bottom: 1px solid $dropdown-border;
-      @include pad(20px, null, 20px, null);
+    .modal-body {
+        @include pad(30px, 30px, 30px, 30px);
     }
-
-    &.clsEdit {
-      li {
-        padding-left: 50px;
-
-        &:first-child {
-          padding-left: 0px;
+    form {
+        @include pad(30px, null, null, 40px);
+    }
+    .clsMaxHeight {
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 50px;
+    }
+    ul {
+        li {
+            border-bottom: 1px solid $dropdown-border;
+            @include pad(20px, null, 20px, null);
         }
-      }
+        &.clsEdit {
+            li {
+                padding-left: 50px;
+                &:first-child {
+                    padding-left: 0px;
+                }
+            }
+        }
     }
-  }
 }
 
 .toggle-button {
-  @include absolute(bottom 0px right -25px);
-  @include size(25px !important);
-  background: $light-blue;
-  color     : $white;
-  text-align: center;
+    @include absolute(bottom 0px right -25px);
+    @include size(25px !important);
+    background: $light-blue;
+    color: $white;
+    text-align: center;
 }
 
 .table-wrapper {
-  @include pad(15px, 20px, 15px, 20px);
-  @include mar(30px, null, 30px, null);
-  border       : 1px solid $dark-blue;
-  border-radius: 3px;
-  box-shadow   : 0 1px 1px rgba(0, 0, 0, .05);
+    @include pad(15px, 20px, 15px, 20px);
+    @include mar(30px, null, 40px, null);
+    border: 1px solid $dark-blue;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
 
 .table-title {
-  padding-bottom: 15px;
-  background    : $dark-blue;
-  padding       : 16px 30px;
-  margin        : -15px -20px 10px;
-  border-radius : 3px 3px 0 0;
-
-  h2 {
-    font-size: $md-size - 6;
-    color    : $white;
-  }
+    padding-bottom: 15px;
+    background: $dark-blue;
+    padding: 15px;
+    margin: -15px -20px 10px;
+    border-radius: 3px 3px 0 0;
+    h2 {
+        font-size: $md-size - 6;
+        color: $white;
+    }
 }
 
 .clsTimeSlot {
-  display  : flex;
-  flex-wrap: wrap;
-
-  span {
-    @include mar(null, 5px, 5px, 5px);
-  }
+    display: flex;
+    flex-wrap: wrap;
+    span {
+        @include mar(null, 5px, 5px, 5px);
+    }
 }
 
 .clsMob-show {
-  display: none;
+    display: none;
 }
 
 body {
-  &.clsAdmin {
-    .imanavbar {
-      display: none;
+    &.clsAdmin {
+        .imanavbar {
+            display: none;
+        }
     }
-  }
 }
 
 .tableActionBtns {
-  width   : 50px;
-  position: relative;
-
-  .actionBtnQa {
-    position  : absolute;
-    text-align: right;
-    top       : -6px;
-    right     : 20px;
-    z-index   : 99;
-
-    .btn {
-      &.addBtnsNew {
-        width             : 34px;
-        height            : 34px;
-        line-height       : 1;
-        border-radius     : 50%;
-        font-size         : 34px;
-        padding           : 0;
-        text-align        : center;
-        font-weight       : 400;
-        line-height       : 34px;
-        -webkit-transition: -webkit-transform 0.3s linear 0s;
-        transition        : -webkit-transform 0.3s linear 0s;
-        transition        : transform 0.3s linear 0s;
-        transition        : transform 0.3s linear 0s, -webkit-transform 0.3s linear 0s;
-
-        &.addNew1,
-        &.addNew2,
-        &.addNew3,
-        &.addNew4 {
-          position  : relative;
-          z-index   : 2;
-          height    : 0;
-          width     : 0;
-          overflow  : hidden;
-          box-shadow: none;
-          outline   : none;
-        }
-
-        span,
-        a {
-          display: block;
-          width  : 100%;
-          height : 100%;
-        }
-
-        svg {
-          width     : 16px;
-          height    : 16px;
-          margin-top: -8px;
-          fill      : #22273E;
-          position  : relative;
-          top       : -18px !important;
-
-          path {
-            fill: #22273E;
-          }
-        }
-      }
-
-      &.transparantDotBtn {
-        background-color: transparent;
-
-        svg {
-          fill: $brand-primary;
-        }
-      }
-
-      &.clsFontIcon {
-        font-size  : 14px;
-        line-height: 34px;
-
-        .fa {
-          color: $white;
-        }
-      }
-    }
-
-    .defultIconSetPerson {
-      width  : 34px;
-      height : 34px;
-      display: inline-block;
-
-      .afterHover {
-        display: none;
-      }
-
-      &:hover {
-        .afterHover {
-          display: inline-block;
-        }
-
+    width: 50px;
+    position: relative;
+    .actionBtnQa {
+        position: absolute;
+        text-align: right;
+        top: -6px;
+        right: 20px;
+        z-index: 99;
         .btn {
-          &.addBtnsNew {
-            opacity     : 1;
-            margin-right: 0;
-            margin-left : 10px;
-            width       : 34px;
-            height      : 34px;
-            overflow    : inherit;
-            background  : $brand-primary !important;
-            border      : 1px solid $brand-primary !important;
-
-            &[disabled] {
-              background: $brand-primary !important;
-              cursor    : not-allowed;
+            &.addBtnsNew {
+                width: 34px;
+                height: 34px;
+                line-height: 1;
+                border-radius: 50%;
+                font-size: 34px;
+                padding: 0;
+                text-align: center;
+                font-weight: 400;
+                line-height: 34px;
+                -webkit-transition: -webkit-transform 0.3s linear 0s;
+                transition: -webkit-transform 0.3s linear 0s;
+                transition: transform 0.3s linear 0s;
+                transition: transform 0.3s linear 0s, -webkit-transform 0.3s linear 0s;
+                &.addNew1,
+                &.addNew2,
+                &.addNew3,
+                &.addNew4 {
+                    position: relative;
+                    z-index: 2;
+                    height: 0;
+                    width: 0;
+                    overflow: hidden;
+                    box-shadow: none;
+                    outline: none;
+                }
+                span,
+                a {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                }
+                svg {
+                    width: 16px;
+                    height: 16px;
+                    margin-top: -8px;
+                    fill: #22273E;
+                    position: relative;
+                    top: -18px !important;
+                    path {
+                        fill: #22273E;
+                    }
+                }
             }
-
-            &.addNew1,
-            &addNew2 {
-              -webkit-animation: bounceAnimation 0.54s ease;
-              animation        : bounceAnimation 0.54s ease;
+            &.transparantDotBtn {
+                background-color: transparent;
+                svg {
+                    fill: $brand-primary;
+                }
             }
-
-            &:first-child {
-              margin-left: 0px;
+            &.clsFontIcon {
+                font-size: 14px;
+                line-height: 34px;
+                .fa {
+                    color: $white;
+                }
             }
-          }
         }
-
-        .beforeHover {
-          display: none;
+        .defultIconSetPerson {
+            width: 34px;
+            height: 34px;
+            display: inline-block;
+            .afterHover {
+                display: none;
+            }
+            &:hover {
+                .afterHover {
+                    display: inline-block;
+                }
+                .btn {
+                    &.addBtnsNew {
+                        opacity: 1;
+                        margin-right: 0;
+                        margin-left: 10px;
+                        width: 34px;
+                        height: 34px;
+                        overflow: inherit;
+                        background: $brand-primary !important;
+                        border: 1px solid $brand-primary !important;
+                        &[disabled] {
+                            background: $brand-primary !important;
+                            cursor: not-allowed;
+                        }
+                        &.addNew1,
+                        &addNew2 {
+                            -webkit-animation: bounceAnimation 0.54s ease;
+                            animation: bounceAnimation 0.54s ease;
+                        }
+                        &:first-child {
+                            margin-left: 0px;
+                        }
+                    }
+                }
+                .beforeHover {
+                    display: none;
+                }
+            }
         }
-      }
+        &:hover {
+            width: 250px;
+            top: 8px;
+            .defultIconSetPerson {
+                width: 250px !important;
+            }
+        }
     }
-
-    &:hover {
-      width: 250px;
-      top  : 8px;
-
-      .defultIconSetPerson {
-        width: 250px !important;
-      }
-    }
-  }
 }
 
 .defultIconSetPerson:hover {
-  .btn.addBtnsNew {
-    opacity         : 1;
-    margin-right    : 0;
-    margin-left     : 1px;
-    width           : 38px;
-    height          : 38px;
-    overflow        : inherit;
-    border          : 0;
-    color           : #333;
-    background-color: $brand-primary !important;
-
-    &:focus {
-      box-shadow: 0 0 1px 3px rgba(38, 143, 255, 0.5) !important;
+    .btn.addBtnsNew {
+        opacity: 1;
+        margin-right: 0;
+        margin-left: 1px;
+        width: 38px;
+        height: 38px;
+        overflow: inherit;
+        border: 0;
+        color: #333;
+        background-color: $brand-primary !important;
+        &:focus {
+            box-shadow: 0 0 1px 3px rgba(38, 143, 255, 0.5) !important;
+        }
+        &.addNew1,
+        &.addNew2,
+        &.addNew3,
+        &.addNew4,
+        &.addNew5 {
+            animation: bounceAnimation 0.54s ease;
+            &.afterHover {
+                animation: none;
+            }
+        }
     }
-
-    &.addNew1,
-    &.addNew2,
-    &.addNew3,
-    &.addNew4,
-    &.addNew5 {
-      animation: bounceAnimation 0.54s ease;
-
-      &.afterHover {
-        animation: none;
-      }
+    .afterHover {
+        display: inline-block;
     }
-  }
-
-  .afterHover {
-    display: inline-block;
-  }
-
-  .beforeHover {
-    display: none;
-  }
+    .beforeHover {
+        display: none;
+    }
 }
 
 @keyframes bounceAnimation {
-  0% {
-    transform: translateX(20px);
-  }
-
-  50% {
-    transform: translateX(-20px);
-  }
-
-  100% {
-    transform: translateX(0px);
-  }
+    0% {
+        transform: translateX(20px);
+    }
+    50% {
+        transform: translateX(-20px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
 }
 
 .input-group-append {
-  .btn {
-    padding: 10px 15px 10px;
-  }
+    .btn {
+        padding: 10px 15px 10px;
+    }
 }
 
 .pad-top-5 {
-  padding-top: 5px;
+    padding-top: 5px;
 }
 
 .pad-bot-5 {
-  padding-bottom: 5px;
+    padding-bottom: 5px;
 }
 
 .pad-left-5 {
-  padding-left: 5px;
+    padding-left: 5px;
 }
 
 .pad-right-5 {
-  padding-right: 5px;
+    padding-right: 5px;
 }
 
 .mar-top-5 {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .mar-bot-5 {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .mar-left-5 {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 
 .mar-right-5 {
-  margin-right: 5px;
+    margin-right: 5px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active,
+input:-webkit-autofill:focus {
+    background-color: $white !important;
+    color: #555 !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: $brand-primary !important;
 }

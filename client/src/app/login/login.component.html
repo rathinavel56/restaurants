@@ -14,9 +14,7 @@
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="form-content">
                             <div class="form-group">
-                                <input formControlName="username" type="text" ng-model="name"
-                                    class="form-control inputUnderline input-lg" required (keydown)="onKeydown($event)"
-                                    placeholder="Username" />
+                                <input formControlName="username" type="text" ng-model="name" class="form-control inputUnderline input-lg" required (keydown)="onKeydown($event)" placeholder="Username" />
                                 <div *ngIf="
                                         submitted &&
                                         loginForm.get('username').value
@@ -36,9 +34,7 @@
                             </div>
 
                             <div class="form-group m-0">
-                                <input formControlName="password" type="password" required
-                                    class="form-control inputUnderline input-lg" (keydown)="onKeydown($event)"
-                                    placeholder="Password" />
+                                <input formControlName="password" type="password" required class="form-control inputUnderline input-lg" (keydown)="onKeydown($event)" placeholder="Password" />
                                 <div *ngIf="
                                         submitted &&
                                         loginForm.get('password').value
@@ -111,7 +107,8 @@
                 <div class="clsFormBlock clsBeforeLogin">
                     <div class="clearfix text-center mb-30">
                         <div class="">
-                            <img class="clsWidth-150" src="assets/images/Masam_Logo.svg" alt="Logo">
+                            <img class="clsWidth-150 clsMob-hide" src="assets/images/Masam_Logo.svg" alt="Logo">
+                            <img class="clsMob-show" src="assets/images/Masam_Logo_white.svg" alt="Logo">
                         </div>
 
                         <h2 class="db-c text-left"> Login </h2>
@@ -120,8 +117,7 @@
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="form-group pb-10">
                             <label for="user_id"> User Id </label>
-                            <input formControlName="username" type="text" ng-model="name" class="form-control" required
-                                (keydown)="onKeydown($event)" placeholder="Username" />
+                            <input formControlName="username" type="text" ng-model="name" class="form-control" required (keydown)="onKeydown($event)" placeholder="Username" />
                             <div *ngIf="
                                         submitted &&
                                         loginForm.get('username').value
@@ -142,8 +138,7 @@
 
                         <div class="form-group">
                             <label for="password"> Password </label>
-                            <input formControlName="password" type="password" required class="form-control"
-                                (keydown)="onKeydown($event)" placeholder="Password" />
+                            <input formControlName="password" type="password" required class="form-control" (keydown)="onKeydown($event)" placeholder="Password" />
                             <div *ngIf="
                                         submitted &&
                                         loginForm.get('password').value
@@ -162,19 +157,13 @@
                             </div>
                         </div>
 
-                        <a [routerLink]="['/forgot-password']" class="btn btn-link width_in pt-0 pb-c text-right">
+                        <!-- <a [routerLink]="['/forgot-password']" class="btn btn-link width_in pt-0 pb-c text-right">
                             Forgot Pasword
-                        </a>
+                        </a> -->
 
-                        <button type="button" class="btn btn-success clsWidth-100 btn-lg" (keydown)="onKeydown($event)"
-                            (click)="onSubmit()"> {{ 'Login' | translate }} </button>
+                        <button type="button" class="btn btn-success clsWidth-100 btn-lg mt-20" (keydown)="onKeydown($event)" (click)="onSubmit()"> {{ 'Login' | translate }} </button>
 
                     </form>
-
-                    <div class="clsPowered clsMob-show text-center pb-20">
-                        <p class="whitec pb-10"> Powered by </p>
-                        <!-- <img src="assets/images/login/powered.svg" alt="B-ID"> -->
-                    </div>
                 </div>
             </div>
         </div>

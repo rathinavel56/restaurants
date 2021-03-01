@@ -1,9 +1,21 @@
-.resimage {
-	max-width    : 550px;
-	width        : 100%;
-	border-radius: 50%;
+// .resimage {
+// 	max-width    : 550px;
+// 	width        : 100%;
+// 	border-radius: 50%;
+// }
+.form-check {
+    margin-bottom: 10px;
 }
 
-.form-check {
-	margin-bottom: 10px;
+.btn-close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    padding: 0px;
+    border-radius: 100%;
+    line-height: 20px;
+    text-align: center;
+    font-size: 13px;
 }

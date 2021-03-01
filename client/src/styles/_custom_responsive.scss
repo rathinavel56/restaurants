@@ -1,133 +1,175 @@
 @media screen and (min-width: 1400px) {
-	// body {}
+    // body {}
 }
 
 @media screen and (min-width: 1200px) {
-	// body {}
+    // body {}
 }
 
 @media screen and (min-width: 992px) and (max-width: 1199px) {
-	// body {}
+    // body {}
 }
 
 @media screen and (min-width: 992px) and (max-width: 1024px) {
-	// body {}
+    // body {}
 }
 
 @media screen and (min-width: 768px) and (max-width: 1199px) {
-	body {
-		.clsAdminPage {
-			.clsLeftSide {
-
-				&:before {
-					background-position: -150px -85px;
-				}
-
-				&:after {
-					background-position: 130px 0px;
-				}
-
-				.clsImgBlock {
-					img {
-						width: 40%;
-					}
-				}
-			}
-
-			.clsFormBlock {
-
-				form {
-					max-width: 300px;
-					min-width: 300px;
-				}
-			}
-		}
-	}
+    body {
+        .clsAdminPage {
+            .clsLeftSide {
+                &:before {
+                    background-position: -150px -85px;
+                }
+                &:after {
+                    background-position: 130px 0px;
+                }
+                .clsImgBlock {
+                    img {
+                        width: 40%;
+                    }
+                }
+            }
+            .clsFormBlock {
+                form {
+                    max-width: 300px;
+                    min-width: 300px;
+                }
+            }
+        }
+    }
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
-	body {
-		.collapse {
-			display: block;
-		}
-
-		.clsDashboard {
-			.clsLeftNav {
-				.clsMenuList {
-					height: calc(100vh - 100px);
-				}
-			}
-		}
-	}
+    body {
+        .collapse {
+            display: block;
+        }
+        .clsDashboard {
+            .clsLeftNav {
+                z-index: 99;
+                .clsMenuList {
+                    height: calc(100vh - 100px);
+                }
+            }
+            .clsRightBlock {
+                width: calc(100% - 60px);
+                padding: 15px 0px 0px;
+            }
+        }
+    }
 }
 
 @media screen and (min-width: 768px) {
-	// body {}
+    // body {}
 }
 
 @media screen and (max-width: 767px) {
-	body {
-		.clsMob-show {
-			display: block;
-		}
-
-		.clsAdminPage {
-			.clsLeftSide {
-				display: none;
-			}
-
-			.clsRightSide {
-				width      : 100%;
-				float      : none;
-				display    : block;
-				background : $brand-success;
-				padding-top: 30px;
-				height     : auto;
-			}
-
-			.clsFormBlock {
-				h2 {
-					color: $white;
-
-					&.lb-c {
-						color: #d2b34f;
-					}
-
-					.clsMob-show {
-						display       : $ib;
-						vertical-align: top;
-					}
-				}
-
-				.mb-50 {
-					margin-bottom: 30px;
-				}
-
-				form {
-					background   : $white;
-					max-width    : inherit;
-					min-width    : inherit;
-					padding      : 30px;
-					margin       : 20px;
-					border-radius: 10px;
-				}
-			}
-		}
-
-		.collapse {
-			display: block;
-		}
-
-		.clsDashboard {
-			.clsLeftNav {
-				.clsMenuList {
-					height: calc(100vh - 100px);
-				}
-			}
-		}
-	}
+    body {
+        .clsMob-show {
+            display: block;
+        }
+        .clsMob-hide {
+            display: none;
+        }
+        .mob-pb-10 {
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: $sm-size - 1;
+            line-height: $md-size;
+        }
+        .clsAdminPage {
+            .clsLeftSide {
+                display: none;
+            }
+            .clsRightSide {
+                width: 100%;
+                float: none;
+                display: block;
+                background: $brand-success;
+                padding-top: 30px;
+                height: auto;
+                img {
+                    height: 150px;
+                    margin: 0 auto;
+                }
+            }
+            .clsFormBlock {
+                h2 {
+                    color: $white;
+                    padding: 0 20px;
+                    &.lb-c {
+                        color: #d2b34f;
+                    }
+                    .clsMob-show {
+                        display: $ib;
+                        vertical-align: top;
+                    }
+                }
+                .mb-50 {
+                    margin-bottom: 30px;
+                }
+                form {
+                    background: $white;
+                    max-width: inherit;
+                    min-width: inherit;
+                    padding: 30px;
+                    margin: 20px;
+                    border-radius: 10px;
+                }
+            }
+        }
+        .collapse {
+            display: block;
+        }
+        .clsDashboard {
+            .clsLeftNav {
+                // position: absolute;
+                z-index: 99;
+                .clsMenuList {
+                    height: calc(100vh - 100px);
+                }
+            }
+            .clsRightBlock {
+                width: calc(100% - 60px);
+                padding: 15px 0px 0px;
+            }
+        }
+        .table-wrapper {
+            margin-top: 15px;
+            padding: 10px;
+        }
+        .table-title {
+            padding: 10px;
+            margin: -10px -10px 10px;
+            h2 {
+                font-size: $sm-size - 1;
+            }
+        }
+        .table {
+            &.table-sm {
+                thead {
+                    tr {
+                        th {
+                            padding: 10px;
+                            text-align: left !important;
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        td {
+                            text-align: left !important;
+                            padding: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 380px) {
-	// body {}
+    // body {}
 }
