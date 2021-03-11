@@ -19,7 +19,7 @@
                 </div>
                 <div class="form-group" *ngIf="item.type === 'select'">
                     <label for="{{item.name}}">{{item.label}} <span *ngIf="item.is_required">*</span></label>
-                    <select class="form-control" [(ngModel)]="item.value" id="{{item.name}}">
+                    <select class="form-control" style="height: 50px !important;" [(ngModel)]="item.value" id="{{item.name}}">
                         <option *ngFor="let option of item.options;"
                             [selected]="(option === item.value || option.name === item.value)">
                             {{option.name ? option.name : option}}</option>
@@ -36,9 +36,8 @@
                 </div>
                 <div class="form-group" *ngIf="item.type === 'file'">
                     <label for="{{item.name}}">{{item.label}} <span *ngIf="item.is_required">*</span></label>
-                    <input type="file" (change)="uploadImage($event, item)" [(ngModel)]="item.value"
-                        [ngModelOptions]="{standalone: true}" class="form-control-file" id="{{item.name}}">
-                    <div class="contprofileimage" *ngIf="!item.isUploaded">
+                    <input type="file" (change)="uploadImage($event, item)" class="form-control-file" id="{{item.name}}">
+                    <div class="contprofileimage" *ngIf="!item.isUploaded || responseData.attachment">
                         <app-attachment [attachment]="responseData.attachment" [type]="original"></app-attachment>
                     </div>
                 </div>

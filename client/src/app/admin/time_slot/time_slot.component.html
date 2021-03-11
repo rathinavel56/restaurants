@@ -1,5 +1,12 @@
 <div [@routerTransition]>
    <div class="container-fluid mt-30">
+      <div class="row" *ngIf="restaurants && restaurants.length > 0">
+         <div class="col-sm-12 col-md-12">
+            Restaurants : <select style="width:250px; height:50px;">
+                  <option *ngFor="let restaurant of restaurants" [value]="restaurant.id" [selected]="restaurant.id == restaurant_id">{{restaurant.title}}</option>
+            </select>
+         </div>
+      </div>
       <div class="row">
          <div class="col-sm-2 col-md-1">
             Days
@@ -36,9 +43,11 @@
                <td>
                   <div class="clsTimeSlot" *ngIf="schedule.type === 0">
                      <span *ngFor="let timeSlot of schedule.timeSlots">
-                        <input style="width:50px" type="number" min="0" [(ngModel)]="timeSlot.slot"
+                        <select style="width:50px" [(ngModel)]="timeSlot.slot"
                            [ngModelOptions]="{standalone: true}"
-                           (change)="updatetimeSlot(timeSlot, $event)" /><br>{{timeSlot.time}}
+                           (change)="updatetimeSlot(timeSlot, $event)">
+                           <option *ngFor="let discount of discounts" [value]="discount" [selected]="discount == timeSlot.slot">{{discount}}%</option>
+                     </select><br>{{timeSlot.time}}
                      </span>
                   </div>
                   <div class="clsTimeSlot" *ngIf="schedule.type === 1">

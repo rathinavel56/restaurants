@@ -24,6 +24,7 @@ export class RestaurantComponent implements OnInit {
     isAddEdit: any = false;
     restaurants: any = [];
     editMode: any = false;
+    viewMode: any = false;
     sessionService: any;
     search: any;
 
@@ -55,8 +56,9 @@ export class RestaurantComponent implements OnInit {
             });
     }
 
-    edit(id) {
+    edit(id, isView) {
         this.editMode = true;
+        this.viewMode = isView;
         this.toastService.showLoading();
         this.userService.restaurantDetail(id)
             .subscribe((response) => {
@@ -166,10 +168,13 @@ export class RestaurantComponent implements OnInit {
             .subscribe((response) => {
                 this.restaurants.splice(index, 1);
                 this.toastService.clearLoading();
+                this.toastService.success(response.error.message);
+                this.ngOnInit();
             });
     }
 
     reset() {
+        this.viewMode = false;
         this.restaurantDetails = {
             id: null,
             title: '',
@@ -272,7 +277,7 @@ export class RestaurantComponent implements OnInit {
         this.userService.static({}).subscribe((response) => {
             if (this.sessionService.role_id === 3) {
                 this.reset();
-                this.edit(this.sessionService.id);
+                this.edit(this.sessionService.id, false);
             }
             if (response.data) {
                 this.staticDataList = response.data;
@@ -320,7 +325,7 @@ export class RestaurantComponent implements OnInit {
             this.toastService.error('Description is required');
         } else if (this.restaurantDetails.maxperson <= 0) {
             this.toastService.error('Maxperson is required');
-        } else if (this.restaurantDetails.menus.filter((e) => e.name.trim() === '' || e.price.trim() === '').length > 0) {
+        } else if (this.restaurantDetails.menus.filter((e) => e.name.trim() === '' || e.price === '').length > 0) {
             this.toastService.error('Menus is required');
         } else if (this.restaurantDetails.facilities.filter((e) => e.name.trim() === '').length > 0) {
             this.toastService.error('Facilities is required');

@@ -30,4 +30,5 @@ export interface QueryParam {
     type?: string;
     date_detail?: string;
     search?: string;
+    restaurant_id?: any;
 }

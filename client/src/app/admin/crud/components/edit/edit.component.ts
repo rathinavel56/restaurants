@@ -140,6 +140,7 @@ export class EditComponent implements OnInit {
         if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
             item.file = response.attachment;
             item.isUploaded = true;
+            this.responseData.attachment = null;
         } else {
             this.toastService.error(response.error.message);
         }

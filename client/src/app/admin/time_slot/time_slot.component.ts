@@ -12,11 +12,16 @@ import { UserService } from '../../api/services/user.service';
 export class TimeSlotComponent implements OnInit {
     timeSlots: any = [];
     schedules: any = [];
+    restaurants: any = [];
+    discounts: any = [5,10,15,20,25,30,35,40,45,50,55,60,65,70]
+    sessionService: any;
+    restaurant_id: any;
 
     constructor(private toastService: ToastService,
         private userService: UserService) {}
 
     ngOnInit() {
+        this.sessionService = JSON.parse(sessionStorage.getItem('user_context'));
         for (let i = 0; i <= 23; i++) {
             let timeValue = (i.toString().length === 1) ? ('0' + i) : i;
             this.timeSlots.push({
@@ -57,11 +62,17 @@ export class TimeSlotComponent implements OnInit {
             type: 0,
             timeSlots: JSON.parse(JSON.stringify(this.timeSlots))
         }];
-        this.timeSlotDetails();
+        if (this.sessionService.role_id === 4) {
+            this.restaurantList();
+        } else {
+            this.timeSlotDetails();
+        }
     }
     timeSlotDetails() {
         this.toastService.showLoading();
-        this.userService.timeSlotDetails().subscribe((response) => {
+        this.userService.timeSlotDetails({
+            restaurant_id: (this.sessionService.role_id === 4) ? this.restaurant_id : ''
+        }).subscribe((response) => {
             if (response.data && response.data.length > 0) {
                 this.schedules.forEach(element => {
                     let savedData = response.data.find((e) => (e.day === element.day));
@@ -104,7 +115,8 @@ export class TimeSlotComponent implements OnInit {
             if (selectedDays.length > 0) {
                 this.toastService.showLoading();
                 this.userService.timeSlot({
-                    time_slot: selectedDays
+                    time_slot: selectedDays,
+                    restaurant_id: (this.sessionService.role_id === 4) ? +this.restaurant_id : ''
                 }).subscribe((response) => {
                     this.toastService.success(response.error.message);
                     this.toastService.clearLoading();
@@ -113,5 +125,16 @@ export class TimeSlotComponent implements OnInit {
             }
         }
         this.toastService.error('Please choose atleast one day');
+    }
+
+    restaurantList() {
+        this.toastService.showLoading();
+        this.userService.restaurantList().subscribe((response) => {
+            if (response.data && response.data.length > 0) {
+                this.restaurants = response.data;
+                this.restaurant_id = this.restaurants[0].id;
+            }
+            this.timeSlotDetails();
+        });
     }
 }

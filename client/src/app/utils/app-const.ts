@@ -38,6 +38,7 @@ export class AppConst {
         CUSTOM_TIMESLOTS: '/custom_time_slots',
         STATIC: '/static',
         RESTAURANTS: '/admin/restaurants',
+        RESTAURANTS_LIST: '/restaurant_list',
         RESTAURANTDETAILS: '/admin/restaurant/detail',
         RESTAURANTDELETE: '/admin/restaurant/delete',
         LOGOUT: '/users/logout'

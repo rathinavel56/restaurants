@@ -16,6 +16,11 @@ export class CustomTimeSlotComponent implements OnInit {
     schedule: any = {};
     customDate: NgbDateStruct;
     currentFullDate = new Date();
+    discounts: any = [5,10,15,20,25,30,35,40,45,50,55,60,65,70]
+    sessionService: any;
+    restaurant_id: any;
+    restaurants: any = [];
+
     constructor(private toastService: ToastService,
         private userService: UserService,
         private calendar: NgbCalendar) {
@@ -23,6 +28,7 @@ export class CustomTimeSlotComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.sessionService = JSON.parse(sessionStorage.getItem('user_context'));
         for (let i = 0; i <= 23; i++) {
             let timeValue = (i.toString().length === 1) ? ('0' + i) : i;
             this.timeSlots.push({
@@ -39,12 +45,17 @@ export class CustomTimeSlotComponent implements OnInit {
             type: 0,
             timeSlots: JSON.parse(JSON.stringify(this.timeSlots))
         };
-        this.customTimeSlotDetails();
+        if (this.sessionService.role_id === 4) {
+            this.restaurantList();
+        } else {
+            this.customTimeSlotDetails();
+        }
     }
     customTimeSlotDetails() {
         this.toastService.showLoading();
         this.userService.customTimeSlotDetails({
-            date_detail: this.dateToString(this.customDate)
+            date_detail: this.dateToString(this.customDate),
+            restaurant_id: (this.sessionService.role_id === 4) ? this.restaurant_id : ''
         }).subscribe((response) => {
             if (response.data && response.data.length > 0) {
                 let savedData = response.data.find((e) => (e.day === this.schedule.day));
@@ -80,7 +91,8 @@ export class CustomTimeSlotComponent implements OnInit {
             selectedDay = {
                 type: day.type,
                 time_slots: addSlots,
-                date_detail: this.dateToString(this.customDate)
+                date_detail: this.dateToString(this.customDate),
+                restaurant_id: (this.sessionService.role_id === 4) ? +this.restaurant_id : ''
             };
         }
         if (selectedDay) {
@@ -95,5 +107,15 @@ export class CustomTimeSlotComponent implements OnInit {
     }
     dateToString(dateDetail) {
         return (dateDetail.year + '-' + (dateDetail.month.length === 1 ? ('0' + dateDetail.month) : dateDetail.month) + '-' + (dateDetail.day.length === 1 ? ('0' + dateDetail.day) : dateDetail.day));
+    }
+    restaurantList() {
+        this.toastService.showLoading();
+        this.userService.restaurantList().subscribe((response) => {
+            if (response.data && response.data.length > 0) {
+                this.restaurants = response.data;
+                this.restaurant_id = this.restaurants[0].id;
+            }
+            this.customTimeSlotDetails();
+        });
     }
 }

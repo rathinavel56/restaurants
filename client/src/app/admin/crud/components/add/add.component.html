@@ -14,13 +14,13 @@
             </div>
             <div class="form-group" *ngIf="item.type === 'select' && !item.id_fill">
                 <label for="{{item.name}}">{{item.label}} <span *ngIf="item.is_required">*</span></label>
-                <select class="form-control" id="{{item.name}}" [(ngModel)]="item.data" (change)="changeSelect(item, $event)">
+                <select class="form-control" style="height: 50px !important;" id="{{item.name}}" [(ngModel)]="item.data" (change)="changeSelect(item, $event)">
                     <option *ngFor="let option of item.options;" [value]="option.id">{{option[item.name]}}</option>
                 </select>
             </div>
             <div class="form-group" *ngIf="item.type === 'select' && item.id_fill">
                 <label for="{{item.name}}">{{item.label}} <span *ngIf="item.is_required">*</span></label>
-                <select class="form-control" id="{{item.name}}" [(ngModel)]="item.data" (change)="changeSelect(item, $event)">
+                <select class="form-control"style="height: 50px !important;" id="{{item.name}}" [(ngModel)]="item.data" (change)="changeSelect(item, $event)">
                     <option *ngFor="let option of item.options;" [value]="option.id">{{option.name}}</option>
                 </select>
             </div>

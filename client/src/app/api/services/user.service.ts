@@ -82,9 +82,9 @@ export class UserService {
         return this.apiService.httpPost(url, request);
     }
 
-    timeSlotDetails(): Observable<any> {
+    timeSlotDetails(queryParam: QueryParam): Observable<any> {
         const url: string = AppConst.SERVER_URL.TIMESLOTS;
-        return this.apiService.httpGet(url, null);
+        return this.apiService.httpGet(url, queryParam);
     }
 
     customTimeSlotDetails(queryParam: QueryParam): Observable<any> {
@@ -125,6 +125,11 @@ export class UserService {
     restaurantSave(request: any): Observable<any> {
         const url: string = AppConst.SERVER_URL.RESTAURANTS;
         return this.apiService.httpPost(url, request);
+    }
+
+    restaurantList(): Observable<any> {
+        const url: string = AppConst.SERVER_URL.RESTAURANTS_LIST;
+        return this.apiService.httpGet(url, null);
     }
 
     logout(): Observable<any> {
