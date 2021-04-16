@@ -8,6 +8,8 @@ import { AppConst } from '../../../../utils/app-const';
 import * as dot from 'dot-object';
 import {Location} from '@angular/common';
 import { TagsChangedEvent } from 'ngx-tags-input/public-api';
+
+declare const google: any;
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -22,6 +24,7 @@ export class EditComponent implements OnInit {
   public menuEditFields: any;
   public windowData: any = window;
   public isFirstTime: any = false;
+  geocoder: any;
 
   constructor(private activatedRoute: ActivatedRoute,
     private crudService: CrudService,
@@ -33,20 +36,21 @@ export class EditComponent implements OnInit {
       this.windowData.top.editFunc = function (value) {
         if (!thiss.isFirstTime) {
           setTimeout(() => {
-            thiss.meunuItem(value);
+            thiss.menuItem(value);
             thiss.isFirstTime = true;
           }, 500);
         } else {
-            thiss.meunuItem(value);
+            thiss.menuItem(value);
         }
       };
     }
 
     ngOnInit(): void {
-      
+      this.geocoder = new google.maps.Geocoder();
+      google.maps.event.addDomListener(window, 'load', this.initialize);
     }
     
-    meunuItem(value: any) {
+    menuItem(value: any) {
       if (value) {
         this.menu = value;
         if (this.menu.api !== '/admin/settings' && this.menu.api !== '/admin/payment_gateways') {
@@ -84,9 +88,7 @@ export class EditComponent implements OnInit {
             this.menu.api === '/admin/payment_gateways') ? this.responseData : this.menu.edit.fields;
             if (this.menu.api !== '/admin/payment_gateways') {
               this.menuEditFields.forEach(element => {
-                if (formatObj[element.name]) {
-                    element.value = formatObj[element.name];
-                } else if (element.type === 'select') {
+                if (element.type === 'select') {
                   if (element.reference) {
                         this.crudService.get(element.reference, null)
                           .subscribe((responseRef) => {
@@ -101,8 +103,43 @@ export class EditComponent implements OnInit {
                 } else if (element.type === 'file') {
                   element.value = (this.responseData['attachment'] && this.responseData['attachment']['filename'])
                   ? this.responseData['attachment']['filename'] : '';
+                } else if (formatObj[element.name]) {
+                  element.value = formatObj[element.name];
                 }
               });
+            }
+            let lat: any = 24.578048697375753;
+            let long: any = -77.88542495468748;
+            let showMap: any = false;
+            if (this.menu.add && this.menu.add.fields) {
+              let index: any = this.menu.add.fields.findIndex((e) => (e.name === 'address.latitude'));
+              if (index > -1) {
+                showMap = true;
+                if (this.menu.add.fields[index]['value']) {
+                  lat = this.menu.add.fields[index]['value'];
+                }
+              }
+              index = this.menu.add.fields.findIndex((e) => (e.name === 'address.longitude'));
+              if (index > -1 && this.menu.add.fields[index]['value']) {
+                long = this.menu.add.fields[index]['value'];
+              }
+              index = this.menu.add.fields.findIndex((e) => (e.name === 'lat'));
+              if (index > -1) {
+                showMap = true;
+                if (this.menu.add.fields[index]['value']) {
+                  lat = this.menu.add.fields[index]['value'];
+                }
+              }
+              index = this.menu.add.fields.findIndex((e) => (e.name === 'lon'));
+              if (index > -1 && this.menu.add.fields[index]['value']) {
+                long = this.menu.add.fields[index]['value'];
+              }
+              if (showMap) {
+                let thiss = this;
+                setTimeout(function () {
+                  thiss.populateMarker(lat, long);
+                }, 2000);              
+              }
             }
             this.toastService.clearLoading();
         });
@@ -140,7 +177,6 @@ export class EditComponent implements OnInit {
         if (response.error && response.error.code === AppConst.SERVICE_STATUS.SUCCESS) {
             item.file = response.attachment;
             item.isUploaded = true;
-            this.responseData.attachment = null;
         } else {
             this.toastService.error(response.error.message);
         }
@@ -198,4 +234,97 @@ export class EditComponent implements OnInit {
     redirect(url: string): void {
         this.router.navigate([ '/admin/actions/' + this.apiEndPoint + '/' + url]);
     }
-}
+    geocodePosition(pos) {
+      let thiss = this;
+      this.geocoder.geocode({
+        latLng: pos
+      }, function(responses) {
+        if (responses && responses.length > 0) {
+          let index: any;
+          responses[0].address_components.forEach(element => {
+              if (element.types.indexOf('locality') > -1) {
+                index = thiss.menu.add.fields.findIndex((e) => (e.name === 'address.city'));
+                if (index > -1) {
+                  thiss.menu.add.fields[index]['value'] = element.long_name;
+                }
+              }
+              if (element.types.indexOf('administrative_area_level_1') > -1) {
+                index = thiss.menu.add.fields.findIndex((e) => (e.name === 'address.state'));
+                if (index > -1) {
+                  thiss.menu.add.fields[index]['value'] = element.long_name;
+                }
+              }
+              if (element.types.indexOf('country') > -1) {
+                index = thiss.menu.add.fields.findIndex((e) => (e.name === 'address.country'));
+                if (index > -1) {
+                  thiss.menu.add.fields[index]['value'] = element.long_name;
+                }
+              }
+          });
+          thiss.updateMarkerAddress(responses[0].formatted_address);
+        } else {
+          thiss.updateMarkerAddress('Cannot determine address at this location.');
+        }
+      });
+    }
+    updateMarkerPosition(latLng) {
+      let index: any = this.menu.add.fields.findIndex((e) => (e.name === 'address.latitude'));
+      if (index > -1) {
+        this.menu.add.fields[index]['value'] = latLng.lat();
+      }
+      index = this.menu.add.fields.findIndex((e) => (e.name === 'address.longitude'));
+      if (index > -1) {
+        this.menu.add.fields[index]['value'] = latLng.lng();
+      }
+      index = this.menu.add.fields.findIndex((e) => (e.name === 'lat'));
+      if (index > -1) {
+        this.menu.add.fields[index]['value'] = latLng.lat();
+      }
+      index = this.menu.add.fields.findIndex((e) => (e.name === 'lon'));
+      if (index > -1) {
+        this.menu.add.fields[index]['value'] = latLng.lng();
+      }
+    }
+    updateMarkerAddress(str) {
+      const addressIndex: any = this.menu.add.fields.findIndex((e) => (e.name === 'address.addressline1'));
+      this.menu.add.fields[addressIndex]['value'] = str;
+      console.log('thiss.menu.add.fields', this.menu.add.fields);
+    }
+    initialize() {
+        let thiss = this;
+        this.populateMarker(24.578048697375753, -77.88542495468748);
+    }
+    populateMarker(lat, lon) {
+        let thiss = this;
+        let latLng = new google.maps.LatLng(lat, lon);
+        let map = new google.maps.Map(document.getElementById('mapCanvas'), {
+            zoom: 8,
+            center: latLng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        let marker = new google.maps.Marker({
+            position: latLng,
+            title: 'Point A',
+            map: map,
+            draggable: true
+        });
+  
+        // Update current position info.
+        this.updateMarkerPosition(latLng);
+        this.geocodePosition(latLng);
+  
+        // Add dragging event listeners.
+        google.maps.event.addListener(marker, 'dragstart', function() {
+            thiss.updateMarkerAddress('');
+        });
+  
+        google.maps.event.addListener(marker, 'drag', function() {
+            thiss.updateMarkerPosition(marker.getPosition());
+        });
+  
+        google.maps.event.addListener(marker, 'dragend', function() {
+            thiss.geocodePosition(marker.getPosition());
+        });
+    }
+  }
+  

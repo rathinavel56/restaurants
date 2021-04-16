@@ -33,9 +33,9 @@ export class CrudComponent {
   setPage() {
     this.apiEndPoint = '/' + this.activatedRoute.snapshot.paramMap.get('api');
     this.id = +this.activatedRoute.snapshot.paramMap.get('id');
-    this.list = (!(this.windowData.location.href.indexOf('/add') > -1) && !(this.windowData.location.href.indexOf('/edit') > -1)
+    this.list = (!(this.windowData.location.href.indexOf('/admin/actions/booking') > -1) && !(this.windowData.location.href.indexOf('/add') > -1) && !(this.windowData.location.href.indexOf('/edit') > -1)
     && !(this.windowData.location.href.indexOf('/view') > -1));
-    this.add = (this.windowData.location.href.indexOf('/add') > -1);
+    this.add = (this.windowData.location.href.indexOf('/add') > -1) || (this.windowData.location.href.indexOf('/admin/actions/booking') > -1);
     this.edit = (this.windowData.location.href.indexOf('/edit') > -1);
     this.view = (this.windowData.location.href.indexOf('/view') > -1);
     this.setMenu();    
@@ -48,7 +48,7 @@ export class CrudComponent {
     if (!menus[1].isFormat) {
         menus.forEach(formatMenu => {
         if (!formatMenu.role_id || formatMenu.role_id.indexOf(session.role_id) > -1) {
-         if (formatMenu.copyFields) {
+         if (!formatMenu.child_sub_menu && formatMenu.copyFields) {
             formatMenu.listview.fields = formatMenu.listview.fields.filter((x) => (x.list === true));
             formatMenu.add = {
               fields: formatMenu.listview.fields.filter((x) => (x.add === true))
@@ -72,8 +72,12 @@ export class CrudComponent {
               fields: feilds.filter((x) => (x.view === true))
             };
           } else if (formatMenu.child_sub_menu) {
-              formatMenu.child_sub_menu.forEach(childMenu => {
-                this.addChildMenus(formatMenu, childMenu);
+              formatMenu.child_sub_menu.forEach((childMenu, indexChild, objectData) => {
+                if (!childMenu.role_id || childMenu.role_id.indexOf(session.role_id) > -1) {
+                  this.addChildMenus(formatMenu, childMenu);
+                } else {
+                  objectData.splice(indexChild, 1);
+                }
               });
           } else {
             this.addParentMenus(formatMenu, menus);
@@ -100,8 +104,15 @@ export class CrudComponent {
       }
       if (menuItem.child_sub_menu) {
         menuItem.child_sub_menu.forEach(childMenuItem => {
-          if (childMenuItem.route === apiService) {
-            this.menu = childMenuItem;
+          if (!childMenuItem.role_id || childMenuItem.role_id.indexOf(session.role_id) > -1) {
+            let childRoute = childMenuItem.route.split('/');
+            let apiS = apiService.split('/');
+            if (childRoute[childRoute.length-1].toLowerCase() === apiS[apiS.length-1].toLowerCase()) {
+              this.menu = childMenuItem;
+              setTimeout(() => {
+                this.setListMenuItem();
+              }, 500);
+            }
           }
         });
       }

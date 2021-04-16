@@ -1,116 +1,72 @@
-<div class="container-fluid" *ngIf="menu">
-    <div class="table-wrapper clearfix">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-8">
-                    <h2>Manage <b>{{menu.title}}</b></h2>
-                </div>
-
-                <div class="col-sm-4 text-right" *ngIf="menu.add || menu.approve ">
-                    <a href="javascript:void(0)" (click)="redirect('add')" *ngIf="menu.add" class="btn btn-info"><i
-                     class="fa fa-plus pr-1"></i> <span>Add</span></a>
-                    <a href="javascript:void(0)" (click)="redirect('delete')" *ngIf="menu.delete" class="btn btn-danger"><i
-                     class="fa fa-trash"></i> <span>Delete</span></a>
-                    <a href="javascript:void(0)" (click)="approveAll()" *ngIf="menu.approve" class="btn btn-success"><i
-                     class="fa fa-plus"></i> <span>Approve All</span></a>
-                    <a href="javascript:void(0)" (click)="disapproveAll()" *ngIf="menu.disapprove" class="btn btn-danger"><i
-                     class="fa fa-trash"></i> <span>Disapprove All</span></a>
-                </div>
-            </div>
-        </div>
-        <div class="clearfix table-responsive">
-            <table class="table table-sm">
-                <thead class="">
-                    <tr>
-                        <th class="">ID</th>
-                        <th class="" *ngFor="let item of menu.listview.fields">{{item.label}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let element of responseData; let indexCrud = index">
-                        <td>{{indexCrud + 1}}</td>
-                        <td class="" *ngFor="let elementChild of menu.listview.fields">
-                            <span *ngIf="!elementChild.listActions">
-                           <span *ngIf="elementChild['label'] === 'From User'">
-                              <span *ngIf="element.parent_user_id === 0">{{element.other_user.first_name}}
-                                 {{element.other_user.last_name}}</span>
-                            <span *ngIf="element.parent_user_id !== 0">{{element.parent_user.first_name}}
-                                 {{element.parent_user.last_name}}</span>
-                            </span>
-                            <span *ngIf="elementChild['label'] !== 'From User'">
-                               {{getValue(elementChild['name'], element)}}
-                           </span>
-                            </span>
-                            <span *ngIf="elementChild.listActions" class="clsAction inline-show">
-                              <ul class="clearfix unstyled">
-                                 <li *ngFor="let button of elementChild.listActions">
-                                    <a href="javascript:void(0)" (click)="action(element, button.label)"
-                                       class="{{button.class}}" data-toggle="modal">
-                                       <i class="{{button.icon}}"></i>
-                                    </a>
-                                 </li>
-                              </ul>
-                           </span>
-                        </td>
-
-                        <!-- <td class="tableActionBtns">
-                     <div class="actionBtnQa claerfix">
-                        <div class="rightNewAddSet f-right">
-                           <div class="defultIconSetPerson">
-                              <button class="btn addBtnsNew searchIcon addNew2 clsFontIcon">
-                                 <span data-toggle="tooltip" data-placement="bottom" title="Edit">
-                                    <i class="fa fa-pencil"></i>
-                                 </span>
-                              </button>
-
-                              <button class="btn addBtnsNew searchIcon addNew2 clsFontIcon">
-                                 <span data-toggle="tooltip" data-placement="bottom" title="Delete">
-                                    <i class="fa fa-trash-o"></i>
-                                 </span>
-                              </button>
-
-                              <button class="btn addBtnsNew searchIcon addNew3 afterHover clsFontIcon">
-                                 <span data-toggle="tooltip" data-placement="bottom" title="View">
-                                    <i class="fa fa-eye"></i>
-                                 </span>
-                              </button>
-
-                              <button class="btn addBtnsNew beforeHover transparantDotBtn">
-                                 <span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                       version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
-                                       style="enable-background:new 0 0 512 512;" xml:space="preserve">
-                                       <g>
-                                          <circle cx="256" cy="256" r="64" />
-                                          <circle cx="256" cy="448" r="64" />
-                                          <circle cx="256" cy="64" r="64" />
-                                       </g>
-                                    </svg>
-                                 </span>
-                              </button>
-                           </div>
+<div class="pt-15 clearfix" *ngIf="menu">
+    <div class="row" *ngIf="(menu.add && menu.add.fields && menu.add.fields.length > 0) || menu.delete">
+        <div class="col-sm-12 clsProgress_tab mb-20">
+            <ul class="nav nav-tabs justify-content-end" role="tablist">
+                <li>
+                    <div class="input-group">
+                        <input type="text" class="form-control" style="height:45px;" [(ngModel)]="search"
+                            [ngModelOptions]="{standalone: true}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary btn-info" type="button"
+                                (click)="getFilterRecords()" data-toggle="tooltip" data-placement="bottom"
+                                title="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
-                     </div>
-                  </td> -->
-                    </tr>
-
-                    <tr *ngIf="responseData && responseData.length === 0">
-                        <td colspan="{{menu.listview.fields.length + 1}}">No Records</td>
-                    </tr>
-                </tbody>
-            </table>
+                    </div>
+                </li>
+                <li class="nav-item" *ngIf="menu.add && menu.add.fields && menu.add.fields.length > 0">
+                    <a class="nav-link" href="javascript:void(0)" style="background: #F4633A;
+                    color: #fff;" (click)="redirect('add')" id="addId" aria-controls="addId" role="tab" data-toggle="tab" aria-selected="false">Add {{menu.title}}</a>
+                </li>
+                <li class="nav-item" *ngIf="menu.delete">
+                    <a class="nav-link" href="javascript:void(0)" style="background: #F4633A;
+                    color: #fff;" (click)="redirect('delete')" id="deleteId" aria-controls="deleteId" role="tab" data-toggle="tab" aria-selected="false">Delete {{menu.title}}</a>
+                </li>
+            </ul>
         </div>
-        <!-- <div class="clearfix">
-        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-        <ul class="pagination">
-           <li class="page-item disabled"><a href="javascript:void(0)">Previous</a></li>
-           <li class="page-item"><a href="javascript:void(0)" class="page-link">1</a></li>
-           <li class="page-item"><a href="javascript:void(0)" class="page-link">2</a></li>
-           <li class="page-item active"><a href="javascript:void(0)" class="page-link">3</a></li>
-           <li class="page-item"><a href="javascript:void(0)" class="page-link">4</a></li>
-           <li class="page-item"><a href="javascript:void(0)" class="page-link">5</a></li>
-           <li class="page-item"><a href="javascript:void(0)" class="page-link">Next</a></li>
-        </ul>
-     </div> -->
+    </div>
+    <div class="table-responsive clsDashTable mb-30">
+        <table class="table mb-20">
+            <thead class="">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center" *ngFor="let item of menu.listview.fields">{{item.label}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of responseData; let indexCrud = index">
+                    <td>{{indexCrud + 1}}</td>
+                    <td class="text-center" *ngFor="let elementChild of menu.listview.fields">
+                        <span *ngIf="!elementChild.listActions">
+                     <span *ngIf="elementChild['label'] === 'From User'">
+                        <span *ngIf="element.parent_user_id === 0">{{element.other_user.first_name}}
+                           {{element.other_user.last_name}}</span>
+                        <span *ngIf="element.parent_user_id !== 0">{{element.parent_user.first_name}}
+                           {{element.parent_user.last_name}}</span>
+                        </span>
+                        <span *ngIf="elementChild['label'] !== 'From User'">{{elementChild['prefix']}}{{getValue(elementChild['name'],
+                        element)}}</span>
+                        </span>
+                        <span *ngIf="elementChild.listActions" class="clsAction inline-show clsMinWidth-100">
+                     <ul class="clearfix unstyled">
+                        <li *ngFor="let button of elementChild.listActions">
+                           <a href="javascript:void(0)" (click)="action(element, button.label)"
+                              class="{{button.class}}" data-toggle="modal">
+                              <i class="{{button.icon}}"></i>
+                           </a>
+                        </li>
+                     </ul>
+                  </span>
+                    </td>
+                </tr>
+                <tr *ngIf="responseData && responseData.length === 0">
+                    <td colspan="{{menu.listview.fields.length + 1}}">No Records</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="clearfix pagination justify-content-center" *ngIf="metaData && metaData.last_page > 1">
+        <ngb-pagination [collectionSize]="metaData.total" [pageSize]="metaData.per_page" [(page)]="metaData.current_page" [maxSize]="7" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
     </div>
 </div>

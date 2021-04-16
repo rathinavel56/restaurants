@@ -18,6 +18,10 @@ export class ListComponent implements OnInit {
   public settings: any;
   public windowData: any = window;
   public isFirstTime: any = false;
+  public metaData: any;
+  public page = 1;
+  public previousPage: any;
+  search: any = '';
 
   constructor(private crudService: CrudService,
     private toastService: ToastService,
@@ -27,38 +31,49 @@ export class ListComponent implements OnInit {
       this.windowData.top.listFunc = function (value) {
         if (!thiss.isFirstTime) {
           setTimeout(() => {
-            thiss.meunuItem(value);
+            thiss.menuItem(value);
             thiss.isFirstTime = true;
           }, 500);
         } else {
-          thiss.meunuItem(value);
+          thiss.menuItem(value);
         }
       };
-    }
+  }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
       
-    }
+  }
     
-  meunuItem(value: any) {
+  menuItem(value: any) {
     if (value) {
       this.menu = value;
+      this.search = '';
       this.menu.listview.fields = value.listview.fields.filter((x) => (x.list === true));
       if (this.menu && this.menu.api) {
         this.getRecords();
       }
     }
   }
-
+  getFilterRecords() {
+    this.previousPage = '';
+    this.getRecords();
+  }
   getRecords() {
     this.toastService.showLoading();
       const queryParam: QueryParam = {};
       if (this.menu && this.menu.query) {
         queryParam.class = this.menu.query;
       }
+      if (this.previousPage) {
+        queryParam.page = this.previousPage;
+      }
+      if (this.search) {
+        queryParam.q = this.search;
+      }
       this.crudService.get(this.menu.api, queryParam)
       .subscribe((responseApi) => {
           this.responseData = responseApi.data;
+          this.metaData = responseApi._metadata;
           this.toastService.clearLoading();
       });
   }
@@ -171,6 +186,13 @@ export class ListComponent implements OnInit {
           });
         }
       });
+  }
+
+  loadPage(page: number) {
+    if (page !== this.previousPage) {
+        this.previousPage = page;
+        this.getRecords();
     }
+  }
 
 }

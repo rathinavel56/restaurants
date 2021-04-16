@@ -92,3 +92,15 @@
 	width        : 100%;
 	border-radius: 50%;
 }
+#mapCanvas {
+    width: 500px;
+    height: 400px;
+    float: left;
+}
+#infoPanel {
+    float: left;
+    margin-left: 10px;
+}
+#infoPanel div {
+    margin-bottom: 5px;
+}

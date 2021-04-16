@@ -11,7 +11,7 @@ import {Location} from '@angular/common';
 import { TagsChangedEvent } from 'ngx-tags-input/public-api';
 import { HttpClient } from '@angular/common/http';
 import {NgbDate, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
-
+declare const google: any;
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -28,7 +28,7 @@ export class AddComponent implements OnInit {
   public toDate: NgbDate | null = null;
   public windowData: any = window;
   public isFirstTime: any = false;
-
+  geocoder: any;
   constructor(private crudService: CrudService,
     private toastService: ToastService,
     private sessionService: SessionService,
@@ -41,22 +41,28 @@ export class AddComponent implements OnInit {
       this.windowData.top.addFunc = function (value) {
         if (!thiss.isFirstTime) {
           setTimeout(() => {
-            thiss.meunuItem(value);
+            thiss.menuItem(value);
             thiss.isFirstTime = true;
           }, 500);
         } else {
-          thiss.meunuItem(value);
+          thiss.menuItem(value);
         }
       };
       this.fromDate = calendar.getToday();
       this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
-    }
-
-    ngOnInit(): void {
+      this.geocoder = new google.maps.Geocoder();
       
-    }
+      setTimeout(function () {
+          google.maps.event.addDomListener(window, 'load', this.initialize);
+          thiss.populateMarker(24.578048697375753, -77.88542495468748);
+      }, 2000);
+  }
+
+  ngOnInit(): void {
     
-  meunuItem(value: any) {
+  }
+    
+  menuItem(value: any) {
     if (value) {
       this.menu = value;
       this.menu.add.fields.forEach((element, index) => {
@@ -104,8 +110,14 @@ export class AddComponent implements OnInit {
     this._location.back();
   }
 
-  changeSelect(item, event) {
-    item.value = event.target.value;
+  changeSelect(item, event, setOption) {
+    if (setOption) {
+      item.value = setOption.find((e) =>{
+        e.setOption.id == event.target.value; 
+      });
+    } else {
+      item.value = event.target.value;
+    }
   }
 
   uploadImage(event, item) {
@@ -174,11 +186,13 @@ export class AddComponent implements OnInit {
     const formData = {};
     const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     this.menu.add.fields.forEach((element, index) => {
-      if (element.is_required && (Array.isArray(element.value)
-      && element.value.length === 0) || (!Array.isArray(element.value) && element.value.toString().trim() === '')) {
+      if (element.is_required && element.is_required === true && ((Array.isArray(element.value)
+      && element.value.length === 0) || (!Array.isArray(element.value) && element.value.toString().trim() === ''))) {
         inValid.push(element.label);
       } else if (element.name === 'email' && reg.test(element.value) === false) {
         inValid.push('Enter the valid email');
+      } else if (element.type === 'date') {
+        formData[element.name] = element.value.year + '-' + (element.value.month.toString().length == 1 ? ('0' + element.value.month) : element.value.month) + '-' + (element.value.day.toString().length == 1 ? ('0' + element.value.day) : element.value.day);
       } else {
         formData[element.name] = (element.type === 'file') ? element.file : element.value;
       }
@@ -205,4 +219,97 @@ export class AddComponent implements OnInit {
     }
   }
 
+  geocodePosition(pos) {
+    let thiss = this;
+    this.geocoder.geocode({
+      latLng: pos
+    }, function(responses) {
+      if (responses && responses.length > 0) {
+        let index: any;
+        responses[0].address_components.forEach(element => {
+            if (element.types.indexOf('locality') > -1) {
+              index = thiss.menu.add.fields.findIndex((e) => (e.name === 'address.city'));
+              if (index > -1) {
+                thiss.menu.add.fields[index]['value'] = element.long_name;
+              }
+            }
+            if (element.types.indexOf('administrative_area_level_1') > -1) {
+              index = thiss.menu.add.fields.findIndex((e) => (e.name === 'address.state'));
+              if (index > -1) {
+                thiss.menu.add.fields[index]['value'] = element.long_name;
+              }
+            }
+            if (element.types.indexOf('country') > -1) {
+              index = thiss.menu.add.fields.findIndex((e) => (e.name === 'address.country'));
+              if (index > -1) {
+                thiss.menu.add.fields[index]['value'] = element.long_name;
+              }
+            }
+        });
+        thiss.updateMarkerAddress(responses[0].formatted_address);
+      } else {
+        thiss.updateMarkerAddress('Cannot determine address at this location.');
+      }
+    });
+  }
+  updateMarkerPosition(latLng) {
+    let index: any = this.menu.add.fields.findIndex((e) => (e.name === 'address.latitude'));
+    if (index > -1) {
+      this.menu.add.fields[index]['value'] = latLng.lat();
+    }
+    index = this.menu.add.fields.findIndex((e) => (e.name === 'address.longitude'));
+    if (index > -1) {
+      this.menu.add.fields[index]['value'] = latLng.lng();
+    }
+    index = this.menu.add.fields.findIndex((e) => (e.name === 'lat'));
+    if (index > -1) {
+      this.menu.add.fields[index]['value'] = latLng.lat();
+    }
+    index = this.menu.add.fields.findIndex((e) => (e.name === 'lon'));
+    if (index > -1) {
+      this.menu.add.fields[index]['value'] = latLng.lng();
+    }
+  }
+  updateMarkerAddress(str) {
+    const addressIndex: any = this.menu.add.fields.findIndex((e) => (e.name === 'address.addressline1'));
+    this.menu.add.fields[addressIndex]['value'] = str;
+  }
+  initialize() {
+      let thiss = this;
+      this.populateMarker(24.578048697375753, -77.88542495468748);
+  }
+  populateMarker(lat, lon) {
+    if (document.getElementById('mapCanvas')) {
+      let thiss = this;
+      let latLng = new google.maps.LatLng(lat, lon);
+      let map = new google.maps.Map(document.getElementById('mapCanvas'), {
+          zoom: 8,
+          center: latLng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      let marker = new google.maps.Marker({
+          position: latLng,
+          title: 'Point A',
+          map: map,
+          draggable: true
+      });
+
+      // Update current position info.
+      this.updateMarkerPosition(latLng);
+      this.geocodePosition(latLng);
+
+      // Add dragging event listeners.
+      google.maps.event.addListener(marker, 'dragstart', function() {
+          thiss.updateMarkerAddress('');
+      });
+
+      google.maps.event.addListener(marker, 'drag', function() {
+          thiss.updateMarkerPosition(marker.getPosition());
+      });
+
+      google.maps.event.addListener(marker, 'dragend', function() {
+          thiss.geocodePosition(marker.getPosition());
+      });
+    }
+  }
 }

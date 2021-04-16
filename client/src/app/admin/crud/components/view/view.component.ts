@@ -31,11 +31,11 @@ export class ViewComponent implements OnInit {
       this.windowData.top.viewFunc = function (value) {
         if (!thiss.isFirstTime) {
           setTimeout(() => {
-            thiss.meunuItem(value);
+            thiss.menuItem(value);
             thiss.isFirstTime = true;
           }, 500);
         } else {
-          thiss.meunuItem(value);
+          thiss.menuItem(value);
         }
       };
     }
@@ -44,7 +44,7 @@ export class ViewComponent implements OnInit {
       
     }
     
-    meunuItem(value: any) {
+    menuItem(value: any) {
         this.menu = value;
         this.getRecords();
     }
