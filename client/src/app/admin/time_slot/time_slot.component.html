@@ -46,7 +46,7 @@
                         <select style="width:50px" [(ngModel)]="timeSlot.slot"
                            [ngModelOptions]="{standalone: true}"
                            (change)="updatetimeSlot(timeSlot, $event)">
-                           <option *ngFor="let discount of discounts" [value]="discount" [selected]="discount == timeSlot.slot">{{discount}}%</option>
+                           <option *ngFor="let discount of discounts" [value]="discount" [selected]="discount == timeSlot.slot">{{discount}}<span *ngIf="discount">%</span><span *ngIf="!discount">None</span></option>
                      </select><br>{{timeSlot.time}}
                      </span>
                   </div>

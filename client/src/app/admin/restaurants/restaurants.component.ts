@@ -6,7 +6,7 @@ import { UserService } from '../../api/services/user.service';
 import { CrudService } from '../../api/services/crud.service';
 import { AppConst } from '../../utils/app-const';
 import { QueryParam } from '../../api/models/query-param';
-
+declare const google: any;
 @Component({
     selector: 'app-restaurant',
     templateUrl: './restaurants.component.html',
@@ -18,8 +18,12 @@ export class RestaurantComponent implements OnInit {
     constructor(private toastService: ToastService,
         private userService: UserService,
         private crudService: CrudService) { }
+    isAllfacilitity: any = false;
+    isAtmospheres: any = false;
+    isLanguages: any = false;
+    isThemes: any = false;
+    isCuisines: any = false;
     staticDataList: any;
-    timeSlots: any = [];
     restaurantDetails: any;
     isAddEdit: any = false;
     restaurants: any = [];
@@ -27,8 +31,11 @@ export class RestaurantComponent implements OnInit {
     viewMode: any = false;
     sessionService: any;
     search: any;
-
+    geocoder: any;
+    timeSlots: any = [];
+    
     ngOnInit() {
+        this.geocoder = new google.maps.Geocoder();
         this.sessionService = JSON.parse(sessionStorage.getItem('user_context'));
         if (this.sessionService.role_id === 3) {
             this.getStaticData();
@@ -36,11 +43,22 @@ export class RestaurantComponent implements OnInit {
             this.getRestaurants();
             this.getStaticData();
         }
+        this.timeSlots.push('Select');
+        for (let i = 0; i <= 23; i++) {
+            let timeValue = (i.toString().length === 1) ? ('0' + i) : i;
+            this.timeSlots.push(timeValue + ':00');
+            this.timeSlots.push(timeValue + ':30');
+        }
+        google.maps.event.addDomListener(window, 'load', this.initialize);
     }
 
     addEdit() {
         this.reset();
         this.isAddEdit = !this.isAddEdit;
+        let thiss = this;
+        setTimeout(function () {
+            thiss.populateMarker(38.9637, 35.2433);
+        }, 2000);
     }
 
     getRestaurants() {
@@ -52,6 +70,7 @@ export class RestaurantComponent implements OnInit {
                 if (response.data) {
                     this.restaurants = response.data;
                 }
+                this.getStaticData();
                 this.toastService.clearLoading();
             });
     }
@@ -76,23 +95,29 @@ export class RestaurantComponent implements OnInit {
                         latitude: response.data.latitude,
                         longitude: response.data.longitude,
                         maxperson: response.data.max_person,
+                        operating_hours: (response.data.operating_hours && response.data.operating_hours.length > 0) ? response.data.operating_hours : this.getOperatingHours(),
                         specialConditions: [{
                             name: ''
                         }],
                         facilities: [{
-                            name: ''
+                            facilities_service_id: ''
                         }],
                         menus: [{
                             name: '',
                             price: ''
                         }],
                         atmospheres: [{
-                            name: ''
+                            atmosphere_id: ''
                         }],
                         languages: [],
                         payments: [],
                         themes: [],
                         cuisines: [],
+                        facilitity_others: '',
+                        atmospheres_others: '',
+                        languages_others: '',
+                        themes_others: '',
+                        cuisines_others: '',
                         about: '',
                         attachments: [],
                         attachmentsDeleted: [],
@@ -100,11 +125,8 @@ export class RestaurantComponent implements OnInit {
                         is_admin_deactived: (this.sessionService.role_id === 1) ? response.data.is_admin_deactived : undefined
                     };
                     if (response.data.facilities_services && response.data.facilities_services.length > 0) {
-                        this.restaurantDetails.facilities = [];
-                        response.data.facilities_services.forEach(facility => {
-                            this.restaurantDetails.facilities.push({
-                                name: facility.name
-                            });
+                        this.staticDataList.facilities.forEach(facility => {
+                            facility.selected = (response.data.facilities_services.filter((e) => facility.id === e.facilities_service_id).length > 0);
                         });
                     }
                     if (response.data.menus && response.data.menus.length > 0) {
@@ -125,11 +147,8 @@ export class RestaurantComponent implements OnInit {
                         });
                     }
                     if (response.data.atmospheres && response.data.atmospheres.length > 0) {
-                        this.restaurantDetails.atmospheres = [];
-                        response.data.atmospheres.forEach(atmosphere => {
-                            this.restaurantDetails.atmospheres.push({
-                                name: atmosphere.name
-                            });
+                        this.staticDataList.atmospheres.forEach(atmosphere => {
+                            atmosphere.selected = (response.data.atmospheres.filter((e) => atmosphere.id === e.atmosphere_id).length > 0);
                         });
                     }
                     if (response.data.languages && response.data.languages.length > 0) {
@@ -157,6 +176,10 @@ export class RestaurantComponent implements OnInit {
                     }
                     this.restaurantDetails.attachments = response.data.attachments;
                     this.isAddEdit = !this.isAddEdit;
+                    let thiss = this;
+                    setTimeout(function () {
+                        thiss.populateMarker(thiss.restaurantDetails.latitude, thiss.restaurantDetails.longitude);
+                    }, 2000);                    
                 }
                 this.toastService.clearLoading();
             });
@@ -191,18 +214,24 @@ export class RestaurantComponent implements OnInit {
             latitude: '',
             longitude: '',
             maxperson: 6,
+            facilitity_others: '',
+            atmospheres_others: '',
+            languages_others: '',
+            themes_others: '',
+            cuisines_others: '',
+            operating_hours: this.getOperatingHours(),
             specialConditions: [{
                 name: ''
             }],
             facilities: [{
-                name: ''
+                facilities_service_id: ''
             }],
             menus: [{
                 name: '',
                 price: ''
             }],
             atmospheres: [{
-                name: ''
+                atmosphere_id: ''
             }],
             languages: [],
             payments: [],
@@ -215,10 +244,154 @@ export class RestaurantComponent implements OnInit {
             is_admin_deactived: (this.sessionService.role_id === 1) ? 0 : undefined
         };
     }
+    
+    getOperatingHours() {
+        return [{
+            day: 'Sun',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        },{
+            day: 'Mon',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        },{
+            day: 'Tue',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        },{
+            day: 'Wed',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        },{
+            day: 'Thu',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        },{
+            day: 'Fri',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        },{
+            day: 'Sat',
+            holiday: false,
+            hours: [{
+                name: 'Breakfast',
+                type: 1,
+                start_time: 'Select',
+                end_time: 'Select'
+            },{
+                name: 'Lunch',
+                type: 2,
+                start_time: 'Select',
+                end_time: 'Select'
+            },
+            {
+                name: 'Dinner',
+                type: 3,
+                start_time: 'Select',
+                end_time: 'Select'
+            }]
+        }];
+    }
 
     public handleAddressChange(address: any) {
         if (address.address_components) {
-            this.restaurantDetails.address = address.formatted_address
+            this.restaurantDetails.address = address.formatted_address;
             address.address_components.forEach(element => {
                 if (element.types.indexOf('locality') > -1) {
                     this.restaurantDetails.city = element.long_name;
@@ -292,7 +465,7 @@ export class RestaurantComponent implements OnInit {
     }
     atmosphereAdd() {
         this.restaurantDetails.atmospheres.push({
-            name: ''
+            atmosphere_id: ''
         });
     }
     menuAdd() {
@@ -303,7 +476,7 @@ export class RestaurantComponent implements OnInit {
     }
     facilitiesAdd() {
         this.restaurantDetails.facilities.push({
-            name: ''
+            facilities_service_id: ''
         });
     }
     saveRes() {
@@ -317,9 +490,9 @@ export class RestaurantComponent implements OnInit {
             this.toastService.error('Password and Confirm Password is required');
         } else if (this.restaurantDetails.address.trim() === '') {
             this.toastService.error('Address is required');
-        } else if (this.restaurantDetails.latitude.trim() === '') {
+        } else if (this.restaurantDetails.latitude === '') {
             this.toastService.error('Latitude is required');
-        } else if (this.restaurantDetails.longitude.trim() === '') {
+        } else if (this.restaurantDetails.longitude === '') {
             this.toastService.error('Longitude is required');
         } else if (this.restaurantDetails.description.trim() === '') {
             this.toastService.error('Description is required');
@@ -327,14 +500,26 @@ export class RestaurantComponent implements OnInit {
             this.toastService.error('Maxperson is required');
         } else if (this.restaurantDetails.menus.filter((e) => e.name.trim() === '' || e.price === '').length > 0) {
             this.toastService.error('Menus is required');
-        } else if (this.restaurantDetails.facilities.filter((e) => e.name.trim() === '').length > 0) {
-            this.toastService.error('Facilities is required');
+        } else if (this.staticDataList.facilities.filter((e) => e.selected === true).length === 0) {
+            if (this.restaurantDetails.facilitity_others.trim() === '') {
+                this.toastService.error('Facilities is required');
+            }
+        } else if (this.staticDataList.atmospheres.filter((e) => e.selected === true).length === 0) {
+            if (this.restaurantDetails.atmospheres_others.trim() === '') {
+                this.toastService.error('Atmosphere is required');
+            }
         } else if (this.staticDataList.themes.filter((theme) => theme.selected === true).length === 0) {
-            this.toastService.error('Theme is required');
+            if (this.restaurantDetails.themes_others.trim() === '') {
+                this.toastService.error('Theme is required');
+            }
         } else if (this.staticDataList.cuisines.filter((cuisine) => cuisine.selected === true).length === 0) {
-            this.toastService.error('Cuisine is required');
+            if (this.restaurantDetails.cuisines_others.trim() === '') {
+                this.toastService.error('Cuisine is required');
+            }
         } else if (this.staticDataList.languages.filter((language) => language.selected === true).length === 0) {
-            this.toastService.error('Languages is required');
+            if (this.restaurantDetails.languages_others.trim() === '') {
+                this.toastService.error('Languages is required');
+            }
         } else if (this.staticDataList.payments.filter((payment) => payment.selected === true).length === 0) {
             this.toastService.error('Payments is required');
         } else if (this.restaurantDetails.about.trim() === '') {
@@ -348,8 +533,8 @@ export class RestaurantComponent implements OnInit {
             this.restaurantDetails.payments = this.staticDataList.payments.filter((payment) => payment.selected === true);
             this.restaurantDetails.attachments = this.restaurantDetails.attachments.filter((attachment) => (!attachment.src && !attachment.id));
             this.restaurantDetails.specialConditions = this.restaurantDetails.specialConditions.filter((e) => e.name.trim() !== '');
-            this.restaurantDetails.atmospheres = this.restaurantDetails.atmospheres.filter((e) => e.name.trim() !== '');
-            this.restaurantDetails.facilities = this.restaurantDetails.facilities.filter((e) => e.name.trim() !== '');
+            this.restaurantDetails.atmospheres = this.staticDataList.atmospheres.filter((e) => e.selected === true);
+            this.restaurantDetails.facilities = this.staticDataList.facilities.filter((e) => e.selected === true);
             this.toastService.showLoading();
             if (this.editMode) {
                 this.userService.restaurantEdit(this.restaurantDetails)
@@ -379,5 +564,78 @@ export class RestaurantComponent implements OnInit {
                     });
             }
         }
+    }
+    geocodePosition(pos) {
+        let thiss = this;
+        this.geocoder.geocode({
+          latLng: pos
+        }, function(responses) {
+          if (responses && responses.length > 0) {
+            responses[0].address_components.forEach(element => {
+                if (element.types.indexOf('locality') > -1) {
+                    thiss.restaurantDetails.city = element.long_name;
+                }
+                if (element.types.indexOf('administrative_area_level_1') > -1) {
+                    thiss.restaurantDetails.state = element.long_name;
+                }
+                if (element.types.indexOf('country') > -1) {
+                    thiss.restaurantDetails.country = element.long_name;
+                }
+            });
+            thiss.updateMarkerAddress(responses[0].formatted_address);
+          } else {
+            thiss.updateMarkerAddress('Cannot determine address at this location.');
+          }
+        });
+    }
+    updateMarkerPosition(latLng) {
+        this.restaurantDetails.latitude = latLng.lat();
+        this.restaurantDetails.longitude = latLng.lng();
+    }
+    updateMarkerAddress(str) {
+        this.restaurantDetails.address = str;
+    }
+    initialize() {
+        let thiss = this;
+        let input = document.getElementById('searchTextField');
+        let autocomplete = new google.maps.places.Autocomplete(input);
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            let place = autocomplete.getPlace();
+            thiss.restaurantDetails.city = place.name;
+            thiss.populateMarker(place.geometry.location.lat(), place.geometry.location.lng());
+        });
+        this.populateMarker(-34.397, 150.644);
+    }
+    populateMarker(lat, lon) {
+        let thiss = this;
+        let latLng = new google.maps.LatLng(lat, lon);
+        let map = new google.maps.Map(document.getElementById('mapCanvas'), {
+            zoom: 8,
+            center: latLng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        let marker = new google.maps.Marker({
+            position: latLng,
+            title: 'Point A',
+            map: map,
+            draggable: true
+        });
+    
+        // Update current position info.
+        this.updateMarkerPosition(latLng);
+        this.geocodePosition(latLng);
+    
+        // Add dragging event listeners.
+        google.maps.event.addListener(marker, 'dragstart', function() {
+            thiss.updateMarkerAddress('');
+        });
+    
+        google.maps.event.addListener(marker, 'drag', function() {
+            thiss.updateMarkerPosition(marker.getPosition());
+        });
+    
+        google.maps.event.addListener(marker, 'dragend', function() {
+            thiss.geocodePosition(marker.getPosition());
+        });
     }
 }
