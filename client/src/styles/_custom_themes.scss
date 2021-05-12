@@ -1352,3 +1352,36 @@ select {
         opacity: 1;
     }
 }
+.clsSelect-icon {
+    position: relative;
+    &:before {
+        content: '';
+        display: block;
+        @include absolute(top 12px right 10px);
+        background: url(../assets/images/select-down-arrow.svg) -8px -7px;
+        @include size(22px);
+    }
+}
+
+.clsSelect-arrow {
+    position: relative;
+    &:before {
+        content: '';
+        display: block;
+        @include absolute(top 12px right 10px);
+        background: url(../assets/images/icons/select-arrow.svg) 0px 0px no-repeat;
+        @include size(15px);
+        transform: rotate(-90deg);
+    }
+}
+select {
+    &.form-control {
+        color: $white;
+        @include radius(6px);
+    }
+    &.clsWhite {
+        background: $white;
+        border: 1px solid $dark-blue;
+        color: $dark-blue;
+    }
+}

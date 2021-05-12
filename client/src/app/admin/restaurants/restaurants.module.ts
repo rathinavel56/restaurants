@@ -6,6 +6,7 @@ import { RestaurantComponent } from './restaurants.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import { SharedCommonModule } from '../../shared-common/shared-common.module';
+import { SelectDropDownModule } from 'ngx-select-dropdown';
 @NgModule({
     imports: [
         CommonModule,
@@ -14,7 +15,8 @@ import { SharedCommonModule } from '../../shared-common/shared-common.module';
         RestaurantRoutingModule,
         GooglePlaceModule,
         FormsModule,
-        SharedCommonModule
+        SharedCommonModule,
+        SelectDropDownModule
     ],
     declarations: [
         RestaurantComponent

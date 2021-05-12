@@ -125,7 +125,7 @@ export class AddComponent implements OnInit {
     const formData: any = new FormData();
     formData.append('file', event.target.files[0], event.target.files[0].name);
       const queryParam: QueryParam = {
-        class: 'UserAvatar'
+        class: item.imageclass ? item.imageclass : 'UserAvatar'
       };
     this.crudService.postFile('/attachments', formData, queryParam)
     .subscribe((response) => {

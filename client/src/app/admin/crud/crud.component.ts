@@ -33,9 +33,9 @@ export class CrudComponent {
   setPage() {
     this.apiEndPoint = '/' + this.activatedRoute.snapshot.paramMap.get('api');
     this.id = +this.activatedRoute.snapshot.paramMap.get('id');
-    this.list = (!(this.windowData.location.href.indexOf('/admin/actions/booking') > -1) && !(this.windowData.location.href.indexOf('/add') > -1) && !(this.windowData.location.href.indexOf('/edit') > -1)
+    this.list = (!(this.windowData.location.href.indexOf('/add') > -1) && !(this.windowData.location.href.indexOf('/edit') > -1)
     && !(this.windowData.location.href.indexOf('/view') > -1));
-    this.add = (this.windowData.location.href.indexOf('/add') > -1) || (this.windowData.location.href.indexOf('/admin/actions/booking') > -1);
+    this.add = (this.windowData.location.href.indexOf('/add') > -1);
     this.edit = (this.windowData.location.href.indexOf('/edit') > -1);
     this.view = (this.windowData.location.href.indexOf('/view') > -1);
     this.setMenu();    

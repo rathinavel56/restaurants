@@ -21,7 +21,8 @@
                             </div>
                         </div>
                         <div class="inline-show v-top pl-10 pad-top-5">
-                            <button type="button" (click)="addEdit()" class="btn btn-outline-secondary btn-info" title="Add">
+                            <button type="button" (click)="addEdit()" class="btn btn-outline-secondary btn-info"
+                                title="Add">
                                 <i class="fa fa-plus pr-1"></i>
                             </button>
                         </div>
@@ -139,17 +140,58 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label>Address *:</label>
-                        {{restaurantDetails.address ? restaurantDetails.address : 'Loading'}}
-                        <input type="hidden" class="form-control" [readonly]="viewMode"
-                            [(ngModel)]="restaurantDetails.address" [ngModelOptions]="{standalone: true}"
-                            autocomplete="no-fill" /><input type="hidden" class="form-control" [readonly]="viewMode"
-                            [(ngModel)]="restaurantDetails.latitude" [ngModelOptions]="{standalone: true}"><input
-                            type="hidden" class="form-control" [readonly]="viewMode"
-                            [(ngModel)]="restaurantDetails.longitude" [ngModelOptions]="{standalone: true}"><input
-                            type="hidden" class="form-control" [readonly]="viewMode"
-                            [(ngModel)]="restaurantDetails.country" [ngModelOptions]="{standalone: true}"> <br>
+                        <label>Pin Geo Address:</label><br>
+                        <span
+                            style="color: black;">{{restaurantDetails.address ? restaurantDetails.address : 'Loading'}}</span>
                         <div id="mapCanvas"></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Address *:</label>
+                        <input type="text" class="form-control" [readonly]="viewMode"
+                            [(ngModel)]="restaurantDetails.address" [ngModelOptions]="{standalone: true}"
+                            autocomplete="no-fill" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Latitude *:</label>
+                        <input type="text" class="form-control" [readonly]="viewMode"
+                            [(ngModel)]="restaurantDetails.latitude" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Longitude *:</label>
+                        <input type="text" class="form-control" [readonly]="viewMode"
+                            [(ngModel)]="restaurantDetails.longitude" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>State *:</label>
+                        <input type="text" class="form-control" [readonly]="viewMode"
+                            [(ngModel)]="restaurantDetails.state" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>City *:</label>
+                        <input type="text" class="form-control" [readonly]="viewMode"
+                            [(ngModel)]="restaurantDetails.city" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="staticDataList">
+                    <div class="form-group">
+                        <label>Country *:</label>
+                        <!-- <ngx-select-dropdown class="form-control" [config]="config" [options]="staticDataList.countries" [(value)]="restaurantDetails.country" (change)="changeDropDown($event)" [multiple]="false">
+                        </ngx-select-dropdown> -->
+                        <div class="clsSelect-arrow">
+                            <select style="height: 50px;" class="form-control clsWhite text-center" [disabled]="viewMode" [(ngModel)]="restaurantDetails.country_id"[ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let country of staticDataList.countries" [value]="country.id" [selected]="country.id === restaurantDetails.country_id">{{country.name}}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -178,11 +220,22 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Special Conditions: <span *ngIf="!viewMode">(<i class="fa fa-plus-circle cursor" (click)="specialAdd()"></i>)</span></label>
-                        <span *ngFor="let specialCondition of restaurantDetails.specialConditions">
+                        <label>Special Conditions: <span *ngIf="!viewMode">(<i class="fa fa-plus-circle cursor"
+                                    (click)="specialAdd()"></i>)</span></label>
+                        <div
+                            *ngFor="let specialCondition of restaurantDetails.specialConditions; let indexItem = index">
                             <input type="text" class="form-control" [disabled]="viewMode"
-                                [(ngModel)]="specialCondition.name" [ngModelOptions]="{standalone: true}" /><br>
-                        </span>
+                                [(ngModel)]="specialCondition.name" [ngModelOptions]="{standalone: true}" />
+                            <span class="clsAction inline-show clsMinWidth-100" *ngIf="indexItem !== 0">
+                                <ul class="clearfix unstyled">
+                                    <li>
+                                        <a href="javascript:void(0)" (click)="remove(indexItem, 'specialConditions')" data-toggle="modal">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </span><br>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,7 +244,7 @@
                     <div class="form-group">
                         <label>Menu Items *: <span *ngIf="!viewMode">(<i class="fa fa-plus-circle cursor"
                                     (click)="menuAdd()"></i>)</span></label><br>
-                        <div class="row" *ngFor="let menu of restaurantDetails.menus">
+                        <div class="row" *ngFor="let menu of restaurantDetails.menus; let indexItem = index">
                             <div class="col-sm-6">
                                 <label>Name:</label>
                                 <input type="text" class="form-control" [readonly]="viewMode" [(ngModel)]="menu.name"
@@ -202,6 +255,15 @@
                                 <label>Price:</label>
                                 <input type="number" class="form-control" [readonly]="viewMode" [(ngModel)]="menu.price"
                                     [ngModelOptions]="{standalone: true}">
+                                <span class="clsAction inline-show clsMinWidth-100" *ngIf="indexItem !== 0">
+                                    <ul class="clearfix unstyled">
+                                        <li>
+                                            <a href="javascript:void(0)" (click)="remove(indexItem, 'menus')" data-toggle="modal">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -209,17 +271,19 @@
                 <div class="col-sm-6" *ngIf="staticDataList">
                     <div class="form-group">
                         <label>Facilities / Services *:</label>
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isAllfacilitity" [(ngModel)]="isAllfacilitity" id="isAllfacilitity" [ngModelOptions]="{standalone: true}" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode"
+                                [checked]="isAllfacilitity" (ngModelChange)="toggleAllSelect('facilities')" [(ngModel)]="isAllfacilitity" id="isAllfacilitity"
+                                [ngModelOptions]="{standalone: true}" />
                             <label class="form-check-label" for="isAllfacilitity">
                                 All
                             </label>
-                        </div> -->
+                        </div>
                         <div class="form-check" *ngFor="let facilitity of staticDataList.facilities">
                             <input class="form-check-input" type="checkbox" [disabled]="viewMode"
                                 [checked]="facilitity.selected" [(ngModel)]="facilitity.selected"
                                 id="facilitity_{{facilitity.name.replace(' ', '')}}"
-                                [ngModelOptions]="{standalone: true}" />
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()" />
                             <label class="form-check-label" for="facilitity_{{facilitity.name.replace(' ', '')}}">
                                 {{facilitity.name}}
                             </label>
@@ -239,17 +303,19 @@
                 <div class="col-sm-6" *ngIf="staticDataList">
                     <div class="form-group">
                         <label>Atmospheres *:</label>
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isAtmospheres" [(ngModel)]="isAtmospheres" id="isAtmospheres" [ngModelOptions]="{standalone: true}" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode"
+                                [checked]="isAtmospheres" (ngModelChange)="toggleAllSelect('atmospheres')" [(ngModel)]="isAtmospheres" id="isAtmospheres"
+                                [ngModelOptions]="{standalone: true}" />
                             <label class="form-check-label" for="isAtmospheres">
                                 All
                             </label>
-                        </div> -->
+                        </div>
                         <div class="form-check" *ngFor="let atmosphere of staticDataList.atmospheres">
                             <input class="form-check-input" type="checkbox" [disabled]="viewMode"
                                 [checked]="atmosphere.selected" [(ngModel)]="atmosphere.selected"
                                 id="atmosphere_{{atmosphere.name.replace(' ', '')}}"
-                                [ngModelOptions]="{standalone: true}" />
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()"/>
                             <label class="form-check-label" for="atmosphere_{{atmosphere.name.replace(' ', '')}}">
                                 {{atmosphere.name}}
                             </label>
@@ -268,17 +334,19 @@
                 <div class="col-sm-6" *ngIf="staticDataList">
                     <div class="form-group">
                         <label>Spoken Languages *:</label>
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isLanguages" [(ngModel)]="isLanguages" id="isLanguages" [ngModelOptions]="{standalone: true}" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode"
+                                [checked]="isLanguages" (ngModelChange)="toggleAllSelect('languages')" [(ngModel)]="isLanguages" id="isLanguages"
+                                [ngModelOptions]="{standalone: true}" />
                             <label class="form-check-label" for="isLanguages">
                                 All
                             </label>
-                        </div> -->
+                        </div>
                         <div class="form-check" *ngFor="let language of staticDataList.languages">
                             <input class="form-check-input" type="checkbox" [disabled]="viewMode"
                                 [checked]="language.selected" [(ngModel)]="language.selected"
                                 id="language_{{language.name.replace(' ', '')}}"
-                                [ngModelOptions]="{standalone: true}" />
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()" />
                             <label class="form-check-label" for="language_{{language.name.replace(' ', '')}}">
                                 {{language.name}}
                             </label>
@@ -297,16 +365,16 @@
                 <div class="col-sm-6" *ngIf="staticDataList">
                     <div class="form-group">
                         <label>Themes *:</label>
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isThemes" [(ngModel)]="isThemes" id="isThemes" [ngModelOptions]="{standalone: true}" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isThemes" (ngModelChange)="toggleAllSelect('themes')" [(ngModel)]="isThemes" id="isThemes" [ngModelOptions]="{standalone: true}" />
                             <label class="form-check-label" for="isThemes">
                                 All
                             </label>
-                        </div> -->
+                        </div>
                         <div class="form-check" *ngFor="let theme of staticDataList.themes">
                             <input class="form-check-input" type="checkbox" [disabled]="viewMode"
                                 [checked]="theme.selected" [(ngModel)]="theme.selected"
-                                id="theme_{{theme.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" />
+                                id="theme_{{theme.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()" />
                             <label class="form-check-label" for="theme_{{theme.name.replace(' ', '')}}">
                                 {{theme.name}}
                             </label>
@@ -325,16 +393,17 @@
                 <div class="col-sm-6" *ngIf="staticDataList">
                     <div class="form-group">
                         <label>Cuisines *:</label>
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isCuisines" [(ngModel)]="isCuisines" id="isCuisines" [ngModelOptions]="{standalone: true}" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isCuisines" (ngModelChange)="toggleAllSelect('cuisines')"
+                                [(ngModel)]="isCuisines" id="isCuisines" [ngModelOptions]="{standalone: true}" />
                             <label class="form-check-label" for="isCuisines">
                                 All
                             </label>
-                        </div> -->
+                        </div>
                         <div class="form-check" *ngFor="let cuisine of staticDataList.cuisines">
                             <input class="form-check-input" type="checkbox" [disabled]="viewMode"
                                 [checked]="cuisine.selected" [(ngModel)]="cuisine.selected"
-                                id="cuisine_{{cuisine.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" />
+                                id="cuisine_{{cuisine.name.replace(' ', '')}}" [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()" />
                             <label class="form-check-label" for="cuisine_{{cuisine.name.replace(' ', '')}}">
                                 {{cuisine.name}}
                             </label>
@@ -352,72 +421,37 @@
                 <div class="col-sm-6" *ngIf="staticDataList">
                     <div class="form-group">
                         <label>Payment Options *:</label>
-                        <!-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isPayment" [(ngModel)]="isPayment" id="isPayment" [ngModelOptions]="{standalone: true}" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode" [checked]="isPayment" (ngModelChange)="toggleAllSelect('payments')"
+                                [(ngModel)]="isPayment" id="isPayment" [ngModelOptions]="{standalone: true}" />
                             <label class="form-check-label" for="isPayment">
                                 All
                             </label>
-                        </div> -->
+                        </div>
                         <div class="form-check" *ngFor="let payment of staticDataList.payments">
                             <input class="form-check-input" type="checkbox" [disabled]="viewMode"
                                 [(ngModel)]="payment.selected" id="{{payment.name.replace(' ', '')}}"
-                                [ngModelOptions]="{standalone: true}" />
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()" />
                             <label class="form-check-label" for="{{payment.name.replace(' ', '')}}">
                                 {{payment.name}}
                             </label>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-sm-12" *ngIf="staticDataList">
-                    <div class="form-group">
-                        <div class="table-responsive">
-                            <label>Operational Hours *:</label>
-                            <table class="table table-hover table-bordered" style="width: 100%;">
-                                <tr *ngFor="let operating_hour of restaurantDetails.operating_hours">
-                                    <td>{{operating_hour.day}}</td>
-                                    <td>
-                                        <table style="width: 100%;" [ngStyle]="{'width': !operating_hour.holiday ? '100%' : '25%'}">
-                                            <tr>
-                                                <th>Holiday</th>
-                                                <th *ngIf="!operating_hour.holiday">Breakfast</th>
-                                                <th *ngIf="!operating_hour.holiday">Lunch</th>
-                                                <th *ngIf="!operating_hour.holiday">Dinner</th>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" [disabled]="viewMode"
-                                                        [(ngModel)]="operating_hour.holiday"
-                                                        [ngModelOptions]="{standalone: true}"
-                                                        style="left: 0px;position: relative;" /></td>
-                                                <ng-template [ngIf]="!operating_hour.holiday">
-                                                    <td *ngFor="let hour of operating_hour.hours">
-                                                        Start Time: <select class="form-control" [disabled]="viewMode"
-                                                            [(ngModel)]="hour.start_time"
-                                                            [ngModelOptions]="{standalone: true}"
-                                                            style="width: 100px;height: 50px;">
-                                                            <option *ngFor="let timeSlot of timeSlots" [value]="timeSlot" [selected]="timeSlot === hour.start_time">
-                                                                {{timeSlot}}</option>
-                                                        </select>
-                                                        End Time: <select class="form-control"
-                                                            style="width: 100px;height: 50px;" [(ngModel)]="hour.end_time"
-                                                            [ngModelOptions]="{standalone: true}">
-                                                            <option *ngFor="let timeSlot of timeSlots" [value]="timeSlot" [selected]="timeSlot === hour.end_time">
-                                                                {{timeSlot}}</option>
-                                                        </select>
-                                                    </td>
-                                                </ng-template>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="form-group">
                         <label>About *:</label>
                         <textarea class="form-control" [readonly]="viewMode" [(ngModel)]="restaurantDetails.about"
                             [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>TimeZone *:</label>
+                        <div class="clsSelect-arrow">
+                        <select style="height: 50px;" class="form-control clsWhite text-center" [disabled]="viewMode" [(ngModel)]="restaurantDetails.timezone_id"[ngModelOptions]="{standalone: true}">
+                            <option *ngFor="let timezone of staticDataList.timezones" [value]="timezone.id" [selected]="timezone.id === restaurantDetails.timezone_id">{{timezone.code}}</option>
+                        </select></div>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -429,8 +463,8 @@
                             </span>
                             <input type="file" multiple (change)="uploadImage($event)" class="form-control">
                         </div>
-                        <div id="preview" class="clearfix pt-10">
-                            <div class="resimage"
+                        <div id="preview" class="clearfix pt-10 row">
+                            <div class="resimage col-sm-2"
                                 *ngFor="let attachment of restaurantDetails.attachments; let i = index">
                                 <div class="clearfix pt-20" *ngIf="attachment.src">
                                     <div class="inline-show pr">
@@ -456,29 +490,150 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <label>Promo Codes: : <span *ngIf="!viewMode">(<i class="fa fa-plus-circle cursor"
+                                    (click)="promoAdd()"></i>)</span></label>
+                            <table class="table table-hover table-bordered" style="width: 100%;">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Amount to be reduced in bill</th>
+                                </tr>
+                                <tr *ngFor="let promo of restaurantDetails.promos; let indexItem = index">
+                                    <td><input type="text" style="text-transform: uppercase;" class="form-control"
+                                            [disabled]="viewMode" [(ngModel)]="promo.code"
+                                            [ngModelOptions]="{standalone: true}" /></td>
+                                    <td><input type="text" class="form-control" [disabled]="viewMode"
+                                            [(ngModel)]="promo.amount" [ngModelOptions]="{standalone: true}" /><span class="clsAction inline-show clsMinWidth-100" *ngIf="indexItem !== 0">
+                                <ul class="clearfix unstyled">
+                                    <li>
+                                        <a href="javascript:void(0)" (click)="remove(indexItem, 'promos')" data-toggle="modal">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12" *ngIf="staticDataList">
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <label>Operational Hours *:</label>
+                            <table class="table table-hover table-bordered" style="width: 100%;">
+                                <tr *ngFor="let operating_hour of restaurantDetails.operating_hours">
+                                    <td>{{operating_hour.day}}</td>
+                                    <td>
+                                        <table style="width: 100%;"
+                                            [ngStyle]="{'width': !operating_hour.holiday && !operating_hour.allday ? '100%' : '25%'}">
+                                            <tr>
+                                                <th>Holiday</th>
+                                                <th *ngIf="!operating_hour.holiday">Full Day Working<br> from 00:00
+                                                    to 23:30</th>
+                                                <th *ngIf="!operating_hour.holiday && !operating_hour.allday">
+                                                    Breakfast</th>
+                                                <th *ngIf="!operating_hour.holiday && !operating_hour.allday">Lunch
+                                                </th>
+                                                <th *ngIf="!operating_hour.holiday && !operating_hour.allday">Dinner
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" [disabled]="viewMode"
+                                                        [(ngModel)]="operating_hour.holiday"
+                                                        (ngModelChange)="operatingHourChange(operating_hour, 'holiday')"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        style="left: 0px;position: relative;" /></td>
+                                                <ng-template [ngIf]="!operating_hour.holiday">
+                                                    <td><input type="checkbox" [disabled]="viewMode"
+                                                            [(ngModel)]="operating_hour.allday"
+                                                            (ngModelChange)="operatingHourChange(operating_hour, 'allday')"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            style="left: 0px;position: relative;" /></td>
+                                                </ng-template>
+                                                <ng-template [ngIf]="!operating_hour.holiday && !operating_hour.allday">
+                                                    <td *ngFor="let hour of operating_hour.hours">
+                                                        Start Time: <div class="clsSelect-arrow"><select
+                                                                class="form-control clsWhite text-center" [disabled]="viewMode"
+                                                                [(ngModel)]="hour.start_time"
+                                                                (ngModelChange)="foodOff(hour)"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                style="height: 50px;">
+                                                                <option *ngFor="let timeSlot of timeSlots"
+                                                                    [value]="timeSlot"
+                                                                    [selected]="timeSlot === hour.start_time">
+                                                                    {{timeSlot}}</option>
+                                                            </select></div>
+                                                        <span *ngIf="(hour.start_time !== 'Select' && hour.start_time !== 'Not Avaiable') || hour.end_time !== 'Not Avaiable'">End Time: <div class="clsSelect-arrow"><select
+                                                                class="form-control clsWhite text-center" style="height: 50px;"
+                                                                [(ngModel)]="hour.end_time"
+                                                                (ngModelChange)="foodOff(hour)"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                                <option *ngFor="let timeSlot of timeSlots"
+                                                                    [value]="timeSlot"
+                                                                    [selected]="timeSlot === hour.end_time">
+                                                                    {{timeSlot}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </span>
+                                                    </td>
+                                                </ng-template>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Booking Types *:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" (ngModelChange)="toggleAllSelect('booking')" type="checkbox" [disabled]="viewMode" [checked]="isBook"
+                                [(ngModel)]="isBook" id="isBook" [ngModelOptions]="{standalone: true}" />
+                            <label class="form-check-label" for="isBook">
+                                All
+                            </label>
+                        </div>
+                        <div class="form-check" *ngFor="let book of staticDataList.booking">
+                            <input class="form-check-input" type="checkbox" [disabled]="viewMode"
+                                [(ngModel)]="book.selected" id="{{book.name.replace(' ', '')}}"
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="toggleSingleSelect()" />
+                            <label class="form-check-label" for="{{book.name.replace(' ', '')}}">
+                                {{book.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div> -->
                 <div class="col-sm-6">
                     <div class="form-group">
+                        <label>
+                            Active *
+                        </label>
                         <div class="form-check">
                             <input class="form-check-input" [readonly]="viewMode" type="checkbox"
                                 [checked]="(restaurantDetails.is_active === 1)"
                                 [(ngModel)]="restaurantDetails.is_active" id="is_active"
                                 [ngModelOptions]="{standalone: true}" />
-                            <label class="form-check-label" for="is_active">
-                                Active *
-                            </label>
+                                <label class="form-check-label" for="is_active">
+                                    
+                                </label>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6" *ngIf="sessionService.role_id === 1 && !viewMode">
                     <div class="form-group">
+                        <label class="form-check-label" for="is_admin_deactived">
+                            Deactive *
+                        </label>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
                                 [checked]="(restaurantDetails.is_admin_deactived === 1)"
                                 [(ngModel)]="restaurantDetails.is_admin_deactived" id="is_admin_deactived"
                                 [ngModelOptions]="{standalone: true}" />
-                            <label class="form-check-label" for="is_active">
-                                Deactive *
-                            </label>
                         </div>
                     </div>
                 </div>
